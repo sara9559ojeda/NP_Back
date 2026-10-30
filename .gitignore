@@ -1,0 +1,67 @@
+# ── Secretos y configuración local (nunca al repositorio) ──
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+secrets/
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# ── Entornos virtuales ──
+.venv/
+venv/
+env/
+ENV/
+
+# ── Pruebas, cobertura y análisis ──
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.tox/
+.nox/
+
+# ── Datos locales (nunca datos reales al repositorio) ──
+data/
+*.sqlite
+*.sqlite3
+*.db
+*.dump
+*.sql.gz
+exports/
+pgdata/
+
+# ── Modelos de IA entrenados (se regeneran; no se versionan) ──
+models/*.joblib
+models/*.pkl
+
+# ── Logs ──
+*.log
+logs/
+
+# ── Docker local ──
+docker-compose.override.yml
+
+# ── Editores y sistema ──
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
