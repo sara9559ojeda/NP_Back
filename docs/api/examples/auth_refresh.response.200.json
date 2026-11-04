@@ -1,0 +1,4 @@
+{
+  "accessToken": "<jwt>",
+  "expiresIn": 900
+}

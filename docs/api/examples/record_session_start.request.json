@@ -1,0 +1,13 @@
+{
+  "recordId": "6f1c2d3e-4a5b-4c6d-8e7f-0a1b2c3d4e5f",
+  "type": "session_start",
+  "schemaVersion": 1,
+  "sessionId": "a3b9e2c4-5d6f-4a1b-8c7d-9e0f1a2b3c4d",
+  "payload": {
+    "startedAt": "2026-10-30T21:00:00Z",
+    "phobiaGrade": 3,
+    "appVersion": "0.2.0",
+    "deviceModel": "quest3",
+    "testSession": false
+  }
+}

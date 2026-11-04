@@ -1,0 +1,13 @@
+{
+  "type": "https://neurophobia/errors/validation-error",
+  "title": "Datos no válidos",
+  "status": 422,
+  "code": "VALIDATION_ERROR",
+  "detail": "Revisa los campos marcados.",
+  "errors": [
+    {
+      "field": "email",
+      "code": "invalid_format"
+    }
+  ]
+}

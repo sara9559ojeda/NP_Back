@@ -1,0 +1,11 @@
+[project]
+name = "neurophobia-backend"
+version = "0.1.0"
+description = "API REST de NEUROPHOBIA (prototipo académico)"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+filterwarnings = ["error::pytest.PytestUnraisableExceptionWarning"]

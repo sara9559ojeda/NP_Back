@@ -1,0 +1,62 @@
+"""Entorno de Alembic. La URL sale de ``NP_DATABASE_URL`` (o de ``config.attributes['url']`` en las pruebas)."""
+
+import os
+from logging.config import fileConfig
+
+from alembic import context
+from sqlalchemy import create_engine
+
+from app.db.models import Base
+
+config = context.config
+if config.config_file_name is not None and config.attributes.get("configure_logger", True):
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
+
+target_metadata = Base.metadata
+
+
+def _url() -> str:
+    url = config.attributes.get("url") or os.environ.get("NP_DATABASE_URL")
+    if not url:
+        raise RuntimeError("Falta NP_DATABASE_URL")
+    return url
+
+
+def _include_name(name, type_, parent_names) -> bool:
+    if type_ == "schema":
+        return name in ("identity", "clinical")
+    return True
+
+
+def run_migrations_offline() -> None:
+    context.configure(
+        url=_url(),
+        target_metadata=target_metadata,
+        literal_binds=True,
+        include_schemas=True,
+        include_name=_include_name,
+        version_table_schema="public",
+    )
+    with context.begin_transaction():
+        context.run_migrations()
+
+
+def run_migrations_online() -> None:
+    engine = create_engine(_url())
+    with engine.connect() as connection:
+        context.configure(
+            connection=connection,
+            target_metadata=target_metadata,
+            include_schemas=True,
+            include_name=_include_name,
+            version_table_schema="public",
+        )
+        with context.begin_transaction():
+            context.run_migrations()
+    engine.dispose()
+
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
