@@ -1,6 +1,9 @@
 """Dependencias de autenticación y permisos por rol (contrato, sección 2)."""
 
 from collections.abc import Callable
+import hmac
+import ipaddress
+import os
 from typing import Annotated
 
 from fastapi import Depends, Request
@@ -8,6 +11,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
 
 from app.core.errors import ApiError
+from app.core.config import get_settings
 from app.core.security import TokenExpired, TokenInvalid, decode_access_token
 from app.db.session import get_db
 from app.repositories import identity
@@ -21,6 +25,19 @@ Db = Annotated[Session, Depends(get_db)]
 
 
 def client_ip(request: Request) -> str:
+    secret = get_settings().proxy_secret
+    supplied = request.headers.get("x-np-proxy-secret", "")
+    if secret and hmac.compare_digest(supplied.encode(), secret.get_secret_value().encode()):
+        try:
+            return str(ipaddress.ip_address(request.headers.get("x-np-client-ip", "")))
+        except ValueError:
+            raise ApiError(400, "BAD_REQUEST", "IP del proxy no válida.") from None
+    # Vercel establece esta cabecera. Fuera de esa plataforma se ignora.
+    if os.environ.get("VERCEL") == "1":
+        try:
+            return str(ipaddress.ip_address(request.headers.get("x-vercel-forwarded-for", "")))
+        except ValueError:
+            pass
     return request.client.host if request.client else "unknown"
 
 

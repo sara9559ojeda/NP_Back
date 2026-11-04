@@ -1,8 +1,7 @@
-"""Límite de frecuencia en memoria, por ventana deslizante.
+"""Ventana deslizante: la API usa PostgreSQL para compartir los contadores.
 
-Suficiente para un prototipo con una sola instancia de la API. Si se escalara a varias
-instancias, habría que moverlo a un almacén compartido (por ejemplo, Redis).
-Las claves son hashes: nunca se guarda un correo ni una IP en claro.
+Solo se persisten hashes HMAC y fechas. SlidingWindowLimiter se conserva como
+implementación aislada en memoria; no es el singleton usado por la API.
 """
 
 import hashlib
@@ -68,4 +67,59 @@ def rate_limited(retry_after: float) -> ApiError:
     )
 
 
-limiter = SlidingWindowLimiter()
+class PostgresWindowLimiter:
+    """Ventana compartida con transacción independiente y bloqueo por clave.
+
+    Un fallo de login no revierte el contador junto a la transacción del usuario.
+    Los advisory locks son transaccionales: funcionan con Transaction pooler.
+    """
+
+    @staticmethod
+    def key(*parts: str) -> str:
+        import hmac
+        from app.core.config import get_settings
+        return hmac.new(
+            get_settings().secret_key.get_secret_value().encode(),
+            "|".join(parts).encode(), hashlib.sha256,
+        ).hexdigest()
+
+    def _operate(self, key: str, window: float, *, hit: bool = False, limit: int | None = None) -> int:
+        from sqlalchemy import text
+        from app.db.session import get_engine
+        lock_id = int.from_bytes(bytes.fromhex(key[:16]), "big", signed=True)
+        with get_engine().begin() as conn:
+            conn.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock_id})
+            now = conn.execute(text("SELECT clock_timestamp()")).scalar_one()
+            from datetime import timedelta
+            cutoff = now - timedelta(seconds=window)
+            conn.execute(text("DELETE FROM identity.rate_limit_events WHERE key_hash=:key AND occurred_at<=:cutoff"), {"key": key, "cutoff": cutoff})
+            # Limpieza acotada de claves abandonadas; solo hashes y fechas.
+            conn.execute(text("DELETE FROM identity.rate_limit_events WHERE id IN (SELECT id FROM identity.rate_limit_events WHERE occurred_at < :cutoff LIMIT 1000)"), {"cutoff": now - timedelta(days=1)})
+            count, oldest = conn.execute(text("SELECT count(*), min(occurred_at) FROM identity.rate_limit_events WHERE key_hash=:key"), {"key": key}).one()
+            if limit is not None and count >= limit:
+                raise rate_limited(window - (now - oldest).total_seconds())
+            if hit:
+                conn.execute(text("INSERT INTO identity.rate_limit_events(key_hash, occurred_at) VALUES (:key, :now)"), {"key": key, "now": now})
+            return count
+
+    def count(self, key: str, window: float) -> int:
+        return self._operate(key, window)
+
+    def hit(self, key: str, window: float) -> None:
+        self._operate(key, window, hit=True)
+
+    def check_and_hit(self, key: str, limit: int, window: float) -> None:
+        self._operate(key, window, hit=True, limit=limit)
+
+    def ensure_below(self, key: str, limit: int, window: float) -> None:
+        self._operate(key, window, limit=limit)
+
+    def reset(self) -> None:
+        """Solo usado por las pruebas, no se expone mediante la API."""
+        from sqlalchemy import text
+        from app.db.session import get_engine
+        with get_engine().begin() as conn:
+            conn.execute(text("TRUNCATE identity.rate_limit_events"))
+
+
+limiter = PostgresWindowLimiter()

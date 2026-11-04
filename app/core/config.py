@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     # Web.
     cors_origin: str = "http://localhost:5173"
     cookie_secure: bool = True
+    # Se comparte solo entre los servidores front/back, nunca con el navegador.
+    proxy_secret: SecretStr | None = Field(default=None, min_length=32)
 
     # Tokens (contrato, sección 2.2).
     access_token_minutes: int = 15
