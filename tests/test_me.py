@@ -44,6 +44,11 @@ def test_change_password(client, api):
         f"{API}/me/password", json={"currentPassword": user["password"], "newPassword": "nueva-clave-123"}, headers=headers
     )
     assert r.status_code == 204
+    # Todas las sesiones web quedan cerradas, también la actual.
+    refresh = client.cookies.get("np_refresh")
+    client.cookies.clear()
+    client.cookies.set("np_refresh", refresh, path="/api/v1/auth")
+    assert client.post(f"{API}/auth/refresh").status_code == 401
     assert client.post(f"{API}/auth/login", json={"email": user["email"], "password": user["password"]}).status_code == 401
     assert client.post(f"{API}/auth/login", json={"email": user["email"], "password": "nueva-clave-123"}).status_code == 200
 

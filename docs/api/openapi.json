@@ -3997,7 +3997,7 @@
             "webAccessToken": []
           }
         ],
-        "summary": "Cambiar la contraseña (cierra las demás sesiones web)",
+        "summary": "Cambiar la contraseña (cierra todas las sesiones web: hay que volver a iniciar sesión)",
         "tags": [
           "me"
         ]

@@ -7,13 +7,13 @@ from fastapi import APIRouter, Depends, Response, status
 
 from app.api.deps import AnyUser, Db, PatientUser
 from app.api.docs import problems
-from app.api.routes.auth import RefreshCookie, clear_refresh_cookie
+from app.api.routes.auth import clear_refresh_cookie
 from app.core.pagination import Page, page_params
 from app.schemas.accounts import MeOut, MePatch, PasswordChangeIn
 from app.schemas.common import StatusOut
 from app.schemas.device import DevicePage, PairingCodeOut
 from app.schemas.tracking import ProgressOut, SessionDetail, SessionPage
-from app.services import accounts, auth, pairing, tracking
+from app.services import accounts, pairing, tracking
 
 router = APIRouter(tags=["me"])
 
@@ -34,12 +34,13 @@ def patch_me(data: MePatch, actor: AnyUser, db: Db) -> MeOut:
     "/me/password",
     status_code=status.HTTP_204_NO_CONTENT,
     responses=problems(401, 422, 423),
-    summary="Cambiar la contraseña (cierra las demás sesiones web)",
+    summary="Cambiar la contraseña (cierra todas las sesiones web: hay que volver a iniciar sesión)",
 )
-def change_password(data: PasswordChangeIn, actor: AnyUser, db: Db, np_refresh: RefreshCookie = None) -> Response:
-    keep = auth.refresh_family(db, np_refresh)
-    accounts.change_password(db, actor, data.current_password, data.new_password, keep_family=keep)
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
+def change_password(data: PasswordChangeIn, actor: AnyUser, db: Db) -> Response:
+    accounts.change_password(db, actor, data.current_password, data.new_password)
+    response = Response(status_code=status.HTTP_204_NO_CONTENT)
+    clear_refresh_cookie(response)
+    return response
 
 
 @router.post(

@@ -125,10 +125,3 @@ def logout(db: Session, refresh_token: str | None) -> None:
     if stored is not None:
         identity.revoke_family(db, stored.family_id, utcnow())
         db.commit()
-
-
-def refresh_family(db: Session, refresh_token: str | None) -> uuid.UUID | None:
-    if not refresh_token:
-        return None
-    stored = identity.get_refresh_token(db, sha256_hex(refresh_token))
-    return stored.family_id if stored else None

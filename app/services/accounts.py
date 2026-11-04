@@ -43,9 +43,7 @@ def patch_me(db: Session, actor: Actor, data: MePatch) -> MeOut:
     return get_me(db, actor)
 
 
-def change_password(
-    db: Session, actor: Actor, current: str, new: str, *, keep_family: uuid.UUID | None
-) -> None:
+def change_password(db: Session, actor: Actor, current: str, new: str) -> None:
     user = identity.get_user(db, actor.user_id, for_update=True)
     if user is None:
         raise ApiError(401, "UNAUTHENTICATED")
@@ -54,8 +52,8 @@ def change_password(
     now = utcnow()
     user.password_hash = hash_password(new)
     user.updated_at = now
-    # Las demás sesiones web se cierran; la actual se conserva.
-    identity.revoke_user_tokens(db, user.id, now, keep_family=keep_family)
+    # Se cierran todas las sesiones web (la cookie de refresco no llega a /me, solo a /auth).
+    identity.revoke_user_tokens(db, user.id, now)
     db.commit()
 
 
