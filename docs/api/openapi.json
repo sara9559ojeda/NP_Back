@@ -1,0 +1,5213 @@
+{
+  "components": {
+    "schemas": {
+      "AdminUserCreate": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "format": "email",
+            "maxLength": 320,
+            "title": "Email",
+            "type": "string"
+          },
+          "fullName": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Fullname",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "patient",
+              "professional",
+              "admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "temporaryPassword": {
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Temporarypassword",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fullName",
+          "email",
+          "role",
+          "temporaryPassword"
+        ],
+        "title": "AdminUserCreate",
+        "type": "object"
+      },
+      "AdminUserOut": {
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "fullName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fullname"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "patient",
+              "professional",
+              "admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "email",
+          "role",
+          "active"
+        ],
+        "title": "AdminUserOut",
+        "type": "object"
+      },
+      "AdminUserPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminUserOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "AdminUserPage",
+        "type": "object"
+      },
+      "AdminUserPatch": {
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "enum": [
+                  "patient",
+                  "professional",
+                  "admin"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          }
+        },
+        "title": "AdminUserPatch",
+        "type": "object"
+      },
+      "AnalysisOut": {
+        "additionalProperties": false,
+        "properties": {
+          "basis": {
+            "items": {
+              "$ref": "#/components/schemas/BasisItem"
+            },
+            "title": "Basis",
+            "type": "array"
+          },
+          "clinicalStatus": {
+            "title": "Clinicalstatus",
+            "type": "string"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "methodVersion": {
+            "title": "Methodversion",
+            "type": "string"
+          },
+          "recommendation": {
+            "enum": [
+              "advance",
+              "repeat",
+              "step_back"
+            ],
+            "title": "Recommendation",
+            "type": "string"
+          },
+          "toleranceIndex": {
+            "title": "Toleranceindex",
+            "type": "number"
+          }
+        },
+        "required": [
+          "toleranceIndex",
+          "recommendation",
+          "method",
+          "methodVersion",
+          "basis",
+          "clinicalStatus",
+          "createdAt"
+        ],
+        "title": "AnalysisOut",
+        "type": "object"
+      },
+      "AssignmentCreate": {
+        "additionalProperties": false,
+        "properties": {
+          "patientId": {
+            "format": "uuid",
+            "title": "Patientid",
+            "type": "string"
+          },
+          "professionalId": {
+            "format": "uuid",
+            "title": "Professionalid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "professionalId",
+          "patientId"
+        ],
+        "title": "AssignmentCreate",
+        "type": "object"
+      },
+      "AssignmentOut": {
+        "additionalProperties": false,
+        "properties": {
+          "active": {
+            "title": "Active",
+            "type": "boolean"
+          },
+          "assignmentId": {
+            "format": "uuid",
+            "title": "Assignmentid",
+            "type": "string"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "patientId": {
+            "format": "uuid",
+            "title": "Patientid",
+            "type": "string"
+          },
+          "patientName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Patientname"
+          },
+          "professionalId": {
+            "format": "uuid",
+            "title": "Professionalid",
+            "type": "string"
+          },
+          "professionalName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Professionalname"
+          }
+        },
+        "required": [
+          "assignmentId",
+          "professionalId",
+          "patientId",
+          "professionalName",
+          "patientName",
+          "active",
+          "createdAt"
+        ],
+        "title": "AssignmentOut",
+        "type": "object"
+      },
+      "AssignmentPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AssignmentOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "AssignmentPage",
+        "type": "object"
+      },
+      "BasisItem": {
+        "additionalProperties": false,
+        "properties": {
+          "effect": {
+            "enum": [
+              "favorable",
+              "unfavorable",
+              "neutral"
+            ],
+            "title": "Effect",
+            "type": "string"
+          },
+          "feature": {
+            "title": "Feature",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "feature",
+          "value",
+          "effect"
+        ],
+        "title": "BasisItem",
+        "type": "object"
+      },
+      "ConsentIn": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted": {
+            "title": "Accepted",
+            "type": "boolean"
+          },
+          "consentVersion": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Consentversion",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accepted",
+          "consentVersion"
+        ],
+        "title": "ConsentIn",
+        "type": "object"
+      },
+      "ConsentOut": {
+        "additionalProperties": false,
+        "properties": {
+          "consentId": {
+            "format": "uuid",
+            "title": "Consentid",
+            "type": "string"
+          },
+          "consentVersion": {
+            "title": "Consentversion",
+            "type": "string"
+          },
+          "grantedAt": {
+            "title": "Grantedat",
+            "type": "string"
+          },
+          "withdrawnAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Withdrawnat"
+          }
+        },
+        "required": [
+          "consentId",
+          "consentVersion",
+          "grantedAt",
+          "withdrawnAt"
+        ],
+        "title": "ConsentOut",
+        "type": "object"
+      },
+      "ContextLastSession": {
+        "additionalProperties": false,
+        "properties": {
+          "endedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endedat"
+          },
+          "levelReached": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Levelreached"
+          },
+          "totalDurationSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totaldurationseconds"
+          }
+        },
+        "required": [
+          "endedAt",
+          "levelReached",
+          "totalDurationSeconds"
+        ],
+        "title": "ContextLastSession",
+        "type": "object"
+      },
+      "ContextRecommendation": {
+        "additionalProperties": false,
+        "properties": {
+          "clinicalStatus": {
+            "title": "Clinicalstatus",
+            "type": "string"
+          },
+          "fromSessionId": {
+            "format": "uuid",
+            "title": "Fromsessionid",
+            "type": "string"
+          },
+          "method": {
+            "title": "Method",
+            "type": "string"
+          },
+          "value": {
+            "enum": [
+              "advance",
+              "repeat",
+              "step_back"
+            ],
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "fromSessionId",
+          "method",
+          "clinicalStatus"
+        ],
+        "title": "ContextRecommendation",
+        "type": "object"
+      },
+      "DeviceContext": {
+        "additionalProperties": false,
+        "properties": {
+          "allowedStartLevel": {
+            "title": "Allowedstartlevel",
+            "type": "integer"
+          },
+          "lastSession": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContextLastSession"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "recommendation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContextRecommendation"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "allowedStartLevel",
+          "lastSession",
+          "recommendation"
+        ],
+        "title": "DeviceContext",
+        "type": "object"
+      },
+      "DeviceOut": {
+        "additionalProperties": false,
+        "properties": {
+          "appVersion": {
+            "title": "Appversion",
+            "type": "string"
+          },
+          "deviceId": {
+            "format": "uuid",
+            "title": "Deviceid",
+            "type": "string"
+          },
+          "deviceModel": {
+            "title": "Devicemodel",
+            "type": "string"
+          },
+          "lastSeenAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastseenat"
+          },
+          "pairedAt": {
+            "title": "Pairedat",
+            "type": "string"
+          },
+          "revokedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Revokedat"
+          }
+        },
+        "required": [
+          "deviceId",
+          "deviceModel",
+          "appVersion",
+          "pairedAt",
+          "lastSeenAt",
+          "revokedAt"
+        ],
+        "title": "DeviceOut",
+        "type": "object"
+      },
+      "DevicePage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/DeviceOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "DevicePage",
+        "type": "object"
+      },
+      "Event": {
+        "additionalProperties": true,
+        "properties": {
+          "data": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Data"
+          },
+          "t": {
+            "minimum": 0,
+            "title": "T",
+            "type": "number"
+          },
+          "type": {
+            "enum": [
+              "level_start",
+              "level_end",
+              "pause",
+              "resume",
+              "avoidance",
+              "suds",
+              "safe_exit",
+              "repeat_offered",
+              "repeat_accepted",
+              "tutorial_skipped"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "t",
+          "type"
+        ],
+        "title": "Event",
+        "type": "object"
+      },
+      "Gaze": {
+        "additionalProperties": true,
+        "properties": {
+          "coneDeg": {
+            "exclusiveMinimum": 0,
+            "maximum": 180,
+            "title": "Conedeg",
+            "type": "number"
+          },
+          "meanAngleDeg": {
+            "anyOf": [
+              {
+                "maximum": 180,
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Meanangledeg"
+          },
+          "onStimulusSeconds": {
+            "minimum": 0,
+            "title": "Onstimulusseconds",
+            "type": "number"
+          }
+        },
+        "required": [
+          "coneDeg",
+          "onStimulusSeconds"
+        ],
+        "title": "Gaze",
+        "type": "object"
+      },
+      "HealthOut": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "version"
+        ],
+        "title": "HealthOut",
+        "type": "object"
+      },
+      "LastSessionItem": {
+        "additionalProperties": false,
+        "properties": {
+          "levelReached": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Levelreached"
+          },
+          "recommendation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "advance",
+                  "repeat",
+                  "step_back"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommendation"
+          },
+          "sessionId": {
+            "format": "uuid",
+            "title": "Sessionid",
+            "type": "string"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startedat"
+          },
+          "totalDurationSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totaldurationseconds"
+          }
+        },
+        "required": [
+          "sessionId",
+          "startedAt",
+          "levelReached",
+          "totalDurationSeconds",
+          "recommendation"
+        ],
+        "title": "LastSessionItem",
+        "type": "object"
+      },
+      "LevelRecordOut": {
+        "additionalProperties": false,
+        "properties": {
+          "attempt": {
+            "title": "Attempt",
+            "type": "integer"
+          },
+          "avoidanceCount": {
+            "title": "Avoidancecount",
+            "type": "integer"
+          },
+          "criterionMet": {
+            "title": "Criterionmet",
+            "type": "boolean"
+          },
+          "endedAt": {
+            "title": "Endedat",
+            "type": "string"
+          },
+          "level": {
+            "title": "Level",
+            "type": "integer"
+          },
+          "minDistanceM": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mindistancem"
+          },
+          "outcome": {
+            "title": "Outcome",
+            "type": "string"
+          },
+          "payload": {
+            "additionalProperties": true,
+            "title": "Payload",
+            "type": "object"
+          },
+          "permanenceSeconds": {
+            "title": "Permanenceseconds",
+            "type": "number"
+          },
+          "recordId": {
+            "format": "uuid",
+            "title": "Recordid",
+            "type": "string"
+          },
+          "startedAt": {
+            "title": "Startedat",
+            "type": "string"
+          },
+          "suds": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Suds",
+            "type": "array"
+          }
+        },
+        "required": [
+          "recordId",
+          "level",
+          "attempt",
+          "outcome",
+          "criterionMet",
+          "startedAt",
+          "endedAt",
+          "permanenceSeconds",
+          "minDistanceM",
+          "avoidanceCount",
+          "suds",
+          "payload"
+        ],
+        "title": "LevelRecordOut",
+        "type": "object"
+      },
+      "LevelRecordPayload": {
+        "additionalProperties": true,
+        "properties": {
+          "attempt": {
+            "maximum": 1000,
+            "minimum": 1,
+            "title": "Attempt",
+            "type": "integer"
+          },
+          "avoidanceCount": {
+            "minimum": 0,
+            "title": "Avoidancecount",
+            "type": "integer"
+          },
+          "criterionMet": {
+            "title": "Criterionmet",
+            "type": "boolean"
+          },
+          "endedAt": {
+            "format": "date-time",
+            "title": "Endedat",
+            "type": "string"
+          },
+          "events": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "extra": {
+            "additionalProperties": true,
+            "default": {},
+            "title": "Extra",
+            "type": "object"
+          },
+          "gaze": {
+            "$ref": "#/components/schemas/Gaze"
+          },
+          "level": {
+            "maximum": 5,
+            "minimum": 1,
+            "title": "Level",
+            "type": "integer"
+          },
+          "levelDefinitionVersion": {
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Leveldefinitionversion",
+            "type": "string"
+          },
+          "minDistanceM": {
+            "anyOf": [
+              {
+                "minimum": 0,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mindistancem"
+          },
+          "outcome": {
+            "enum": [
+              "completed",
+              "criterion_not_met",
+              "safe_exit",
+              "abandoned"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "permanenceSeconds": {
+            "minimum": 0,
+            "title": "Permanenceseconds",
+            "type": "number"
+          },
+          "samples": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Samples"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "startedAt": {
+            "format": "date-time",
+            "title": "Startedat",
+            "type": "string"
+          },
+          "suds": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/Suds"
+            },
+            "title": "Suds",
+            "type": "array"
+          }
+        },
+        "required": [
+          "level",
+          "attempt",
+          "levelDefinitionVersion",
+          "startedAt",
+          "endedAt",
+          "outcome",
+          "criterionMet",
+          "permanenceSeconds",
+          "minDistanceM",
+          "gaze",
+          "avoidanceCount"
+        ],
+        "title": "LevelRecordPayload",
+        "type": "object"
+      },
+      "LoginIn": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "maxLength": 320,
+            "minLength": 1,
+            "title": "Email",
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "title": "LoginIn",
+        "type": "object"
+      },
+      "LoginOut": {
+        "additionalProperties": false,
+        "properties": {
+          "accessToken": {
+            "title": "Accesstoken",
+            "type": "string"
+          },
+          "expiresIn": {
+            "title": "Expiresin",
+            "type": "integer"
+          },
+          "user": {
+            "$ref": "#/components/schemas/UserRef"
+          }
+        },
+        "required": [
+          "accessToken",
+          "expiresIn",
+          "user"
+        ],
+        "title": "LoginOut",
+        "type": "object"
+      },
+      "MeOut": {
+        "additionalProperties": false,
+        "properties": {
+          "consents": {
+            "items": {
+              "$ref": "#/components/schemas/ConsentOut"
+            },
+            "title": "Consents",
+            "type": "array"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "fullName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fullname"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "patient",
+              "professional",
+              "admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "role",
+          "fullName",
+          "email",
+          "consents"
+        ],
+        "title": "MeOut",
+        "type": "object"
+      },
+      "MePatch": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "anyOf": [
+              {
+                "format": "email",
+                "maxLength": 320,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "fullName": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fullname"
+          }
+        },
+        "title": "MePatch",
+        "type": "object"
+      },
+      "NoteCreated": {
+        "additionalProperties": false,
+        "properties": {
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "noteId": {
+            "format": "uuid",
+            "title": "Noteid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "noteId",
+          "createdAt"
+        ],
+        "title": "NoteCreated",
+        "type": "object"
+      },
+      "NoteIn": {
+        "additionalProperties": false,
+        "properties": {
+          "sessionId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sessionid"
+          },
+          "text": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "NoteIn",
+        "type": "object"
+      },
+      "NoteOut": {
+        "additionalProperties": false,
+        "properties": {
+          "authorId": {
+            "format": "uuid",
+            "title": "Authorid",
+            "type": "string"
+          },
+          "authorName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Authorname"
+          },
+          "createdAt": {
+            "title": "Createdat",
+            "type": "string"
+          },
+          "editedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Editedat"
+          },
+          "noteId": {
+            "format": "uuid",
+            "title": "Noteid",
+            "type": "string"
+          },
+          "sessionId": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sessionid"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "noteId",
+          "sessionId",
+          "authorId",
+          "authorName",
+          "text",
+          "createdAt",
+          "editedAt"
+        ],
+        "title": "NoteOut",
+        "type": "object"
+      },
+      "NotePage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/NoteOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "NotePage",
+        "type": "object"
+      },
+      "NotePatch": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "NotePatch",
+        "type": "object"
+      },
+      "PairIn": {
+        "additionalProperties": false,
+        "properties": {
+          "appVersion": {
+            "maxLength": 32,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.+-]+$",
+            "title": "Appversion",
+            "type": "string"
+          },
+          "code": {
+            "maxLength": 8,
+            "minLength": 6,
+            "title": "Code",
+            "type": "string"
+          },
+          "deviceModel": {
+            "maxLength": 32,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_.-]+$",
+            "title": "Devicemodel",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "deviceModel",
+          "appVersion"
+        ],
+        "title": "PairIn",
+        "type": "object"
+      },
+      "PairOut": {
+        "additionalProperties": false,
+        "properties": {
+          "deviceId": {
+            "format": "uuid",
+            "title": "Deviceid",
+            "type": "string"
+          },
+          "deviceToken": {
+            "title": "Devicetoken",
+            "type": "string"
+          }
+        },
+        "required": [
+          "deviceId",
+          "deviceToken"
+        ],
+        "title": "PairOut",
+        "type": "object"
+      },
+      "PairingCodeOut": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "expiresAt": {
+            "title": "Expiresat",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "expiresAt"
+        ],
+        "title": "PairingCodeOut",
+        "type": "object"
+      },
+      "PasswordChangeIn": {
+        "additionalProperties": false,
+        "properties": {
+          "currentPassword": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Currentpassword",
+            "type": "string"
+          },
+          "newPassword": {
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Newpassword",
+            "type": "string"
+          }
+        },
+        "required": [
+          "currentPassword",
+          "newPassword"
+        ],
+        "title": "PasswordChangeIn",
+        "type": "object"
+      },
+      "PatientPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PatientSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "PatientPage",
+        "type": "object"
+      },
+      "PatientSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "fullName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fullname"
+          },
+          "lastRecommendation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "advance",
+                  "repeat",
+                  "step_back"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastrecommendation"
+          },
+          "lastSessionAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lastsessionat"
+          },
+          "levelReached": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Levelreached"
+          },
+          "patientId": {
+            "format": "uuid",
+            "title": "Patientid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "patientId",
+          "fullName",
+          "lastSessionAt",
+          "levelReached",
+          "lastRecommendation"
+        ],
+        "title": "PatientSummary",
+        "type": "object"
+      },
+      "PlanIn": {
+        "additionalProperties": false,
+        "properties": {
+          "allowedStartLevel": {
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Allowedstartlevel",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "allowedStartLevel"
+        ],
+        "title": "PlanIn",
+        "type": "object"
+      },
+      "PlanOut": {
+        "additionalProperties": false,
+        "properties": {
+          "allowedStartLevel": {
+            "title": "Allowedstartlevel",
+            "type": "integer"
+          },
+          "patientId": {
+            "format": "uuid",
+            "title": "Patientid",
+            "type": "string"
+          },
+          "updatedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updatedat"
+          }
+        },
+        "required": [
+          "patientId",
+          "allowedStartLevel",
+          "updatedAt"
+        ],
+        "title": "PlanOut",
+        "type": "object"
+      },
+      "Problem": {
+        "description": "Cuerpo de error ``application/problem+json`` (RFC 9457). Solo para la documentación OpenAPI.",
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Detail"
+          },
+          "errors": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Errors"
+          },
+          "status": {
+            "title": "Status",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "type": {
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "title",
+          "status",
+          "code"
+        ],
+        "title": "Problem",
+        "type": "object"
+      },
+      "ProfessionalSessionDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "analysis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnalysisOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "appVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Appversion"
+          },
+          "deviceModel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Devicemodel"
+          },
+          "endReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endreason"
+          },
+          "endedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endedat"
+          },
+          "levelReached": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Levelreached"
+          },
+          "levels": {
+            "items": {
+              "$ref": "#/components/schemas/LevelRecordOut"
+            },
+            "title": "Levels",
+            "type": "array"
+          },
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/NoteOut"
+            },
+            "title": "Notes",
+            "type": "array"
+          },
+          "phobiaGrade": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phobiagrade"
+          },
+          "recommendation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "advance",
+                  "repeat",
+                  "step_back"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommendation"
+          },
+          "sessionId": {
+            "format": "uuid",
+            "title": "Sessionid",
+            "type": "string"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startedat"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "closed",
+              "pending_start"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "testSession": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Testsession"
+          },
+          "toleranceIndex": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Toleranceindex"
+          },
+          "totalDurationSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totaldurationseconds"
+          }
+        },
+        "required": [
+          "sessionId",
+          "status",
+          "startedAt",
+          "endedAt",
+          "phobiaGrade",
+          "testSession",
+          "endReason",
+          "levelReached",
+          "totalDurationSeconds",
+          "recommendation",
+          "toleranceIndex",
+          "appVersion",
+          "deviceModel",
+          "levels",
+          "analysis",
+          "notes"
+        ],
+        "title": "ProfessionalSessionDetail",
+        "type": "object"
+      },
+      "ProgressOut": {
+        "additionalProperties": false,
+        "properties": {
+          "lastSessions": {
+            "items": {
+              "$ref": "#/components/schemas/LastSessionItem"
+            },
+            "title": "Lastsessions",
+            "type": "array"
+          },
+          "levelReached": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Levelreached"
+          },
+          "sessionsCount": {
+            "title": "Sessionscount",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sessionsCount",
+          "levelReached",
+          "lastSessions"
+        ],
+        "title": "ProgressOut",
+        "type": "object"
+      },
+      "RecordEnvelope": {
+        "additionalProperties": false,
+        "description": "Sobre de la bandeja de salida del visor (D12).",
+        "properties": {
+          "payload": {
+            "additionalProperties": true,
+            "title": "Payload",
+            "type": "object"
+          },
+          "recordId": {
+            "format": "uuid",
+            "title": "Recordid",
+            "type": "string"
+          },
+          "schemaVersion": {
+            "const": 1,
+            "title": "Schemaversion",
+            "type": "integer"
+          },
+          "sessionId": {
+            "format": "uuid",
+            "title": "Sessionid",
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "session_start",
+              "level_record",
+              "session_end"
+            ],
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "recordId",
+          "type",
+          "schemaVersion",
+          "sessionId",
+          "payload"
+        ],
+        "title": "RecordEnvelope",
+        "type": "object"
+      },
+      "RecordResult": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "stored",
+              "duplicate"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "RecordResult",
+        "type": "object"
+      },
+      "RefreshOut": {
+        "additionalProperties": false,
+        "properties": {
+          "accessToken": {
+            "title": "Accesstoken",
+            "type": "string"
+          },
+          "expiresIn": {
+            "title": "Expiresin",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "accessToken",
+          "expiresIn"
+        ],
+        "title": "RefreshOut",
+        "type": "object"
+      },
+      "RegisterIn": {
+        "additionalProperties": false,
+        "properties": {
+          "consent": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ConsentIn"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "email": {
+            "format": "email",
+            "maxLength": 320,
+            "title": "Email",
+            "type": "string"
+          },
+          "fullName": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Fullname",
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 128,
+            "minLength": 8,
+            "title": "Password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fullName",
+          "email",
+          "password"
+        ],
+        "title": "RegisterIn",
+        "type": "object"
+      },
+      "RegisterOut": {
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "enum": [
+              "patient",
+              "professional",
+              "admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          },
+          "userId": {
+            "format": "uuid",
+            "title": "Userid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userId",
+          "role"
+        ],
+        "title": "RegisterOut",
+        "type": "object"
+      },
+      "Samples": {
+        "additionalProperties": true,
+        "properties": {
+          "angleDeg": {
+            "default": [],
+            "items": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Angledeg",
+            "type": "array"
+          },
+          "distanceM": {
+            "default": [],
+            "items": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Distancem",
+            "type": "array"
+          },
+          "hz": {
+            "exclusiveMinimum": 0,
+            "title": "Hz",
+            "type": "number"
+          }
+        },
+        "required": [
+          "hz"
+        ],
+        "title": "Samples",
+        "type": "object"
+      },
+      "SessionDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "analysis": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AnalysisOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "appVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Appversion"
+          },
+          "deviceModel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Devicemodel"
+          },
+          "endReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endreason"
+          },
+          "endedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endedat"
+          },
+          "levelReached": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Levelreached"
+          },
+          "levels": {
+            "items": {
+              "$ref": "#/components/schemas/LevelRecordOut"
+            },
+            "title": "Levels",
+            "type": "array"
+          },
+          "phobiaGrade": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phobiagrade"
+          },
+          "recommendation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "advance",
+                  "repeat",
+                  "step_back"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommendation"
+          },
+          "sessionId": {
+            "format": "uuid",
+            "title": "Sessionid",
+            "type": "string"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startedat"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "closed",
+              "pending_start"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "testSession": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Testsession"
+          },
+          "toleranceIndex": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Toleranceindex"
+          },
+          "totalDurationSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totaldurationseconds"
+          }
+        },
+        "required": [
+          "sessionId",
+          "status",
+          "startedAt",
+          "endedAt",
+          "phobiaGrade",
+          "testSession",
+          "endReason",
+          "levelReached",
+          "totalDurationSeconds",
+          "recommendation",
+          "toleranceIndex",
+          "appVersion",
+          "deviceModel",
+          "levels",
+          "analysis"
+        ],
+        "title": "SessionDetail",
+        "type": "object"
+      },
+      "SessionEndPayload": {
+        "additionalProperties": true,
+        "properties": {
+          "endReason": {
+            "enum": [
+              "completed",
+              "user_finished",
+              "safe_exit",
+              "app_closed"
+            ],
+            "title": "Endreason",
+            "type": "string"
+          },
+          "endedAt": {
+            "format": "date-time",
+            "title": "Endedat",
+            "type": "string"
+          },
+          "levelReached": {
+            "maximum": 5,
+            "minimum": 0,
+            "title": "Levelreached",
+            "type": "integer"
+          },
+          "totalDurationSeconds": {
+            "minimum": 0,
+            "title": "Totaldurationseconds",
+            "type": "number"
+          }
+        },
+        "required": [
+          "endedAt",
+          "endReason",
+          "levelReached",
+          "totalDurationSeconds"
+        ],
+        "title": "SessionEndPayload",
+        "type": "object"
+      },
+      "SessionPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SessionSummary"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nextcursor"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "title": "SessionPage",
+        "type": "object"
+      },
+      "SessionStartPayload": {
+        "additionalProperties": true,
+        "properties": {
+          "appVersion": {
+            "maxLength": 32,
+            "minLength": 1,
+            "title": "Appversion",
+            "type": "string"
+          },
+          "deviceModel": {
+            "enum": [
+              "quest2",
+              "quest3",
+              "quest3s",
+              "editor"
+            ],
+            "title": "Devicemodel",
+            "type": "string"
+          },
+          "phobiaGrade": {
+            "maximum": 5,
+            "minimum": 1,
+            "title": "Phobiagrade",
+            "type": "integer"
+          },
+          "startedAt": {
+            "format": "date-time",
+            "title": "Startedat",
+            "type": "string"
+          },
+          "testSession": {
+            "title": "Testsession",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "startedAt",
+          "phobiaGrade",
+          "appVersion",
+          "deviceModel",
+          "testSession"
+        ],
+        "title": "SessionStartPayload",
+        "type": "object"
+      },
+      "SessionSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "endReason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endreason"
+          },
+          "endedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Endedat"
+          },
+          "levelReached": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Levelreached"
+          },
+          "phobiaGrade": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phobiagrade"
+          },
+          "recommendation": {
+            "anyOf": [
+              {
+                "enum": [
+                  "advance",
+                  "repeat",
+                  "step_back"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommendation"
+          },
+          "sessionId": {
+            "format": "uuid",
+            "title": "Sessionid",
+            "type": "string"
+          },
+          "startedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Startedat"
+          },
+          "status": {
+            "enum": [
+              "open",
+              "closed",
+              "pending_start"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "testSession": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Testsession"
+          },
+          "toleranceIndex": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Toleranceindex"
+          },
+          "totalDurationSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totaldurationseconds"
+          }
+        },
+        "required": [
+          "sessionId",
+          "status",
+          "startedAt",
+          "endedAt",
+          "phobiaGrade",
+          "testSession",
+          "endReason",
+          "levelReached",
+          "totalDurationSeconds",
+          "recommendation",
+          "toleranceIndex"
+        ],
+        "title": "SessionSummary",
+        "type": "object"
+      },
+      "StatusOut": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "StatusOut",
+        "type": "object"
+      },
+      "Suds": {
+        "additionalProperties": true,
+        "properties": {
+          "at": {
+            "minimum": 0,
+            "title": "At",
+            "type": "number"
+          },
+          "phase": {
+            "enum": [
+              "before",
+              "during",
+              "after"
+            ],
+            "title": "Phase",
+            "type": "string"
+          },
+          "value": {
+            "maximum": 100,
+            "minimum": 0,
+            "title": "Value",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "phase",
+          "value",
+          "at"
+        ],
+        "title": "Suds",
+        "type": "object"
+      },
+      "UserRef": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "patient",
+              "professional",
+              "admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "role"
+        ],
+        "title": "UserRef",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "deviceToken": {
+        "description": "Token opaco del visor emparejado.",
+        "scheme": "bearer",
+        "type": "http"
+      },
+      "webAccessToken": {
+        "description": "JWT de acceso de la web (15 min).",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "API v1 de NEUROPHOBIA (prototipo académico). Contrato: docs/api/CONTRATO_API_v1.md. Errores en application/problem+json (RFC 9457).",
+    "title": "NEUROPHOBIA API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/admin/assignments": {
+      "get": {
+        "operationId": "list_assignments_api_v1_admin_assignments_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "professionalId",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Professionalid"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignmentPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Asignaciones profesional–paciente activas",
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "operationId": "create_assignment_api_v1_admin_assignments_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignmentCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignmentOut"
+                }
+              }
+            },
+            "description": "La asignación ya existía"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignmentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Asignar un paciente a un profesional",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/assignments/{assignmentId}": {
+      "delete": {
+        "operationId": "delete_assignment_api_v1_admin_assignments__assignmentId__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "assignmentId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Assignmentid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Quitar una asignación",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/exports/analysis-dataset": {
+      "get": {
+        "operationId": "export_dataset_api_v1_admin_exports_analysis_dataset_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              },
+              "text/csv": {}
+            },
+            "description": "Conjunto anónimo (JSON por defecto; CSV con `Accept: text/csv`)."
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Exportación anónima para análisis (sin pseudonym_id, ids nuevos, sin sesiones de prueba)",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/users": {
+      "get": {
+        "operationId": "list_users_api_v1_admin_users_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "patient",
+                    "professional",
+                    "admin"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Role"
+            }
+          },
+          {
+            "in": "query",
+            "name": "active",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Active"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUserPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Usuarios (paginado)",
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "operationId": "create_user_api_v1_admin_users_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminUserCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUserOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "EMAIL_TAKEN, RECORD_CONFLICT o LAST_ADMIN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Crear un usuario con contraseña temporal",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/users/{userId}": {
+      "patch": {
+        "operationId": "patch_user_api_v1_admin_users__userId__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Userid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminUserPatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUserOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "EMAIL_TAKEN, RECORD_CONFLICT o LAST_ADMIN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Cambiar rol o activar/desactivar",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "RATE_LIMITED"
+          }
+        },
+        "summary": "Inicio de sesión web; deja la cookie de refresco",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR"
+          }
+        },
+        "summary": "Cierra la sesión y revoca el refresco",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "refresh_api_v1_auth_refresh_post",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefreshOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "summary": "Nuevo token de acceso; rota la cookie de refresco",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "register_api_v1_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "EMAIL_TAKEN, RECORD_CONFLICT o LAST_ADMIN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "RATE_LIMITED"
+          }
+        },
+        "summary": "Registro de un usuario externo (queda como paciente sin profesional, D18)",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/api/v1/device/context": {
+      "get": {
+        "operationId": "context_api_v1_device_context_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceContext"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          }
+        },
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "summary": "Contexto al empezar, en el Refugio (sin nombre ni correo)",
+        "tags": [
+          "device"
+        ]
+      }
+    },
+    "/api/v1/device/pair": {
+      "post": {
+        "operationId": "pair_api_v1_device_pair_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PairIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PairOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "410": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "PAIRING_CODE_EXPIRED"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "429": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "RATE_LIMITED"
+          }
+        },
+        "summary": "Emparejar el visor con el código de la web",
+        "tags": [
+          "device"
+        ]
+      }
+    },
+    "/api/v1/device/records": {
+      "post": {
+        "operationId": "post_record_api_v1_device_records_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RecordEnvelope"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordResult"
+                }
+              }
+            },
+            "description": "duplicate: ya existía con el mismo contenido"
+          },
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordResult"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "400": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "BAD_REQUEST"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "EMAIL_TAKEN, RECORD_CONFLICT o LAST_ADMIN"
+          },
+          "413": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "PAYLOAD_TOO_LARGE"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          }
+        },
+        "security": [
+          {
+            "deviceToken": []
+          }
+        ],
+        "summary": "Entrada única de la bandeja de salida del visor (idempotente por recordId)",
+        "tags": [
+          "device"
+        ]
+      }
+    },
+    "/api/v1/health": {
+      "get": {
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Estado del servicio",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "operationId": "get_me_api_v1_me_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Datos propios",
+        "tags": [
+          "me"
+        ]
+      },
+      "patch": {
+        "operationId": "patch_me_api_v1_me_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MePatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "EMAIL_TAKEN, RECORD_CONFLICT o LAST_ADMIN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Editar nombre o correo",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/api/v1/me/consents/withdraw": {
+      "post": {
+        "operationId": "withdraw_api_v1_me_consents_withdraw_post",
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "EMAIL_TAKEN, RECORD_CONFLICT o LAST_ADMIN"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Retirar el consentimiento: borra la identidad y deja los datos clínicos sin vínculo",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/api/v1/me/devices": {
+      "get": {
+        "operationId": "my_devices_api_v1_me_devices_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DevicePage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Visores emparejados",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/api/v1/me/devices/{deviceId}": {
+      "delete": {
+        "operationId": "revoke_device_api_v1_me_devices__deviceId__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "deviceId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Deviceid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Revocar un visor",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/api/v1/me/password": {
+      "put": {
+        "operationId": "change_password_api_v1_me_password_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordChangeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Cambiar la contraseña (cierra todas las sesiones web: hay que volver a iniciar sesión)",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/api/v1/me/progress": {
+      "get": {
+        "operationId": "my_progress_api_v1_me_progress_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Progreso del paciente",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/api/v1/me/sessions": {
+      "get": {
+        "operationId": "my_sessions_api_v1_me_sessions_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Sesiones propias",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/api/v1/me/sessions/{sessionId}": {
+      "get": {
+        "operationId": "my_session_api_v1_me_sessions__sessionId__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sessionId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Sessionid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Detalle de una sesión propia (sin notas)",
+        "tags": [
+          "me"
+        ]
+      }
+    },
+    "/api/v1/pairing-codes": {
+      "post": {
+        "operationId": "create_pairing_code_api_v1_pairing_codes_post",
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PairingCodeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Código para emparejar el visor (paciente)",
+        "tags": [
+          "me",
+          "device"
+        ]
+      }
+    },
+    "/api/v1/patients": {
+      "get": {
+        "operationId": "list_patients_api_v1_patients_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PatientPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Pacientes asignados",
+        "tags": [
+          "patients"
+        ]
+      }
+    },
+    "/api/v1/patients/{patientId}/notes": {
+      "get": {
+        "operationId": "list_notes_api_v1_patients__patientId__notes_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Patientid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotePage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Notas, más recientes primero",
+        "tags": [
+          "patients"
+        ]
+      },
+      "post": {
+        "operationId": "add_note_api_v1_patients__patientId__notes_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Patientid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteCreated"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Nueva nota",
+        "tags": [
+          "patients"
+        ]
+      }
+    },
+    "/api/v1/patients/{patientId}/notes/{noteId}": {
+      "patch": {
+        "operationId": "edit_note_api_v1_patients__patientId__notes__noteId__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Patientid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "noteId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Noteid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NotePatch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Editar una nota (solo el autor)",
+        "tags": [
+          "patients"
+        ]
+      }
+    },
+    "/api/v1/patients/{patientId}/pairing-codes": {
+      "post": {
+        "operationId": "create_pairing_code_api_v1_patients__patientId__pairing_codes_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Patientid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PairingCodeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Código para emparejar el visor de un paciente (profesional, D20)",
+        "tags": [
+          "patients",
+          "device"
+        ]
+      }
+    },
+    "/api/v1/patients/{patientId}/plan": {
+      "put": {
+        "operationId": "put_plan_api_v1_patients__patientId__plan_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Patientid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Nivel inicial permitido (1–5)",
+        "tags": [
+          "patients"
+        ]
+      }
+    },
+    "/api/v1/patients/{patientId}/progress": {
+      "get": {
+        "operationId": "patient_progress_api_v1_patients__patientId__progress_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Patientid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgressOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Progreso de un paciente",
+        "tags": [
+          "patients"
+        ]
+      }
+    },
+    "/api/v1/patients/{patientId}/sessions": {
+      "get": {
+        "operationId": "patient_sessions_api_v1_patients__patientId__sessions_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Patientid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Sesiones de un paciente",
+        "tags": [
+          "patients"
+        ]
+      }
+    },
+    "/api/v1/patients/{patientId}/sessions/{sessionId}": {
+      "get": {
+        "operationId": "patient_session_api_v1_patients__patientId__sessions__sessionId__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "patientId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Patientid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "sessionId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Sessionid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProfessionalSessionDetail"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "404": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "NOT_FOUND o PAIRING_CODE_INVALID"
+          },
+          "422": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "VALIDATION_ERROR o CONSENT_REQUIRED"
+          },
+          "423": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "ACCOUNT_DISABLED"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Detalle de una sesión: registros por nivel, SUDS, análisis y notas",
+        "tags": [
+          "patients"
+        ]
+      }
+    }
+  }
+}

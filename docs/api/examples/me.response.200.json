@@ -1,0 +1,14 @@
+{
+  "id": "2f6e1d2c-3b4a-4c5d-9e8f-7a6b5c4d3e2f",
+  "role": "patient",
+  "fullName": "Ana Pérez",
+  "email": "ana@example.com",
+  "consents": [
+    {
+      "consentId": "0d1e2f3a-4b5c-4d6e-8f7a-9b0c1d2e3f4a",
+      "consentVersion": "2026-10-v1",
+      "grantedAt": "2026-10-30T21:00:00Z",
+      "withdrawnAt": null
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "sessionsCount": 1,
+  "levelReached": 2,
+  "lastSessions": [
+    {
+      "sessionId": "a3b9e2c4-5d6f-4a1b-8c7d-9e0f1a2b3c4d",
+      "startedAt": "2026-10-30T21:00:00Z",
+      "levelReached": 2,
+      "totalDurationSeconds": 720.0,
+      "recommendation": "advance"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+# API + PostgreSQL en este PC (D24). Los valores salen de .env (fuera de Git): ver .env.example.
+name: neurophobia
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Falta POSTGRES_USER en .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD en .env}
+      POSTGRES_DB: ${POSTGRES_DB:-neurophobia}
+    ports:
+      # Solo desde este PC.
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NP_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-neurophobia}
+      NP_SECRET_KEY: ${NP_SECRET_KEY:?Falta NP_SECRET_KEY en .env}
+      NP_CORS_ORIGIN: ${NP_CORS_ORIGIN:-http://localhost:5173}
+      NP_COOKIE_SECURE: ${NP_COOKIE_SECURE:-true}
+      NP_LOG_LEVEL: ${NP_LOG_LEVEL:-INFO}
+    ports:
+      # En todas las interfaces, para que el visor llegue por la Wi-Fi local en las builds de desarrollo.
+      - "8000:8000"
+
+volumes:
+  pgdata:

@@ -1,0 +1,85 @@
+{
+  "recordId": "8a9b0c1d-2e3f-4a4b-9c5d-6e7f8a9b0c1d",
+  "type": "level_record",
+  "schemaVersion": 1,
+  "sessionId": "a3b9e2c4-5d6f-4a1b-8c7d-9e0f1a2b3c4d",
+  "payload": {
+    "level": 1,
+    "attempt": 1,
+    "levelDefinitionVersion": "2026-10-30",
+    "startedAt": "2026-10-30T21:01:10Z",
+    "endedAt": "2026-10-30T21:05:40Z",
+    "outcome": "completed",
+    "criterionMet": true,
+    "permanenceSeconds": 270.0,
+    "minDistanceM": 1.85,
+    "gaze": {
+      "coneDeg": 15,
+      "onStimulusSeconds": 142.5,
+      "meanAngleDeg": 21.3
+    },
+    "avoidanceCount": 2,
+    "suds": [
+      {
+        "phase": "before",
+        "value": 60,
+        "at": 0.0
+      },
+      {
+        "phase": "during",
+        "value": 70,
+        "at": 120.4
+      },
+      {
+        "phase": "after",
+        "value": 40,
+        "at": 270.0
+      }
+    ],
+    "events": [
+      {
+        "t": 0.0,
+        "type": "level_start"
+      },
+      {
+        "t": 33.2,
+        "type": "avoidance",
+        "data": {
+          "retreatSpeed": 0.9
+        }
+      },
+      {
+        "t": 80.0,
+        "type": "pause"
+      },
+      {
+        "t": 95.0,
+        "type": "resume"
+      },
+      {
+        "t": 270.0,
+        "type": "level_end"
+      }
+    ],
+    "samples": {
+      "hz": 2,
+      "distanceM": [
+        3.1,
+        3.0
+      ],
+      "angleDeg": [
+        12.0,
+        8.5
+      ]
+    },
+    "extra": {
+      "taskCompletions": [
+        "TASK_LAMP"
+      ],
+      "breathingActivations": 0,
+      "headMovementMean": 0.12,
+      "handContactSeconds": 0.0,
+      "handWithdrawals": 0
+    }
+  }
+}

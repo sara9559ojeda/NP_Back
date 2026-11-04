@@ -1,0 +1,19 @@
+{
+  "toleranceIndex": 0.62,
+  "recommendation": "advance",
+  "method": "rules-baseline",
+  "methodVersion": "0.1.0",
+  "basis": [
+    {
+      "feature": "sudsDrop",
+      "value": 20,
+      "effect": "favorable"
+    },
+    {
+      "feature": "avoidanceCount",
+      "value": 2,
+      "effect": "unfavorable"
+    }
+  ],
+  "clinicalStatus": "pendiente_de_validar"
+}

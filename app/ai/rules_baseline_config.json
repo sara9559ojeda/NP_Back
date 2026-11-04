@@ -1,0 +1,48 @@
+{
+  "method": "rules-baseline",
+  "methodVersion": "0.1.0",
+  "clinicalStatus": "pendiente_de_validar",
+  "aviso": "Ningún parámetro de este archivo tiene fuente clínica. Son valores técnicos de partida para que el sistema funcione de punta a punta. Un profesional debe validarlos o sustituirlos antes de cualquier uso con pacientes. La recomendación no cambia nada sola: el profesional decide el nivel inicial con PUT /patients/{patientId}/plan.",
+  "parameters": {
+    "weights": {
+      "value": { "criterionMet": 1.0, "sudsDrop": 1.0, "sudsAfter": 1.0, "avoidanceCount": 1.0 },
+      "status": "provisional técnico, sin fuente, pendiente de validar",
+      "description": "Peso de cada rasgo en el índice de tolerancia (media ponderada de puntuaciones de 0 a 1). Pesos iguales por no haber fuente que justifique otros. Si falta un rasgo (por ejemplo, sin SUDS), se reparte el peso entre los demás."
+    },
+    "sudsScaleRange": {
+      "value": [0, 100],
+      "status": "provisional técnico, sin fuente, pendiente de validar",
+      "description": "Rango de la SUDS usado para normalizar sudsAfter (1 - valor/100) y sudsDrop ((caída + 100) / 200). Es el rango de la escala del contrato, no un umbral clínico."
+    },
+    "avoidanceTransform": {
+      "value": "1/(1+n)",
+      "status": "provisional técnico, sin fuente, pendiente de validar",
+      "description": "Puntuación del número de evitaciones n del nivel evaluado: 0 evitaciones = 1; 1 = 0,5 (neutro); 2 = 0,33."
+    },
+    "advanceMinIndex": {
+      "value": 0.6,
+      "status": "provisional técnico, sin fuente, pendiente de validar",
+      "description": "Índice mínimo para recomendar 'advance'."
+    },
+    "stepBackMaxIndex": {
+      "value": 0.4,
+      "status": "provisional técnico, sin fuente, pendiente de validar",
+      "description": "Por debajo de este índice se recomienda 'step_back' (o 'repeat' si el nivel evaluado es el 1)."
+    },
+    "requireCriterionMetToAdvance": {
+      "value": true,
+      "status": "provisional técnico, sin fuente, pendiente de validar",
+      "description": "Solo se recomienda 'advance' si el nivel evaluado cumplió su criterio de permanencia (coherente con HU-03, pero el criterio de cada nivel también está pendiente de validar)."
+    },
+    "safeExitBlocksAdvance": {
+      "value": true,
+      "status": "provisional técnico, sin fuente, pendiente de validar",
+      "description": "Si el nivel evaluado terminó con salida segura, no se recomienda 'advance'."
+    },
+    "neutralScore": {
+      "value": 0.5,
+      "status": "provisional técnico, sin fuente, pendiente de validar",
+      "description": "Puntuación a partir de la cual un rasgo se explica como 'favorable' (mayor) o 'unfavorable' (menor) en basis."
+    }
+  }
+}

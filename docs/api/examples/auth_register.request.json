@@ -1,0 +1,9 @@
+{
+  "fullName": "Ana Pérez",
+  "email": "ana@example.com",
+  "password": "********",
+  "consent": {
+    "accepted": true,
+    "consentVersion": "2026-10-v1"
+  }
+}
