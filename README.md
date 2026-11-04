@@ -49,6 +49,8 @@ docs/api/           contrato, openapi.json y ejemplos
 
 ## Puesta en marcha con Docker
 
+Para Vercel y Supabase, sigue [la guía de despliegue](docs/DESPLIEGUE_VERCEL.md). Incluye variables por proyecto, migraciones `0001`/`0002`, primer administrador y cookies detrás del proxy de NP_Front.
+
 Requisitos: Docker Desktop. Puertos: API **8000** y PostgreSQL **5433** (solo desde este PC).
 
 1. Copia `.env.example` como `.env` y escribe los valores (el archivo `.env` no se sube a Git).

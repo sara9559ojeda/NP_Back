@@ -15,6 +15,8 @@ from typing import Any
 
 from sqlalchemy import (
     Boolean,
+    BigInteger,
+    Identity,
     CheckConstraint,
     DateTime,
     Float,
@@ -42,6 +44,18 @@ NAMING = {
 
 class Base(DeclarativeBase):
     metadata = MetaData(naming_convention=NAMING)
+
+
+class RateLimitEvent(Base):
+    __tablename__ = "rate_limit_events"
+    __table_args__ = (
+        Index("ix_rate_limit_key_time", "key_hash", "occurred_at"),
+        Index("ix_rate_limit_time", "occurred_at"),
+        {"schema": "identity"},
+    )
+    id: Mapped[int] = mapped_column(BigInteger, Identity(), primary_key=True)
+    key_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, server_default=text("clock_timestamp()"))
 
 
 def _uuid_pk() -> Mapped[uuid.UUID]:
