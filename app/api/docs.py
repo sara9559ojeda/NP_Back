@@ -18,6 +18,7 @@ _DESCRIPTIONS = {
     422: "VALIDATION_ERROR o CONSENT_REQUIRED",
     423: "ACCOUNT_DISABLED",
     429: "RATE_LIMITED",
+    503: "STORAGE_UNAVAILABLE (database unreachable; retry after Retry-After)",
 }
 
 

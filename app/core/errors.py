@@ -6,6 +6,8 @@ from typing import Any
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import InterfaceError, OperationalError
+from sqlalchemy.exc import TimeoutError as PoolTimeoutError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 logger = logging.getLogger("neurophobia.errors")
@@ -33,7 +35,11 @@ _TITLES: dict[str, str] = {
     "ACCOUNT_DISABLED": "Cuenta desactivada",
     "RATE_LIMITED": "Demasiados intentos",
     "SERVER_ERROR": "Error interno",
+    "STORAGE_UNAVAILABLE": "Almacenamiento no disponible",
 }
+
+# Seconds the client is asked to wait before retrying when the database does not answer.
+STORAGE_RETRY_AFTER_SECONDS = 5
 
 _DEFAULT_CODE_BY_STATUS: dict[int, str] = {
     400: "BAD_REQUEST",
@@ -48,6 +54,7 @@ _DEFAULT_CODE_BY_STATUS: dict[int, str] = {
     423: "ACCOUNT_DISABLED",
     429: "RATE_LIMITED",
     500: "SERVER_ERROR",
+    503: "STORAGE_UNAVAILABLE",
 }
 
 
@@ -100,6 +107,15 @@ def problem_response(
         status_code=status,
         media_type=PROBLEM_CONTENT_TYPE,
         headers=headers,
+    )
+
+
+def storage_unavailable_response() -> JSONResponse:
+    return problem_response(
+        503,
+        "STORAGE_UNAVAILABLE",
+        "No se pudieron guardar ni leer los datos. Inténtalo de nuevo.",
+        headers={"Retry-After": str(STORAGE_RETRY_AFTER_SECONDS)},
     )
 
 
@@ -173,6 +189,15 @@ def install_error_handlers(app: FastAPI) -> None:
     async def _http(_: Request, exc: StarletteHTTPException) -> JSONResponse:
         code = _DEFAULT_CODE_BY_STATUS.get(exc.status_code, "SERVER_ERROR" if exc.status_code >= 500 else "BAD_REQUEST")
         return problem_response(exc.status_code, code, headers=getattr(exc, "headers", None))
+
+    async def _storage(request: Request, exc: Exception) -> JSONResponse:
+        # BPMN gateway "¿Almacena datos? -> no -> mensaje de error": the transaction is discarded, so
+        # nothing is half-saved and the client can resend the same request. No technical details leak.
+        logger.error("storage_unavailable type=%s request_id=%s", type(exc).__name__, getattr(request.state, "request_id", "-"))
+        return storage_unavailable_response()
+
+    for exc_class in (OperationalError, InterfaceError, PoolTimeoutError):
+        app.add_exception_handler(exc_class, _storage)
 
     @app.exception_handler(Exception)
     async def _unhandled(request: Request, exc: Exception) -> JSONResponse:
