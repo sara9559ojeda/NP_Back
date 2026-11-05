@@ -73,6 +73,16 @@ def _matrix(w):
         ("delete", f"/admin/assignments/{uuid.uuid4()}", None, {ANON: 401, PATIENT: 403, PRO: 403, ADMIN: 404}),
         # Exportación anónima
         ("get", "/admin/exports/analysis-dataset", None, {ANON: 401, PATIENT: 403, PRO: 403, ADMIN: 200}),
+        # ── v1.1.0 (UML/BPMN diagrams) ──
+        ("get", "/public/product-info", None, {ANON: 200, PATIENT: 200, PRO: 200, ADMIN: 200}),
+        ("get", "/me/therapy", None, {ANON: 401, PATIENT: 200, PRO: 403, ADMIN: 403, DEVICE: 401}),
+        ("put", "/me/phobia-grade", {"phobiaGrade": 3}, {ANON: 401, PATIENT: 200, PRO: 403, ADMIN: 403}),
+        ("put", "/device/phobia-grade", {"phobiaGrade": 3}, {ANON: 401, PATIENT: 403, PRO: 403, ADMIN: 403, DEVICE: 200}),
+        ("get", f"/device/sessions/{sid}", None, {ANON: 401, PATIENT: 403, PRO: 403, ADMIN: 403, DEVICE: 200}),
+        ("post", "/device/unpair", None, {ANON: 401, PATIENT: 403, PRO: 403, ADMIN: 403}),
+        ("get", f"/patients/{pid}/feedback", None, {ANON: 401, PATIENT: 403, PRO: 200, OTHER_PRO: 404, ADMIN: 403}),
+        ("get", f"/admin/users/{pid}", None, {ANON: 401, PATIENT: 403, PRO: 403, ADMIN: 200}),
+        ("put", f"/admin/users/{pid}/password", {"temporaryPassword": "temporal-123"}, {ANON: 401, PATIENT: 403, PRO: 403, ADMIN: 204}),
     ]
 
 
