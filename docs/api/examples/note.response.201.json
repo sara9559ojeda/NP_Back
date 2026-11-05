@@ -1,4 +1,9 @@
 {
   "noteId": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
-  "createdAt": "2026-10-30T21:20:00Z"
+  "sessionId": "a3b9e2c4-5d6f-4a1b-8c7d-9e0f1a2b3c4d",
+  "authorId": "7c8d9e0f-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+  "authorName": "Laura Gómez",
+  "text": "Tolera el nivel 2; mantener el plan una sesión más.",
+  "createdAt": "2026-10-30T21:20:00Z",
+  "editedAt": null
 }

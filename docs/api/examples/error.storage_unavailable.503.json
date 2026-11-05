@@ -1,0 +1,7 @@
+{
+  "type": "https://neurophobia/errors/storage-unavailable",
+  "title": "Almacenamiento no disponible",
+  "status": 503,
+  "code": "STORAGE_UNAVAILABLE",
+  "detail": "No se pudieron guardar ni leer los datos. Inténtalo de nuevo."
+}

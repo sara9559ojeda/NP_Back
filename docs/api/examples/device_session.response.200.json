@@ -1,0 +1,17 @@
+{
+  "sessionId": "a3b9e2c4-5d6f-4a1b-8c7d-9e0f1a2b3c4d",
+  "status": "closed",
+  "startedAt": "2026-10-30T21:00:00Z",
+  "endedAt": "2026-10-30T21:12:00Z",
+  "phobiaGrade": 3,
+  "levelReached": 2,
+  "levelsStored": 1,
+  "feedback": {
+    "status": "saved",
+    "recommendation": "repeat",
+    "toleranceIndex": 0.62,
+    "method": "rules-baseline",
+    "clinicalStatus": "pendiente_de_validar",
+    "createdAt": "2026-10-30T21:12:01Z"
+  }
+}

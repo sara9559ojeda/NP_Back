@@ -2,8 +2,9 @@
 
 import json
 import re
+import uuid
 
-from tests.conftest import ROOT
+from tests.conftest import API, ROOT, envelope, example
 
 CONTRACT = ROOT / "docs" / "api" / "CONTRATO_API_v1.md"
 OPENAPI = ROOT / "docs" / "api" / "openapi.json"
@@ -38,3 +39,34 @@ def test_errors_documented_as_problem_json(app):
     assert record_body["content"]["application/json"]["schema"]["$ref"].endswith("/RecordEnvelope")
     for name in ("SessionStartPayload", "LevelRecordPayload", "SessionEndPayload"):
         assert name in schema["components"]["schemas"]
+
+
+def _shape(value):
+    """Keys of a JSON value, recursively, ignoring the concrete values."""
+    if isinstance(value, dict):
+        return {key: _shape(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_shape(value[0])] if value else []
+    return None
+
+
+def test_v1_1_examples_match_real_responses(client, api, care_team):
+    pid, device = care_team["patient"]["id"], care_team["device"]
+    session_id = str(uuid.uuid4())
+    start = api.send(device, envelope("session_start", session_id)).json()
+    api.send(device, envelope("level_record", session_id))
+    end = api.send(device, envelope("session_end", session_id)).json()
+    client.post(f"{API}/patients/{pid}/notes", json={"text": "n", "sessionId": session_id}, headers=care_team["pro_headers"])
+    grade = client.put(f"{API}/device/phobia-grade", json=example("phobia_grade.request.json"), headers=device).json()
+    real = {
+        "records_session_start.response.201.json": start,
+        "records_session_end.response.201.json": end,
+        "phobia_grade.response.200.json": grade,
+        "device_session.response.200.json": client.get(f"{API}/device/sessions/{session_id}", headers=device).json(),
+        "device_context.v1_1.response.200.json": client.get(f"{API}/device/context", headers=device).json(),
+        "me_therapy.response.200.json": client.get(f"{API}/me/therapy", headers=care_team["patient_headers"]).json(),
+        "feedback.response.200.json": client.get(f"{API}/patients/{pid}/feedback", headers=care_team["pro_headers"]).json(),
+        "health_ready.response.200.json": client.get(f"{API}/health/ready").json(),
+    }
+    for name, body in real.items():
+        assert _shape(body) == _shape(example(name)), name
