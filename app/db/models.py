@@ -167,12 +167,16 @@ class Patient(Base):
     __tablename__ = "patients"
     __table_args__ = (
         CheckConstraint("allowed_start_level BETWEEN 1 AND 5", name="allowed_start_level"),
+        CheckConstraint("phobia_grade IS NULL OR phobia_grade BETWEEN 1 AND 5", name="phobia_grade"),
         {"schema": "clinical"},
     )
 
     pseudonym_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     allowed_start_level: Mapped[int] = mapped_column(SmallInteger, nullable=False, default=1)
     plan_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Self-reported phobia grade (1-5) from the BPMN step "Ajustar grado de fobia" (contract v1.1.0).
+    phobia_grade: Mapped[int | None] = mapped_column(SmallInteger)
+    phobia_grade_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # Plazo de conservación: campo preparado, sin uso hasta que se decida D23.
     retain_until: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = _created_at()
