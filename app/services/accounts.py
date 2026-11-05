@@ -1,15 +1,36 @@
 """Datos propios y retirada del consentimiento (contrato, secciones 3 y 4.3)."""
 
 import uuid
+from datetime import datetime
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.core.errors import ApiError, field_error
 from app.core.security import hash_password, utcnow, verify_password
+from app.db.models import User
 from app.repositories import clinical, identity
 from app.schemas.accounts import ConsentOut, MeOut, MePatch
 from app.services.actor import Actor
+
+
+def change_email(db: Session, user: User, email: str, now: datetime) -> None:
+    """Set a new e-mail, rejecting one that already belongs to another account."""
+    if email == user.email:
+        return
+    if identity.email_exists(db, email, exclude_user=user.id):
+        raise ApiError(409, "EMAIL_TAKEN", "Ese correo ya tiene una cuenta.")
+    user.email = email
+    user.updated_at = now
+
+
+def commit_profile(db: Session) -> None:
+    """Commit a profile change; a concurrent duplicate e-mail surfaces as ``EMAIL_TAKEN``."""
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise ApiError(409, "EMAIL_TAKEN", "Ese correo ya tiene una cuenta.") from exc
 
 
 def get_me(db: Session, actor: Actor) -> MeOut:
@@ -28,18 +49,11 @@ def patch_me(db: Session, actor: Actor, data: MePatch) -> MeOut:
     if user is None:
         raise ApiError(401, "UNAUTHENTICATED")
     now = utcnow()
-    if data.email is not None and data.email != user.email:
-        if identity.email_exists(db, data.email, exclude_user=user.id):
-            raise ApiError(409, "EMAIL_TAKEN", "Ese correo ya tiene una cuenta.")
-        user.email = data.email
-        user.updated_at = now
+    if data.email is not None:
+        change_email(db, user, data.email, now)
     if data.full_name is not None:
         identity.set_full_name(db, user.id, data.full_name, now)
-    try:
-        db.commit()
-    except IntegrityError as exc:
-        db.rollback()
-        raise ApiError(409, "EMAIL_TAKEN", "Ese correo ya tiene una cuenta.") from exc
+    commit_profile(db)
     return get_me(db, actor)
 
 

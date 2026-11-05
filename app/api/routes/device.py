@@ -2,6 +2,7 @@
 
 import json
 import math
+import uuid
 
 from fastapi import APIRouter, Request, Response, status
 from starlette.concurrency import run_in_threadpool
@@ -10,8 +11,8 @@ from app.api.deps import Db, Device, client_ip
 from app.api.docs import problems
 from app.core.config import get_settings
 from app.core.errors import ApiError
-from app.schemas.device import DeviceContext, PairIn, PairOut, RecordResult
-from app.services import pairing, records
+from app.schemas.device import DeviceContext, DeviceSessionOut, PairIn, PairOut, PhobiaGradeIn, PhobiaGradeOut, RecordResult
+from app.services import pairing, records, therapy
 
 router = APIRouter(prefix="/device", tags=["device"])
 
@@ -42,7 +43,7 @@ def pair(data: PairIn, request: Request, db: Db) -> PairOut:
     "/context",
     response_model=DeviceContext,
     responses=problems(401, 403),
-    summary="Contexto al empezar, en el Refugio (sin nombre ni correo)",
+    summary="Contexto al empezar, en el Refugio (sin nombre ni correo). v1.1.0: incluye phobiaGrade",
 )
 def context(device: Device, db: Db) -> DeviceContext:
     return records.device_context(db, device)
@@ -54,7 +55,7 @@ def context(device: Device, db: Db) -> DeviceContext:
     response_model=RecordResult,
     responses={
         200: {"model": RecordResult, "description": "duplicate: ya existía con el mismo contenido"},
-        **problems(400, 401, 403, 409, 413, 422),
+        **problems(400, 401, 403, 409, 413, 422, 503),
     },
     openapi_extra={
         "requestBody": {
@@ -62,7 +63,7 @@ def context(device: Device, db: Db) -> DeviceContext:
             "content": {"application/json": {"schema": {"$ref": "#/components/schemas/RecordEnvelope"}}},
         }
     },
-    summary="Entrada única de la bandeja de salida del visor (idempotente por recordId)",
+    summary="Entrada única de la bandeja de salida del visor (idempotente por recordId); v1.1.0: session y feedback",
 )
 async def post_record(request: Request, device: Device, db: Db, response: Response) -> RecordResult:
     limit = get_settings().max_record_bytes
@@ -77,6 +78,40 @@ async def post_record(request: Request, device: Device, db: Db, response: Respon
     except (UnicodeDecodeError, ValueError) as exc:
         raise ApiError(400, "BAD_REQUEST", "El cuerpo no es JSON válido.") from exc
     result = await run_in_threadpool(records.ingest, db, device, parsed)
-    if result == "duplicate":
+    if result.status == "duplicate":
         response.status_code = status.HTTP_200_OK
-    return RecordResult(status=result)
+    return result
+
+
+# ───────────── v1.1.0: phobia grade, session status and headset logout ─────────────
+
+
+@router.put(
+    "/phobia-grade",
+    response_model=PhobiaGradeOut,
+    responses=problems(401, 403, 404, 422, 503),
+    summary="Ajustar grado de fobia (1–5) en el Refugio, antes de «Comenzar»",
+)
+def put_phobia_grade(data: PhobiaGradeIn, device: Device, db: Db) -> PhobiaGradeOut:
+    return therapy.set_phobia_grade(db, device.pseudonym_id, data.phobia_grade)
+
+
+@router.get(
+    "/sessions/{sessionId}",
+    response_model=DeviceSessionOut,
+    responses=problems(401, 403, 404, 503),
+    summary="Estado de una sesión del visor y de su retroalimentación",
+)
+def get_session(sessionId: uuid.UUID, device: Device, db: Db) -> DeviceSessionOut:  # noqa: N803
+    return therapy.device_session(db, device, sessionId)
+
+
+@router.post(
+    "/unpair",
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses=problems(401, 403),
+    summary="Cerrar sesión en el visor: revoca su propio token",
+)
+def unpair(device: Device, db: Db) -> Response:
+    therapy.unpair(db, device)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

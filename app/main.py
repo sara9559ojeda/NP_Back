@@ -13,7 +13,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
-from app.api.routes import admin, auth, device, health, me, patients
+from app.api.routes import admin, auth, device, health, me, patients, public
 from app.core.config import APP_VERSION, get_settings
 from app.core.errors import install_error_handlers
 from app.core.logging import AccessLogMiddleware, configure_logging
@@ -30,7 +30,7 @@ def custom_openapi(app: FastAPI) -> dict[str, Any]:
         title="NEUROPHOBIA API",
         version=APP_VERSION,
         description=(
-            "API v1 de NEUROPHOBIA (prototipo académico). Contrato: docs/api/CONTRATO_API_v1.md. "
+            "API v1 de NEUROPHOBIA (prototipo académico). Contrato: docs/api/CONTRATO_API_v1.md (contrato-v1.1.0). "
             "Errores en application/problem+json (RFC 9457)."
         ),
         routes=app.routes,
@@ -69,7 +69,7 @@ def create_app() -> FastAPI:
         redoc_url=None,
     )
     install_error_handlers(app)
-    for module in (health, auth, me, admin, patients, device):
+    for module in (health, public, auth, me, admin, patients, device):
         app.include_router(module.router, prefix=API_PREFIX)
     app.add_middleware(
         CORSMiddleware,

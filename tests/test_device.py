@@ -5,7 +5,7 @@ import uuid
 
 from sqlalchemy import update
 
-from tests.conftest import API, envelope, example, full_session
+from tests.conftest import API, assert_v1_compatible, envelope, example, full_session
 
 PAIR = f"{API}/device/pair"
 
@@ -116,7 +116,13 @@ def test_context_without_sessions(client, api):
     device = api.pair(headers)
     r = client.get(f"{API}/device/context", headers=device["headers"])
     assert r.status_code == 200
-    assert r.json() == {"allowedStartLevel": 1, "lastSession": None, "recommendation": None}
+    assert r.json() == {
+        "allowedStartLevel": 1,
+        "lastSession": None,
+        "recommendation": None,
+        "phobiaGrade": None,
+        "phobiaGradeUpdatedAt": None,
+    }
 
 
 def test_context_after_session_has_no_personal_data(client, api, admin):
@@ -153,7 +159,7 @@ def test_records_examples_from_contract_are_stored(api):
     for kind in ("session_start", "level_record", "session_end"):
         r = api.send(device, example(f"record_{kind}.request.json"))
         assert r.status_code == 201, r.text
-        assert r.json() == example("records.response.201.json")
+        assert_v1_compatible(r.json(), "records.response.201.json")
 
 
 def test_records_idempotent_and_conflict(api):
@@ -161,7 +167,8 @@ def test_records_idempotent_and_conflict(api):
     env = envelope("session_start")
     assert api.send(device, env).status_code == 201
     dup = api.send(device, env)
-    assert dup.status_code == 200 and dup.json() == example("records.response.200.json")
+    assert dup.status_code == 200
+    assert_v1_compatible(dup.json(), "records.response.200.json")
 
     changed = json.loads(json.dumps(env))
     changed["payload"]["phobiaGrade"] = 4

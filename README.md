@@ -17,7 +17,7 @@ Python, FastAPI, PostgreSQL (con `JSONB` para los registros de sesión), Alembic
 
 ## Contrato de la API
 
-La especificación aprobada está en [`docs/api/CONTRATO_API_v1.md`](docs/api/CONTRATO_API_v1.md) (versión `contrato-v1.0.0`). **Este repositorio es su fuente**: la web y la app de realidad virtual guardan copias fijadas a una versión (`contrato-vX.Y.Z`).
+La especificación aprobada está en [`docs/api/CONTRATO_API_v1.md`](docs/api/CONTRATO_API_v1.md) (versión `contrato-v1.1.0`, pendiente de aprobación; la `v1.0.0` sigue siendo compatible). **Este repositorio es su fuente**: la web y la app de realidad virtual guardan copias fijadas a una versión (`contrato-vX.Y.Z`).
 
 - [`docs/api/openapi.json`](docs/api/openapi.json): OpenAPI generado por FastAPI. Se regenera con `python scripts/export_openapi.py`; una prueba falla si no está al día.
 - [`docs/api/examples/`](docs/api/examples/): los ejemplos JSON del contrato, que usan las pruebas de los tres componentes.
@@ -66,7 +66,7 @@ Requisitos: Docker Desktop. Puertos: API **8000** y PostgreSQL **5433** (solo de
    docker compose exec api python -m app.cli create-admin
    ```
 
-4. Comprueba: `http://localhost:8000/api/v1/health` → `{"status": "ok", "version": "0.1.0"}`.
+4. Comprueba: `http://localhost:8000/api/v1/health` → `{"status": "ok", "version": "0.2.0"}`. `GET /api/v1/health/ready` comprueba además la conexión a PostgreSQL.
 
 Para que el visor se conecte por la Wi-Fi local (solo builds de desarrollo), usa la IP de este PC en lugar de `localhost`.
 

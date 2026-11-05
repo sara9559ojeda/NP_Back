@@ -103,6 +103,13 @@ class AdminUserCreate(CamelModel):
 class AdminUserPatch(CamelModel):
     role: Role | None = None
     active: bool | None = None
+    # v1.1.0: full profile management.
+    full_name: FullName | None = None
+    email: Email | None = None
+
+
+class AdminPasswordReset(CamelModel):
+    temporary_password: Password
 
 
 class AssignmentCreate(CamelModel):

@@ -1,0 +1,12 @@
+{
+  "status": "stored",
+  "session": { "sessionId": "a3b9e2c4-5d6f-4a1b-8c7d-9e0f1a2b3c4d", "status": "open" },
+  "feedback": {
+    "status": "pending",
+    "recommendation": null,
+    "toleranceIndex": null,
+    "method": null,
+    "clinicalStatus": null,
+    "createdAt": null
+  }
+}

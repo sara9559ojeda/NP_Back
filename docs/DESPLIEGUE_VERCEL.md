@@ -88,7 +88,7 @@ El emparejamiento conserva la política de contar fallos; varias peticiones fall
 5. Revisar notas, visor, sesiones incompletas y exportación.
 6. Confirmar los resultados del CI en el PR y después verificar logs del despliegue sin exponer secretos.
 
-`health` no comprueba todas las tablas. Un 200 no sustituye la prueba de registro/login ni las migraciones.
+`health` no comprueba todas las tablas. Un 200 no sustituye la prueba de registro/login ni las migraciones. `GET /api/v1/health/ready` sí comprueba que el servidor llega a PostgreSQL (`503 STORAGE_UNAVAILABLE` si no). Antes de desplegar v1.1.0 aplica la migración `0003` (`alembic upgrade head`).
 
 Si Vercel protege el backend con autenticación de previews, el proxy no podrá acceder sin configurar un mecanismo de acceso de servidor. Para la primera prueba usa el dominio estable del backend con la protección de despliegue configurada conscientemente; la API mantiene su propia autenticación por rol. No desactives protecciones de otros proyectos.
 

@@ -14,6 +14,7 @@ from app.core.config import get_settings
 from app.core.security import utcnow
 from app.db.models import TherapySession
 from app.repositories import clinical
+from app.schemas.device import FeedbackOut
 
 
 def refresh_analysis(db: Session, session: TherapySession) -> None:
@@ -44,4 +45,23 @@ def refresh_analysis(db: Session, session: TherapySession) -> None:
             "clinical_status": result.clinical_status,
             "created_at": utcnow(),
         },
+    )
+
+
+def feedback_for(db: Session, session: TherapySession) -> FeedbackOut:
+    """Feedback state of a session as currently stored (v1.1.0)."""
+    if not (session.has_start and session.has_end):
+        return FeedbackOut(status="pending")
+    if session.test_session is not False:
+        return FeedbackOut(status="not_applicable")
+    analysis = clinical.analyses_for(db, [session.id], get_settings().ai_method).get(session.id)
+    if analysis is None:
+        return FeedbackOut(status="insufficient_data")
+    return FeedbackOut(
+        status="saved",
+        recommendation=analysis.recommendation,
+        tolerance_index=analysis.tolerance_index,
+        method=analysis.method,
+        clinical_status=analysis.clinical_status,
+        created_at=analysis.created_at,
     )

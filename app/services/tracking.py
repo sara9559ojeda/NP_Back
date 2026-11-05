@@ -61,7 +61,7 @@ def _method() -> str:
     return get_settings().ai_method
 
 
-def _status(s: TherapySession) -> str:
+def session_status(s: TherapySession) -> str:
     if not s.has_start:
         return "pending_start"
     return "closed" if s.has_end else "open"
@@ -70,7 +70,7 @@ def _status(s: TherapySession) -> str:
 def _summary(s: TherapySession, analysis: Analysis | None) -> SessionSummary:
     return SessionSummary(
         session_id=s.id,
-        status=_status(s),
+        status=session_status(s),
         started_at=s.started_at,
         ended_at=s.ended_at,
         phobia_grade=s.phobia_grade,
@@ -171,6 +171,7 @@ def my_patients(db: Session, actor: Actor, page: Page) -> PatientPage:
     items = []
     for a in visible:
         pseudonym = identity.get_pseudonym(db, a.patient_user_id)
+        patient = clinical.get_patient(db, pseudonym) if pseudonym else None
         sessions = clinical.progress_sessions(db, pseudonym) if pseudonym else []
         analyses = clinical.analyses_for(db, [s.id for s in sessions], _method())
         last_analyzed = next((analyses[s.id] for s in sessions if s.id in analyses), None)
@@ -182,6 +183,7 @@ def my_patients(db: Session, actor: Actor, page: Page) -> PatientPage:
                 last_session_at=sessions[0].started_at if sessions else None,
                 level_reached=max(reached) if reached else None,
                 last_recommendation=last_analyzed.recommendation if last_analyzed else None,
+                phobia_grade=patient.phobia_grade if patient else None,
             )
         )
     return PatientPage(items=items, next_cursor=next_cursor(rows, page, lambda a: (a.created_at, a.id)))
@@ -219,8 +221,8 @@ def _notes_out(db: Session, notes: list[Note]) -> list[NoteOut]:
     ]
 
 
-def list_notes(db: Session, pseudonym: uuid.UUID, page: Page) -> NotePage:
-    rows = clinical.list_notes(db, pseudonym, page)
+def list_notes(db: Session, pseudonym: uuid.UUID, page: Page, session_id: uuid.UUID | None = None) -> NotePage:
+    rows = clinical.list_notes(db, pseudonym, page, session_id)
     return NotePage(
         items=_notes_out(db, rows[: page.limit]),
         next_cursor=next_cursor(rows, page, lambda n: (n.created_at, n.id)),
@@ -232,7 +234,8 @@ def add_note(db: Session, actor: Actor, pseudonym: uuid.UUID, text: str, session
         raise ApiError(422, "VALIDATION_ERROR", "Revisa los campos marcados.", [{"field": "sessionId", "code": "not_found"}])
     note = clinical.add_note(db, pseudonym_id=pseudonym, session_id=session_id, author_id=actor.user_id, text=text)
     db.commit()
-    return NoteCreated(note_id=note.id, created_at=note.created_at)
+    # "Comentario anotado": confirm by returning the note exactly as it was stored.
+    return NoteCreated(**_notes_out(db, [note])[0].model_dump())
 
 
 def edit_note(db: Session, actor: Actor, pseudonym: uuid.UUID, note_id: uuid.UUID, text: str) -> NoteOut:

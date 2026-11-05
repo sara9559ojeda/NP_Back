@@ -1,0 +1,42 @@
+{
+  "phobiaGrade": 3,
+  "phobiaGradeUpdatedAt": "2026-10-30T20:58:00Z",
+  "allowedStartLevel": 1,
+  "pairedDevices": 1,
+  "openSession": null,
+  "lastSession": {
+    "sessionId": "a3b9e2c4-5d6f-4a1b-8c7d-9e0f1a2b3c4d",
+    "startedAt": "2026-10-30T21:00:00Z",
+    "levelReached": 2,
+    "totalDurationSeconds": 720.0,
+    "recommendation": "repeat"
+  },
+  "lastFeedback": {
+    "sessionId": "a3b9e2c4-5d6f-4a1b-8c7d-9e0f1a2b3c4d",
+    "startedAt": "2026-10-30T21:00:00Z",
+    "endedAt": "2026-10-30T21:12:00Z",
+    "phobiaGrade": 3,
+    "levelReached": 2,
+    "endReason": "completed",
+    "analysis": {
+      "toleranceIndex": 0.62,
+      "recommendation": "repeat",
+      "method": "rules-baseline",
+      "methodVersion": "0.1.0",
+      "basis": [
+        {
+          "feature": "sudsDrop",
+          "value": 20,
+          "effect": "favorable"
+        },
+        {
+          "feature": "avoidanceCount",
+          "value": 2,
+          "effect": "unfavorable"
+        }
+      ],
+      "clinicalStatus": "pendiente_de_validar",
+      "createdAt": "2026-10-30T21:12:01Z"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "NEUROPHOBIA",
+  "tagline": "Terapia de exposición a la aracnofobia en realidad virtual, acompañada por tu profesional.",
+  "description": "NEUROPHOBIA es un prototipo académico de exposición gradual a arañas en realidad virtual (Meta Quest). Cada sesión avanza por niveles, registra cómo respondes y genera una retroalimentación que revisa tu profesional de la salud.",
+  "audience": "Personas con miedo a las arañas que siguen un proceso con un profesional de la salud.",
+  "features": [
+    {
+      "title": "Exposición gradual",
+      "description": "Cinco niveles de exposición; empiezas en el que autorice tu profesional."
+    },
+    {
+      "title": "Tú controlas",
+      "description": "Puedes pausar o salir de forma segura en cualquier momento."
+    },
+    {
+      "title": "Seguimiento",
+      "description": "Tu profesional ve tu avance, la retroalimentación de cada sesión y deja notas."
+    },
+    {
+      "title": "Privacidad",
+      "description": "Los datos de las sesiones se guardan separados de tu identidad."
+    }
+  ],
+  "howItWorks": [
+    {
+      "order": 1,
+      "title": "Regístrate",
+      "description": "Crea tu cuenta y acepta el consentimiento informado."
+    },
+    {
+      "order": 2,
+      "title": "Empareja el visor",
+      "description": "Genera un código en la web y escríbelo en las gafas."
+    },
+    {
+      "order": 3,
+      "title": "Ajusta tu grado de fobia",
+      "description": "Indica del 1 al 5 cuánto miedo sientes hoy."
+    },
+    {
+      "order": 4,
+      "title": "Inicia la terapia",
+      "description": "Pulsa «Comenzar» en el Refugio y avanza a tu ritmo."
+    },
+    {
+      "order": 5,
+      "title": "Revisa tu avance",
+      "description": "Consulta tus sesiones; tu profesional revisa la retroalimentación."
+    }
+  ],
+  "requirements": {
+    "headsets": [
+      "Meta Quest 2",
+      "Meta Quest 3",
+      "Meta Quest 3S"
+    ],
+    "web": "Navegador actualizado (Chrome, Edge, Firefox o Safari)."
+  },
+  "disclaimer": "NEUROPHOBIA es un prototipo académico y no sustituye un diagnóstico ni un tratamiento profesional. Si sientes malestar intenso, detén la sesión y consulta con tu profesional de la salud.",
+  "contentVersion": "2026-11-04",
+  "contentStatus": "pendiente_de_aprobacion",
+  "apiVersion": "0.2.0"
+}
