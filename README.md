@@ -51,6 +51,8 @@ docs/api/           contrato, openapi.json y ejemplos
 
 Para Vercel y Supabase, sigue [la guía de despliegue](docs/DESPLIEGUE_VERCEL.md). Incluye variables por proyecto, migraciones `0001`/`0002`, primer administrador y cookies detrás del proxy de NP_Front.
 
+Como alternativa, [la guía de AWS](docs/DESPLIEGUE_AWS.md) despliega NP_Back y NP_Front con un solo comando (`scripts/deploy-aws.ps1`): ECS Fargate, RDS PostgreSQL y CloudFront, definidos con AWS CDK en `infra/aws`.
+
 Requisitos: Docker Desktop. Puertos: API **8000** y PostgreSQL **5433** (solo desde este PC).
 
 1. Copia `.env.example` como `.env` y escribe los valores (el archivo `.env` no se sube a Git).
