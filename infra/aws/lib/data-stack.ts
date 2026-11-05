@@ -105,7 +105,7 @@ export class DataStack extends Stack {
     const settings = props.database;
     const database = new rds.DatabaseInstance(this, 'Database', {
       instanceIdentifier: `${props.projectName}-db`,
-      engine: rds.DatabaseInstanceEngine.postgres({ version: rds.PostgresEngineVersion.VER_17 }),
+      engine: rds.DatabaseInstanceEngine.postgres({ version: rds.PostgresEngineVersion.VER_17_9 }),
       instanceType: new ec2.InstanceType(settings.instanceClass),
       vpc: this.vpc,
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_ISOLATED },
