@@ -1,0 +1,27 @@
+{
+  "name": "neurophobia-aws-infra",
+  "private": true,
+  "version": "0.1.0",
+  "description": "AWS CDK app that deploys NP_Back and NP_Front (alternative to Vercel plus Supabase).",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "synth": "cdk synth --strict",
+    "cdk": "cdk"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.274.0",
+    "cdk-nag": "^3.0.2",
+    "constructs": "^10.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.0",
+    "aws-cdk": "2.1146.0",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  }
+}
