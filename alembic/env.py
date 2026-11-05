@@ -1,4 +1,8 @@
-"""Entorno de Alembic. La URL sale de ``NP_DATABASE_URL`` (o de ``config.attributes['url']`` en las pruebas)."""
+"""Alembic environment.
+
+The URL comes from ``config.attributes['url']`` (tests), ``NP_DATABASE_URL`` or the RDS secret in
+``NP_DATABASE_SECRET`` (AWS deployment).
+"""
 
 import os
 from logging.config import fileConfig
@@ -6,6 +10,7 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import create_engine
 
+from app.core.database_url import database_url_from_env
 from app.db.models import Base
 
 config = context.config
@@ -16,9 +21,9 @@ target_metadata = Base.metadata
 
 
 def _url() -> str:
-    url = config.attributes.get("url") or os.environ.get("NP_DATABASE_URL")
+    url = config.attributes.get("url") or database_url_from_env(os.environ)
     if not url:
-        raise RuntimeError("Falta NP_DATABASE_URL")
+        raise RuntimeError("Falta NP_DATABASE_URL o NP_DATABASE_SECRET")
     return url
 
 

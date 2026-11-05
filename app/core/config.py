@@ -5,9 +5,12 @@ son obligatorios y los escribe Sara en ``backend/.env`` (fuera de Git).
 """
 
 from functools import lru_cache
+from typing import Any
 
-from pydantic import Field, SecretStr
+from pydantic import Field, SecretStr, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from app.core.database_url import url_from_rds_secret
 
 APP_VERSION = "0.2.0"
 
@@ -18,6 +21,8 @@ class Settings(BaseSettings):
     # Obligatorios (secretos).
     database_url: SecretStr
     secret_key: SecretStr = Field(min_length=32)
+    # AWS only: RDS secret JSON injected by ECS; used when NP_DATABASE_URL is absent.
+    database_secret: SecretStr | None = None
 
     # Web.
     cors_origin: str = "http://localhost:5173"
@@ -50,6 +55,13 @@ class Settings(BaseSettings):
     ai_method: str = "rules-baseline"
 
     log_level: str = "INFO"
+
+    @model_validator(mode="before")
+    @classmethod
+    def _database_url_from_rds_secret(cls, data: Any) -> Any:
+        if isinstance(data, dict) and not data.get("database_url") and data.get("database_secret"):
+            return {**data, "database_url": url_from_rds_secret(str(data["database_secret"]))}
+        return data
 
 
 @lru_cache
