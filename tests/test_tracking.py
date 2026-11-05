@@ -60,6 +60,7 @@ def test_professional_views_assigned_patient(client, care):
             "lastSessionAt": "2026-10-30T21:00:00Z",
             "levelReached": 2,
             "lastRecommendation": patients[0]["lastRecommendation"],
+            "phobiaGrade": 3,
         }
     ]
     assert patients[0]["lastRecommendation"] in ("advance", "repeat", "step_back")
@@ -81,7 +82,8 @@ def test_notes(client, api, care):
     h, pid = care["headers"], care["patient"]["id"]
     session_id = care["sessions"][0]
     r = client.post(f"{API}/patients/{pid}/notes", json={"text": "Primera nota", "sessionId": session_id}, headers=h)
-    assert r.status_code == 201 and set(r.json()) == {"noteId", "createdAt"}
+    assert r.status_code == 201 and set(r.json()) >= {"noteId", "createdAt"}
+    assert r.json()["text"] == "Primera nota" and r.json()["sessionId"] == session_id
     note_id = r.json()["noteId"]
     client.post(f"{API}/patients/{pid}/notes", json={"text": "Segunda nota"}, headers=h)
 

@@ -46,6 +46,7 @@ class PatientSummary(CamelModel):
     last_session_at: UtcDateTime | None
     level_reached: int | None
     last_recommendation: Recommendation | None
+    phobia_grade: int | None = None
 
 
 class PatientPage(Paginated[PatientSummary]):
@@ -131,10 +132,45 @@ class NoteIn(CamelModel):
     session_id: uuid.UUID | None = None
 
 
-class NoteCreated(CamelModel):
-    note_id: uuid.UUID
-    created_at: UtcDateTime
+class NoteCreated(NoteOut):
+    """``201`` body of a new note. Since v1.1.0 it is the whole stored note ("comentario anotado")."""
 
 
 class NotePatch(CamelModel):
     text: NoteText
+
+
+# ───────────── feedback and therapy state (v1.1.0) ─────────────
+
+
+class SessionFeedbackItem(CamelModel):
+    session_id: uuid.UUID
+    started_at: UtcDateTime | None
+    ended_at: UtcDateTime | None
+    phobia_grade: int | None
+    level_reached: int | None
+    end_reason: str | None
+    analysis: AnalysisOut
+
+
+class ProfessionalFeedbackItem(SessionFeedbackItem):
+    notes_count: int
+
+
+class FeedbackPage(Paginated[ProfessionalFeedbackItem]):
+    pass
+
+
+class OpenSessionOut(CamelModel):
+    session_id: uuid.UUID
+    started_at: UtcDateTime | None
+
+
+class TherapyStateOut(CamelModel):
+    phobia_grade: int | None
+    phobia_grade_updated_at: UtcDateTime | None
+    allowed_start_level: int
+    paired_devices: int
+    open_session: OpenSessionOut | None
+    last_session: LastSessionItem | None
+    last_feedback: SessionFeedbackItem | None

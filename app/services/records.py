@@ -23,11 +23,13 @@ from app.schemas.device import (
     DeviceContext,
     LevelRecordPayload,
     RecordEnvelope,
+    RecordResult,
     SessionEndPayload,
     SessionStartPayload,
 )
 from app.services.actor import DeviceActor
-from app.services.analysis import refresh_analysis
+from app.services.therapy import session_ref, sync_phobia_grade_from_session
+from app.services.analysis import feedback_for, refresh_analysis
 
 
 def _conflict() -> ApiError:
@@ -59,9 +61,24 @@ def parse_envelope(body: Any) -> tuple[RecordEnvelope, Any]:
     return envelope, payload
 
 
-def ingest(db: Session, device: DeviceActor, body: dict[str, Any]) -> str:
-    """Devuelve ``"stored"`` o ``"duplicate"``."""
+def ingest(db: Session, device: DeviceActor, body: dict[str, Any]) -> RecordResult:
+    """Store one outbox envelope and report the resulting session and feedback state (contract v1.1.0).
+
+    Metrics, AI analysis and feedback are committed in a single transaction ("therapy" sequence
+    diagram): if anything fails nothing is half-saved and the headset can resend the same envelope.
+    """
     envelope, payload = parse_envelope(body)
+    status = _store(db, device, envelope, payload, body)
+    session = clinical.get_session(db, device.pseudonym_id, envelope.sessionId)
+    if session is None:  # unreachable: the envelope was just stored or already existed
+        return RecordResult(status=status)
+    result = RecordResult(status=status, session=session_ref(session), feedback=feedback_for(db, session))
+    db.commit()  # persists the device's last_seen_at on duplicates
+    return result
+
+
+def _store(db: Session, device: DeviceActor, envelope: RecordEnvelope, payload: Any, body: dict[str, Any]) -> str:
+    """Return ``"stored"`` or ``"duplicate"``."""
     digest = content_hash(body)
 
     existing = clinical.get_inbound(db, envelope.recordId)
@@ -98,6 +115,7 @@ def ingest(db: Session, device: DeviceActor, body: dict[str, Any]) -> str:
         session.has_start = True
         session.started_at = payload.startedAt
         session.phobia_grade = payload.phobiaGrade
+        sync_phobia_grade_from_session(db, device.pseudonym_id, payload.phobiaGrade, payload.startedAt)
         session.app_version = payload.appVersion
         session.device_model = payload.deviceModel
         session.test_session = payload.testSession
@@ -166,4 +184,6 @@ def device_context(db: Session, device: DeviceActor) -> DeviceContext:
         if last
         else None,
         recommendation=recommendation,
+        phobia_grade=patient.phobia_grade if patient else None,
+        phobia_grade_updated_at=patient.phobia_grade_updated_at if patient else None,
     )

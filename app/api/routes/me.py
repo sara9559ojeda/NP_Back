@@ -11,9 +11,9 @@ from app.api.routes.auth import clear_refresh_cookie
 from app.core.pagination import Page, page_params
 from app.schemas.accounts import MeOut, MePatch, PasswordChangeIn
 from app.schemas.common import StatusOut
-from app.schemas.device import DevicePage, PairingCodeOut
-from app.schemas.tracking import ProgressOut, SessionDetail, SessionPage
-from app.services import accounts, pairing, tracking
+from app.schemas.device import DevicePage, PairingCodeOut, PhobiaGradeIn, PhobiaGradeOut
+from app.schemas.tracking import ProgressOut, SessionDetail, SessionPage, TherapyStateOut
+from app.services import accounts, pairing, therapy, tracking
 
 router = APIRouter(tags=["me"])
 
@@ -102,3 +102,26 @@ def revoke_device(deviceId: uuid.UUID, actor: PatientUser, db: Db) -> Response: 
 )
 def create_pairing_code(actor: PatientUser, db: Db) -> PairingCodeOut:
     return pairing.create_code(db, tracking.own_pseudonym(db, actor))
+
+
+# ───────────── v1.1.0: start therapy ─────────────
+
+
+@router.get(
+    "/me/therapy",
+    response_model=TherapyStateOut,
+    responses=problems(401, 403, 423),
+    summary="Estado de la terapia: grado de fobia, nivel permitido, sesión en curso y última retroalimentación",
+)
+def my_therapy(actor: PatientUser, db: Db) -> TherapyStateOut:
+    return therapy.therapy_state(db, tracking.own_pseudonym(db, actor))
+
+
+@router.put(
+    "/me/phobia-grade",
+    response_model=PhobiaGradeOut,
+    responses=problems(401, 403, 422, 423),
+    summary="Ajustar grado de fobia autorreportado (1–5) antes de iniciar la terapia",
+)
+def put_my_phobia_grade(data: PhobiaGradeIn, actor: PatientUser, db: Db) -> PhobiaGradeOut:
+    return therapy.set_phobia_grade(db, tracking.own_pseudonym(db, actor), data.phobia_grade)

@@ -189,8 +189,10 @@ def get_note(db: Session, pseudonym_id: uuid.UUID, note_id: uuid.UUID) -> Note |
     return db.scalars(select(Note).where(Note.id == note_id, Note.pseudonym_id == pseudonym_id).with_for_update()).first()
 
 
-def list_notes(db: Session, pseudonym_id: uuid.UUID, page: Page) -> list[Note]:
+def list_notes(db: Session, pseudonym_id: uuid.UUID, page: Page, session_id: uuid.UUID | None = None) -> list[Note]:
     stmt = select(Note).where(Note.pseudonym_id == pseudonym_id)
+    if session_id is not None:
+        stmt = stmt.where(Note.session_id == session_id)
     if page.after:
         at, last_id = page.after
         stmt = stmt.where(or_(Note.created_at < at, and_(Note.created_at == at, Note.id < last_id)))
@@ -205,6 +207,60 @@ def notes_for_session(db: Session, pseudonym_id: uuid.UUID, session_id: uuid.UUI
         .order_by(Note.created_at.desc(), Note.id.desc())
     )
     return list(db.scalars(stmt))
+
+
+def notes_count_by_session(db: Session, pseudonym_id: uuid.UUID, session_ids: list[uuid.UUID]) -> dict[uuid.UUID, int]:
+    if not session_ids:
+        return {}
+    stmt = (
+        select(Note.session_id, func.count())
+        .where(Note.pseudonym_id == pseudonym_id, Note.session_id.in_(session_ids))
+        .group_by(Note.session_id)
+    )
+    return {sid: n for sid, n in db.execute(stmt)}
+
+
+# ───────────── therapy state and feedback (v1.1.0) ─────────────
+
+
+def count_level_records(db: Session, session_id: uuid.UUID) -> int:
+    return db.scalar(select(func.count()).select_from(LevelRecord).where(LevelRecord.session_id == session_id)) or 0
+
+
+def count_active_devices(db: Session, pseudonym_id: uuid.UUID) -> int:
+    stmt = select(func.count()).select_from(Device).where(Device.pseudonym_id == pseudonym_id, Device.revoked_at.is_(None))
+    return db.scalar(stmt) or 0
+
+
+def open_session(db: Session, pseudonym_id: uuid.UUID) -> TherapySession | None:
+    """Latest started session that has not ended yet (the therapy in progress, if any)."""
+    stmt = (
+        select(TherapySession)
+        .where(
+            TherapySession.pseudonym_id == pseudonym_id,
+            TherapySession.has_start.is_(True),
+            TherapySession.has_end.is_(False),
+        )
+        .order_by(TherapySession.started_at.desc(), TherapySession.id.desc())
+        .limit(1)
+    )
+    return db.scalars(stmt).first()
+
+
+def feedback_sessions(db: Session, pseudonym_id: uuid.UUID, method: str, page: Page) -> list[tuple[TherapySession, Analysis]]:
+    """Sessions with stored feedback, newest first (returns at most ``limit + 1`` rows)."""
+    stmt = (
+        select(TherapySession, Analysis)
+        .join(Analysis, and_(Analysis.session_id == TherapySession.id, Analysis.method == method))
+        .where(TherapySession.pseudonym_id == pseudonym_id, TherapySession.started_at.is_not(None))
+    )
+    if page.after:
+        at, last_id = page.after
+        stmt = stmt.where(
+            or_(TherapySession.started_at < at, and_(TherapySession.started_at == at, TherapySession.id < last_id))
+        )
+    stmt = stmt.order_by(TherapySession.started_at.desc(), TherapySession.id.desc()).limit(page.limit + 1)
+    return [(row[0], row[1]) for row in db.execute(stmt)]
 
 
 # ───────────── exportación anónima ─────────────

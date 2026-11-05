@@ -6,13 +6,14 @@ Un paciente no asignado al profesional responde 404, no 403 (contrato, sección 
 import uuid
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Query, status
 
 from app.api.deps import Db, ProfessionalUser
 from app.api.docs import problems
 from app.core.pagination import Page, page_params
 from app.schemas.device import PairingCodeOut
 from app.schemas.tracking import (
+    FeedbackPage,
     NoteCreated,
     NoteIn,
     NoteOut,
@@ -25,7 +26,7 @@ from app.schemas.tracking import (
     ProgressOut,
     SessionPage,
 )
-from app.services import pairing, tracking
+from app.services import pairing, therapy, tracking
 
 router = APIRouter(prefix="/patients", tags=["patients"])
 
@@ -65,13 +66,28 @@ def put_plan(patientId: uuid.UUID, data: PlanIn, actor: ProfessionalUser, db: Db
     return tracking.set_plan(db, patientId, pseudonym, data.allowed_start_level)
 
 
-@router.get("/{patientId}/notes", response_model=NotePage, responses=ERRORS, summary="Notas, más recientes primero")
-def list_notes(patientId: uuid.UUID, actor: ProfessionalUser, db: Db, page: Pagination) -> NotePage:  # noqa: N803
-    return tracking.list_notes(db, tracking.assigned_pseudonym(db, actor, patientId), page)
+@router.get(
+    "/{patientId}/notes",
+    response_model=NotePage,
+    responses=ERRORS,
+    summary="Notas, más recientes primero (v1.1.0: filtro opcional ?sessionId=)",
+)
+def list_notes(
+    patientId: uuid.UUID,  # noqa: N803
+    actor: ProfessionalUser,
+    db: Db,
+    page: Pagination,
+    sessionId: Annotated[uuid.UUID | None, Query()] = None,  # noqa: N803
+) -> NotePage:
+    return tracking.list_notes(db, tracking.assigned_pseudonym(db, actor, patientId), page, sessionId)
 
 
 @router.post(
-    "/{patientId}/notes", status_code=status.HTTP_201_CREATED, response_model=NoteCreated, responses=ERRORS, summary="Nueva nota"
+    "/{patientId}/notes",
+    status_code=status.HTTP_201_CREATED,
+    response_model=NoteCreated,
+    responses=ERRORS,
+    summary="Anotar un comentario: valida, guarda y devuelve la nota guardada",
 )
 def add_note(patientId: uuid.UUID, data: NoteIn, actor: ProfessionalUser, db: Db) -> NoteCreated:  # noqa: N803
     pseudonym = tracking.assigned_pseudonym(db, actor, patientId)
@@ -94,3 +110,13 @@ def edit_note(patientId: uuid.UUID, noteId: uuid.UUID, data: NotePatch, actor: P
 )
 def create_pairing_code(patientId: uuid.UUID, actor: ProfessionalUser, db: Db) -> PairingCodeOut:  # noqa: N803
     return pairing.create_code(db, tracking.assigned_pseudonym(db, actor, patientId))
+
+
+@router.get(
+    "/{patientId}/feedback",
+    response_model=FeedbackPage,
+    responses=ERRORS,
+    summary="Consultar retroalimentación: análisis de IA por sesión, más recientes primero",
+)
+def patient_feedback(patientId: uuid.UUID, actor: ProfessionalUser, db: Db, page: Pagination) -> FeedbackPage:  # noqa: N803
+    return therapy.feedback_page(db, tracking.assigned_pseudonym(db, actor, patientId), page)

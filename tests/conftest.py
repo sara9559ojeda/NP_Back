@@ -27,6 +27,12 @@ def example(name: str) -> dict:
     return json.loads((EXAMPLES / name).read_text(encoding="utf-8"))
 
 
+def assert_v1_compatible(body: dict, example_name: str) -> None:
+    """Backwards compatibility (contract v1.1.0): every v1 example field is unchanged; fields are only added."""
+    expected = example(example_name)
+    assert {k: body.get(k, "<falta>") for k in expected} == expected
+
+
 @pytest.fixture(scope="session")
 def database_url():
     from tests.ephemeral_pg import ephemeral_postgres
@@ -182,3 +188,21 @@ def full_session(api: Api, device_headers: dict, *, test_session: bool = False, 
         r = api.send(device_headers, env)
         assert r.status_code == 201, r.text
     return session_id
+
+
+@pytest.fixture
+def care_team(api, admin) -> dict:
+    """A patient with a paired headset, assigned to a professional, with no sessions yet."""
+    _, admin_headers = admin
+    patient, patient_headers = api.user_with_headers("patient")
+    professional, professional_headers = api.user_with_headers("professional")
+    api.assign(admin_headers, professional, patient)
+    device = api.pair(patient_headers)
+    return {
+        "patient": patient,
+        "patient_headers": patient_headers,
+        "professional": professional,
+        "pro_headers": professional_headers,
+        "device": device["headers"],
+        "admin_headers": admin_headers,
+    }

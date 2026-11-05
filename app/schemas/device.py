@@ -59,6 +59,60 @@ class DeviceContext(CamelModel):
     allowed_start_level: int
     last_session: ContextLastSession | None
     recommendation: ContextRecommendation | None
+    # v1.1.0: latest self-reported phobia grade, to prefill the "Ajustar grado de fobia" step.
+    phobia_grade: int | None = None
+    phobia_grade_updated_at: UtcDateTime | None = None
+
+
+# ───────────── phobia grade and therapy state (v1.1.0) ─────────────
+
+PhobiaGrade = Annotated[int, Field(ge=1, le=5, strict=True)]
+
+
+class PhobiaGradeIn(CamelModel):
+    phobia_grade: PhobiaGrade
+
+
+class PhobiaGradeOut(CamelModel):
+    phobia_grade: int | None
+    updated_at: UtcDateTime | None
+
+
+FeedbackStatus = Literal["saved", "not_applicable", "insufficient_data", "pending"]
+SessionStatus = Literal["open", "closed", "pending_start"]
+
+
+class FeedbackOut(CamelModel):
+    """Feedback (AI analysis) state of a session.
+
+    - ``saved``: the analysis is stored (same data as ``analysis`` in the session detail).
+    - ``pending``: the session is still missing its start or its end.
+    - ``not_applicable``: test session (``testSession = true``); it is never analysed.
+    - ``insufficient_data``: closed session without enough data for the current method.
+    """
+
+    status: FeedbackStatus
+    recommendation: Literal["advance", "repeat", "step_back"] | None = None
+    tolerance_index: float | None = None
+    method: str | None = None
+    clinical_status: str | None = None
+    created_at: UtcDateTime | None = None
+
+
+class SessionRef(CamelModel):
+    session_id: uuid.UUID
+    status: SessionStatus
+
+
+class DeviceSessionOut(CamelModel):
+    session_id: uuid.UUID
+    status: SessionStatus
+    started_at: UtcDateTime | None
+    ended_at: UtcDateTime | None
+    phobia_grade: int | None
+    level_reached: int | None
+    levels_stored: int
+    feedback: FeedbackOut
 
 
 # ───────────── sobres ─────────────
@@ -170,3 +224,6 @@ class RecordEnvelope(BaseModel):
 
 class RecordResult(CamelModel):
     status: Literal["stored", "duplicate"]
+    # v1.1.0 (optional): session and feedback state after storing the envelope.
+    session: SessionRef | None = None
+    feedback: FeedbackOut | None = None
