@@ -1,0 +1,28 @@
+{
+  "projectName": "neurophobia",
+  "account": "",
+  "region": "us-east-1",
+  "alarmEmail": "",
+  "monthlyBudgetUsd": 60,
+  "database": {
+    "mode": "rds",
+    "externalSecretName": "neurophobia/database-url",
+    "instanceClass": "t4g.micro",
+    "allocatedStorageGiB": 20,
+    "maxAllocatedStorageGiB": 50,
+    "backupRetentionDays": 7,
+    "multiAz": false,
+    "deletionProtection": false
+  },
+  "backend": {
+    "cpu": 256,
+    "memoryMiB": 512,
+    "desiredCount": 1,
+    "cpuArchitecture": "X86_64",
+    "useSpot": false,
+    "logRetentionDays": 30
+  },
+  "frontend": {
+    "sourceDir": "../NP_Front"
+  }
+}

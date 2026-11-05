@@ -1,0 +1,8 @@
+node_modules/
+cdk.out/
+cdk.out.*/
+outputs.json
+# Real deployment parameters (account, e-mail). Copy parameters.example.json instead.
+parameters.json
+*.js
+*.d.ts

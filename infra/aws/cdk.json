@@ -1,0 +1,10 @@
+{
+  "app": "npx tsx bin/neurophobia.ts",
+  "watch": {
+    "include": ["bin/**", "lib/**"],
+    "exclude": ["node_modules", "cdk.out", "test"]
+  },
+  "context": {
+    "@aws-cdk/core:defaultCrossStackReferences": "strong"
+  }
+}
