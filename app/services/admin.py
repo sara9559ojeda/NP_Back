@@ -15,7 +15,7 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.errors import ApiError
 from app.core.pagination import Page, next_cursor
-from app.core.security import utcnow
+from app.core.security import hash_password, utcnow
 from app.repositories import clinical, identity
 from app.schemas.accounts import (
     AdminUserCreate,
@@ -25,6 +25,8 @@ from app.schemas.accounts import (
     AssignmentOut,
     AssignmentPage,
 )
+from app.db.models import User
+from app.services.accounts import change_email, commit_profile
 from app.services.auth import create_account, ensure_patient_link
 
 
@@ -33,6 +35,15 @@ def _user_out(db: Session, user_id: uuid.UUID) -> AdminUserOut:
     if user is None:
         raise ApiError(404, "NOT_FOUND")
     return AdminUserOut(id=user.id, full_name=identity.get_full_name(db, user.id), email=user.email, role=user.role, active=user.active)
+
+
+def _ensure_not_withdrawn(user: User) -> None:
+    if user.withdrawn_at is not None:
+        raise ApiError(422, "VALIDATION_ERROR", "La cuenta retiró su consentimiento.", [{"field": "userId", "code": "withdrawn"}])
+
+
+def get_user(db: Session, user_id: uuid.UUID) -> AdminUserOut:
+    return _user_out(db, user_id)
 
 
 def list_users(db: Session, page: Page, *, role: str | None, active: bool | None, q: str | None) -> AdminUserPage:
@@ -57,8 +68,7 @@ def patch_user(db: Session, user_id: uuid.UUID, data: AdminUserPatch) -> AdminUs
     user = identity.get_user(db, user_id, for_update=True)
     if user is None:
         raise ApiError(404, "NOT_FOUND")
-    if user.withdrawn_at is not None:
-        raise ApiError(422, "VALIDATION_ERROR", "La cuenta retiró su consentimiento.", [{"field": "userId", "code": "withdrawn"}])
+    _ensure_not_withdrawn(user)
     new_role = data.role if data.role is not None else user.role
     new_active = data.active if data.active is not None else user.active
     loses_admin = user.role == "admin" and user.active and (new_role != "admin" or not new_active)
@@ -74,9 +84,26 @@ def patch_user(db: Session, user_id: uuid.UUID, data: AdminUserPatch) -> AdminUs
     if not new_active and user.active:
         identity.revoke_user_tokens(db, user.id, now)
     user.active = new_active
+    if data.email is not None:
+        change_email(db, user, data.email, now)
+    if data.full_name is not None:
+        identity.set_full_name(db, user.id, data.full_name, now)
     user.updated_at = now
-    db.commit()
+    commit_profile(db)
     return _user_out(db, user.id)
+
+
+def reset_password(db: Session, user_id: uuid.UUID, temporary_password: str) -> None:
+    """Set an admin-chosen temporary password and close every web session of that user."""
+    user = identity.get_user(db, user_id, for_update=True)
+    if user is None:
+        raise ApiError(404, "NOT_FOUND")
+    _ensure_not_withdrawn(user)
+    now = utcnow()
+    user.password_hash = hash_password(temporary_password)
+    user.updated_at = now
+    identity.revoke_user_tokens(db, user.id, now)
+    db.commit()
 
 
 # ───────────── asignaciones ─────────────

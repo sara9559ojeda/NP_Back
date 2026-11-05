@@ -10,6 +10,7 @@ from app.api.deps import AdminUser, Db
 from app.api.docs import problems
 from app.core.pagination import Page, page_params
 from app.schemas.accounts import (
+    AdminPasswordReset,
     AdminUserCreate,
     AdminUserOut,
     AdminUserPage,
@@ -50,14 +51,35 @@ def create_user(data: AdminUserCreate, actor: AdminUser, db: Db) -> AdminUserOut
     return admin.create_user(db, data)
 
 
+@router.get(
+    "/users/{userId}",
+    response_model=AdminUserOut,
+    responses=problems(401, 403, 404, 423),
+    summary="Perfil de un usuario (sin datos clínicos)",
+)
+def get_user(userId: uuid.UUID, actor: AdminUser, db: Db) -> AdminUserOut:  # noqa: N803
+    return admin.get_user(db, userId)
+
+
 @router.patch(
     "/users/{userId}",
     response_model=AdminUserOut,
     responses=problems(401, 403, 404, 409, 422, 423),
-    summary="Cambiar rol o activar/desactivar",
+    summary="Editar el perfil: rol, activo, nombre o correo",
 )
 def patch_user(userId: uuid.UUID, data: AdminUserPatch, actor: AdminUser, db: Db) -> AdminUserOut:  # noqa: N803
     return admin.patch_user(db, userId, data)
+
+
+@router.put(
+    "/users/{userId}/password",
+    status_code=status.HTTP_204_NO_CONTENT,
+    responses=problems(401, 403, 404, 422, 423),
+    summary="Poner una contraseña temporal (cierra las sesiones web de ese usuario)",
+)
+def reset_password(userId: uuid.UUID, data: AdminPasswordReset, actor: AdminUser, db: Db) -> Response:  # noqa: N803
+    admin.reset_password(db, userId, data.temporary_password)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.get(
