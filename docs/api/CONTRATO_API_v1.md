@@ -1,6 +1,6 @@
 # Contrato de la API v1 — NEUROPHOBIA
 
-- **Versión:** `contrato-v1.1.0` (04-11-2026), **pendiente de aprobación** por Sara María Ojeda López. Cambios compatibles hacia atrás sobre `contrato-v1.0.0` (aprobada el 30-10-2026) para cubrir los diagramas UML/BPMN; ver sección 12. Cualquier cambio necesita una nueva aprobación y una versión nueva. **Este repositorio (NP_Back) es la fuente del contrato.**
+- **Versión:** `contrato-v1.1.0` (04-11-2026), **aprobada por Sara María Ojeda López el 09-11-2026**. Cambios compatibles hacia atrás sobre `contrato-v1.0.0` (aprobada el 30-10-2026) para cubrir los diagramas UML/BPMN; ver sección 12. Cualquier cambio necesita una nueva aprobación y una versión nueva. **Este repositorio (NP_Back) es la fuente del contrato.**
 - **Fecha:** 30-10-2026 (v1.0.0) · 04-11-2026 (v1.1.0)
 - **Partes:** app VR (Unity, Meta Quest; repo NPdefdef), backend (FastAPI + PostgreSQL; repo NP_Back) y web (React + TypeScript; repo NP_Front).
 - **Fuentes:** documento de metodología (RQF001–RQF015, RQFN001–RQFN010, HU-01 a HU-14) y decisiones de diseño aprobadas D1–D24.
@@ -70,33 +70,51 @@
 
 ---
 
-## 3. Modelo de datos (resumen)
+## 3. Modelo de datos
 
-Separación de identidad y datos clínicos (D15 de R1):
+Separación de identidad y datos clínicos (D15 de R1). Es el modelo implementado en `app/db/models.py` (migraciones en `alembic/`). Convenciones: **PK** = clave primaria, **FK** = clave foránea, **UQ** = único, `?` = admite nulo. Las fechas son `timestamptz`, los identificadores `uuid` y los `JSONB` guardan el registro completo del visor.
 
-```
-esquema identity                          esquema clinical
-───────────────                           ────────────────
-users(id, email, password_hash,           patients(pseudonym_id, allowed_start_level,
-      role, active, created_at)                    phobia_grade, phobia_grade_updated_at,
-                                                   created_at)
-personal_data(user_id, full_name, …)      devices(id, pseudonym_id, model, app_version,
-consents(id, user_id, consent_version,             paired_at, revoked_at, token_hash)
-         granted_at, withdrawn_at)        sessions(id, pseudonym_id, device_id, started_at,
-identity_links(user_id, pseudonym_id)  ◄──         ended_at, phobia_grade, test_session,
-assignments(professional_user_id,                  end_reason, level_reached, raw JSONB)
-            patient_user_id, active)      level_records(id, session_id, level, attempt,
-refresh_tokens(...)                                outcome, payload JSONB)
-                                          analyses(session_id, method, method_version,
-                                                   tolerance_index, recommendation,
-                                                   basis JSONB, created_at)
-                                          notes(id, pseudonym_id, session_id NULL,
-                                                author_user_id, text, created_at, edited_at)
-```
+### 3.1 Esquema `identity` (cuentas, roles y consentimiento)
 
-- Solo la capa de servicio une `identity` y `clinical` a través de `identity_links`.
+| Tabla | Columnas | Claves |
+|---|---|---|
+| `users` | `id`, `email`, `password_hash?`, `role`, `active`, `created_at`, `updated_at?`, `withdrawn_at?` | PK `id` · UQ `email` |
+| `personal_data` | `user_id`, `full_name`, `updated_at` | PK y FK `user_id` → `users.id` (borrado en cascada) |
+| `consents` | `id`, `user_id`, `consent_version`, `granted_at`, `withdrawn_at?` | PK `id` · FK `user_id` → `users.id` |
+| `identity_links` | `user_id`, `pseudonym_id` | PK y FK `user_id` → `users.id` · UQ `pseudonym_id` (**sin FK**, ver 3.3) |
+| `assignments` | `id`, `professional_user_id`, `patient_user_id`, `active`, `created_at`, `ended_at?` | PK `id` · FK `professional_user_id` y `patient_user_id` → `users.id` · índice único de la asignación activa |
+| `refresh_tokens` | `id`, `user_id`, `family_id`, `token_hash`, `created_at`, `expires_at`, `revoked_at?` | PK `id` · FK `user_id` → `users.id` · UQ `token_hash` · `family_id` agrupa la rotación (no es FK) |
+| `rate_limit_events` | `id`, `key_hash`, `occurred_at` | PK `id` (entero) · índices por `key_hash` y por fecha. Límite de frecuencia de inicio de sesión, registro y emparejamiento; guarda solo un hash de la clave, nunca correos ni IP en claro |
+
+### 3.2 Esquema `clinical` (datos de terapia, seudonimizados)
+
+| Tabla | Columnas | Claves |
+|---|---|---|
+| `patients` | `pseudonym_id`, `allowed_start_level`, `plan_updated_at?`, `phobia_grade?`, `phobia_grade_updated_at?`, `retain_until?`, `created_at` | PK `pseudonym_id`. `retain_until` queda preparado para el plazo de conservación (D23, pendiente) |
+| `pairing_codes` | `id`, `pseudonym_id`, `code_hash`, `created_at`, `expires_at`, `used_at?` | PK `id` · FK `pseudonym_id` → `patients` · UQ `code_hash`. Código de un solo uso (10 min); se guarda solo su hash |
+| `devices` | `id`, `pseudonym_id`, `model`, `app_version`, `token_hash`, `paired_at`, `last_seen_at?`, `revoked_at?` | PK `id` · FK `pseudonym_id` → `patients` · UQ `token_hash` |
+| `sessions` | `id`, `pseudonym_id`, `device_id?`, `has_start`, `has_end`, `started_at?`, `ended_at?`, `phobia_grade?`, `test_session?`, `app_version?`, `device_model?`, `end_reason?`, `level_reached?`, `total_duration_seconds?`, `raw` (JSONB), `created_at` | PK `id` (lo genera el visor) · FK `pseudonym_id` → `patients` · FK `device_id` → `devices` (nulo si se revoca) · índice (`pseudonym_id`, `started_at`). `has_start` y `has_end` indican qué sobres han llegado, porque pueden llegar desordenados |
+| `level_records` | `id`, `session_id`, `level`, `attempt`, `outcome`, `criterion_met`, `started_at`, `ended_at`, `permanence_seconds`, `min_distance_m?`, `avoidance_count`, `payload` (JSONB), `received_at` | PK `id` (= `recordId` del visor) · FK `session_id` → `sessions` |
+| `analyses` | `session_id`, `method`, `method_version`, `tolerance_index`, `recommendation`, `basis` (JSONB), `clinical_status`, `created_at` | PK (`session_id`, `method`) · FK `session_id` → `sessions` |
+| `notes` | `id`, `pseudonym_id`, `session_id?`, `author_user_id`, `text`, `created_at`, `edited_at?` | PK `id` · FK `pseudonym_id` → `patients` · FK `session_id` → `sessions` (nulo si se borra) · `author_user_id` **sin FK** (ver 3.3) |
+| `inbound_records` | `record_id`, `pseudonym_id`, `device_id?`, `session_id`, `type`, `schema_version`, `content_hash`, `received_at` | PK `record_id` · índice `session_id` · **sin FK** (ver 3.3). Registro de idempotencia de `POST /device/records`: el mismo `recordId` con el mismo `content_hash` → `duplicate`; con otro → `409` |
+
+### 3.3 Relaciones sin clave foránea (decisión de diseño)
+
+En el diagrama entidad-relación se dibujan con **línea discontinua** y esta nota:
+
+| Relación lógica | Por qué no tiene FK |
+|---|---|
+| `identity.identity_links.pseudonym_id` → `clinical.patients.pseudonym_id` | Es el único puente entre los dos esquemas. Sin FK, `clinical` no depende de `identity`: al retirar el consentimiento se borra el vínculo y los datos clínicos quedan anónimos (Ley 1581). Solo la capa de servicio une ambos lados |
+| `clinical.notes.author_user_id` → `identity.users.id` | Cruza de `clinical` a `identity` por la misma separación. Si se borra la identidad del autor, la nota se conserva |
+| `clinical.inbound_records` → `sessions`, `devices` y `patients` | El visor puede enviar un `level_record` o un `session_end` antes que su `session_start` (sección 6.3). Una FK rechazaría esos registros; el servicio los guarda y los enlaza después |
+
+### 3.4 Reglas
+
+- Solo la capa de servicio une `identity` y `clinical`, y siempre a través de `identity_links`.
 - Los registros del visor se guardan completos en `JSONB` (`raw`, `payload`) y, además, en columnas los campos que se consultan.
-- **Retirar el consentimiento** borra `personal_data` e `identity_links`, desactiva la cuenta y deja los datos clínicos sin vínculo (anónimos). El plazo de conservación está pendiente (D23).
+- **Retirar el consentimiento** borra `personal_data` e `identity_links`, marca `users.withdrawn_at`, desactiva la cuenta y deja los datos clínicos sin vínculo (anónimos). El plazo de conservación (`patients.retain_until`) está pendiente (D23).
+- Los secretos (contraseñas, tokens de refresco, tokens de dispositivo y códigos de emparejamiento) nunca se guardan en claro: solo su hash.
 
 ---
 
@@ -436,6 +454,8 @@ Los textos visibles de los errores en la web y en el visor son claves de texto y
 ---
 
 ## 12. Cambios de `contrato-v1.1.0` (04-11-2026)
+
+**Aprobada por Sara el 09-11-2026.** En la misma versión se completa la sección 3 (modelo de datos) para que coincida con `app/db/models.py`: tablas `pairing_codes`, `inbound_records` y `rate_limit_events`, columnas que faltaban y relaciones sin clave foránea (3.3). Es documentación: no cambia ninguna ruta ni tabla.
 
 Motivo: implementar los diagramas UML/BPMN (casos de uso, secuencias de terapia y del profesional, BPMN de inicio de sesión y terapia, contexto nivel 0 y despliegue). Matriz completa en `NP_Coordinacion/informes/BACK_MATRIZ_DIAGRAMAS_2026-11-04.md`.
 
