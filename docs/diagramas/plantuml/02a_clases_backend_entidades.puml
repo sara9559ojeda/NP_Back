@@ -1,0 +1,165 @@
+@startuml 02a_clases_backend_entidades
+title NP_Back - Clases (entidades del ORM, todas heredan de Base)
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+class "PersonalData" as PersonalData <<entity>> {
+  + user_id : UUID
+  + full_name : str
+  + updated_at : datetime
+}
+class "Consent" as Consent <<entity>> {
+  + id : UUID
+  + user_id : UUID
+  + consent_version : str
+  + granted_at : datetime
+  + withdrawn_at : datetime [0..1]
+}
+class "RefreshToken" as RefreshToken <<entity>> {
+  + id : UUID
+  + user_id : UUID
+  + family_id : UUID
+  + token_hash : str
+  + created_at : datetime
+  + expires_at : datetime
+  + revoked_at : datetime [0..1]
+}
+class "RateLimitEvent" as RateLimitEvent <<entity>> {
+  + id : int
+  + key_hash : str
+  + occurred_at : datetime
+}
+class "Base" as Base <<DeclarativeBase>> {
+  + metadata : MetaData
+}
+class "IdentityLink" as IdentityLink <<entity>> {
+  + user_id : UUID
+  + pseudonym_id : UUID
+}
+class "User" as User <<entity>> {
+  + id : UUID
+  + email : str
+  + password_hash : str [0..1]
+  + role : str
+  + active : bool
+  + created_at : datetime
+  + updated_at : datetime [0..1]
+  + withdrawn_at : datetime [0..1]
+}
+class "Assignment" as Assignment <<entity>> {
+  + id : UUID
+  + professional_user_id : UUID
+  + patient_user_id : UUID
+  + active : bool
+  + created_at : datetime
+  + ended_at : datetime [0..1]
+}
+class "Patient" as Patient <<entity>> {
+  + pseudonym_id : UUID
+  + allowed_start_level : int
+  + plan_updated_at : datetime [0..1]
+  + phobia_grade : int [0..1]
+  + phobia_grade_updated_at : datetime [0..1]
+  + retain_until : datetime [0..1]
+  + created_at : datetime
+}
+class "PairingCode" as PairingCode <<entity>> {
+  + id : UUID
+  + pseudonym_id : UUID
+  + code_hash : str
+  + created_at : datetime
+  + expires_at : datetime
+  + used_at : datetime [0..1]
+}
+class "Device" as Device <<entity>> {
+  + id : UUID
+  + pseudonym_id : UUID
+  + model : str
+  + app_version : str
+  + token_hash : str
+  + paired_at : datetime
+  + last_seen_at : datetime [0..1]
+  + revoked_at : datetime [0..1]
+}
+class "Note" as Note <<entity>> {
+  + id : UUID
+  + pseudonym_id : UUID
+  + session_id : UUID [0..1]
+  + author_user_id : UUID
+  + text : str
+  + created_at : datetime
+  + edited_at : datetime [0..1]
+}
+class "InboundRecord" as InboundRecord <<entity>> {
+  + record_id : UUID
+  + pseudonym_id : UUID
+  + device_id : UUID [0..1]
+  + session_id : UUID
+  + type : str
+  + schema_version : int
+  + content_hash : str
+  + received_at : datetime
+}
+class "TherapySession" as TherapySession <<entity>> {
+  + id : UUID
+  + pseudonym_id : UUID
+  + device_id : UUID [0..1]
+  + has_start : bool
+  + has_end : bool
+  + started_at : datetime [0..1]
+  + ended_at : datetime [0..1]
+  + phobia_grade : int [0..1]
+  + test_session : bool [0..1]
+  + app_version : str [0..1]
+  + device_model : str [0..1]
+  + end_reason : str [0..1]
+  + level_reached : int [0..1]
+  + total_duration_seconds : float [0..1]
+  + raw : dict
+  + created_at : datetime
+}
+class "LevelRecord" as LevelRecord <<entity>> {
+  + id : UUID
+  + session_id : UUID
+  + level : int
+  + attempt : int
+  + outcome : str
+  + criterion_met : bool
+  + started_at : datetime
+  + ended_at : datetime
+  + permanence_seconds : float
+  + min_distance_m : float [0..1]
+  + avoidance_count : int
+  + payload : dict
+  + received_at : datetime
+}
+class "Analysis" as Analysis <<entity>> {
+  + session_id : UUID
+  + method : str
+  + method_version : str
+  + tolerance_index : float
+  + recommendation : str
+  + basis : list
+  + clinical_status : str
+  + created_at : datetime
+}
+
+User "1" *-- "0..1" PersonalData
+User "1" *-- "0..*" Consent
+User "1" *-- "0..1" IdentityLink
+User "1" *-- "0..*" RefreshToken
+User "1" -- "0..*" Assignment : professional
+User "1" -- "0..*" Assignment : patient
+IdentityLink "0..1" ..> "1" Patient : «logical» pseudonym_id
+Patient "1" *-- "0..*" PairingCode
+Patient "1" *-- "0..*" Device
+Patient "1" *-- "0..*" TherapySession
+Patient "1" *-- "0..*" Note
+Device "0..1" -- "0..*" TherapySession
+TherapySession "1" *-- "0..*" LevelRecord
+TherapySession "1" *-- "0..*" Analysis
+TherapySession "0..1" -- "0..*" Note
+Note "0..*" ..> "1" User : «logical» author
+InboundRecord "0..*" ..> "1" TherapySession : «logical» session_id
+@enduml

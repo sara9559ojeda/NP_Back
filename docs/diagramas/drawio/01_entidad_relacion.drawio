@@ -1,0 +1,154 @@
+<mxfile host="neurophobia-generator" type="device">
+  <diagram id="d1" name="NEUROPHOBIA - Diagrama entidad-relación">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="«identity»&#10;personal_data" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="202" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="PK,FK user_id : uuid&#10;   full_name : varchar(200)&#10;   updated_at : timestamptz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c1">
+          <mxGeometry x="0" y="34" width="202" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="«identity»&#10;consents" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="384" y="0" width="242" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="PK id : uuid&#10;FK user_id : uuid&#10;   consent_version : varchar(64)&#10;   granted_at : timestamptz&#10;   withdrawn_at : timestamptz [N]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c3">
+          <mxGeometry x="0" y="34" width="242" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="«identity»&#10;refresh_tokens" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="815" y="0" width="229" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="PK id : uuid&#10;FK user_id : uuid&#10;   family_id : uuid&#10;U  token_hash : varchar(64)&#10;   created_at : timestamptz&#10;   expires_at : timestamptz&#10;   revoked_at : timestamptz [N]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c5">
+          <mxGeometry x="0" y="34" width="229" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="«identity»&#10;rate_limit_events" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1127" y="0" width="209" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="PK id : bigint&#10;   key_hash : varchar(64)&#10;   occurred_at : timestamptz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c7">
+          <mxGeometry x="0" y="34" width="209" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="Nota&#10;Líneas punteadas = relaciones lógicas sin FK&#10;(cruzan los esquemas identity y clinical).&#10;Retirar el consentimiento borra personal_data&#10;e identity_links: los datos clínicos quedan anónimos." style="shape=note;whiteSpace=wrap;html=0;size=14;verticalAlign=top;align=left;spacingLeft=6;fillColor=#ffffff;strokeColor=#999999;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1604" y="0" width="374" height="108" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="«identity»&#10;identity_links" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="0" y="224" width="235" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="PK,FK user_id : uuid&#10;U  pseudonym_id : uuid  (sin FK)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c10">
+          <mxGeometry x="0" y="34" width="235" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="«identity»&#10;users" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="384" y="224" width="361" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="PK id : uuid&#10;U  email : varchar(320)&#10;   password_hash : text [N]&#10;   role : varchar(16)  {patient|professional|admin}&#10;   active : boolean&#10;   created_at : timestamptz&#10;   updated_at : timestamptz [N]&#10;   withdrawn_at : timestamptz [N]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c12">
+          <mxGeometry x="0" y="34" width="361" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="«identity»&#10;assignments" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="815" y="224" width="222" height="138" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="PK id : uuid&#10;FK professional_user_id : uuid&#10;FK patient_user_id : uuid&#10;   active : boolean&#10;   created_at : timestamptz&#10;   ended_at : timestamptz [N]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c14">
+          <mxGeometry x="0" y="34" width="222" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="«clinical»&#10;patients" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="0" y="464" width="314" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="PK pseudonym_id : uuid&#10;   allowed_start_level : smallint {1..5}&#10;   plan_updated_at : timestamptz [N]&#10;   phobia_grade : smallint {1..5} [N]&#10;   phobia_grade_updated_at : timestamptz [N]&#10;   retain_until : timestamptz [N]&#10;   created_at : timestamptz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c16">
+          <mxGeometry x="0" y="34" width="314" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="«clinical»&#10;pairing_codes" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="384" y="464" width="209" height="138" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="PK id : uuid&#10;FK pseudonym_id : uuid&#10;U  code_hash : varchar(64)&#10;   created_at : timestamptz&#10;   expires_at : timestamptz&#10;   used_at : timestamptz [N]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c18">
+          <mxGeometry x="0" y="34" width="209" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="c20" value="«clinical»&#10;devices" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="815" y="464" width="242" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c21" value="PK id : uuid&#10;FK pseudonym_id : uuid&#10;   model : varchar(32)&#10;   app_version : varchar(32)&#10;U  token_hash : varchar(64)&#10;   paired_at : timestamptz&#10;   last_seen_at : timestamptz [N]&#10;   revoked_at : timestamptz [N]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c20">
+          <mxGeometry x="0" y="34" width="242" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" value="«clinical»&#10;notes" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1127" y="464" width="248" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="c23" value="PK id : uuid&#10;FK pseudonym_id : uuid&#10;FK session_id : uuid [N]&#10;   author_user_id : uuid  (sin FK)&#10;   text : text&#10;   created_at : timestamptz&#10;   edited_at : timestamptz [N]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c22">
+          <mxGeometry x="0" y="34" width="248" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c24" value="«clinical»&#10;inbound_records" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="0" y="704" width="242" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c25" value="PK record_id : uuid&#10;   pseudonym_id : uuid  (sin FK)&#10;   device_id : uuid [N]  (sin FK)&#10;   session_id : uuid  (sin FK)&#10;   type : varchar(16)&#10;   schema_version : smallint&#10;   content_hash : varchar(64)&#10;   received_at : timestamptz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c24">
+          <mxGeometry x="0" y="34" width="242" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="c26" value="«clinical»&#10;sessions" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="384" y="704" width="268" height="298" as="geometry" />
+        </mxCell>
+        <mxCell id="c27" value="PK id : uuid&#10;FK pseudonym_id : uuid&#10;FK device_id : uuid [N]&#10;   has_start : boolean&#10;   has_end : boolean&#10;   started_at : timestamptz [N]&#10;   ended_at : timestamptz [N]&#10;   phobia_grade : smallint [N]&#10;   test_session : boolean [N]&#10;   app_version : varchar(32) [N]&#10;   device_model : varchar(32) [N]&#10;   end_reason : varchar(32) [N]&#10;   level_reached : smallint [N]&#10;   total_duration_seconds : float [N]&#10;   raw : jsonb&#10;   created_at : timestamptz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c26">
+          <mxGeometry x="0" y="34" width="268" height="264" as="geometry" />
+        </mxCell>
+        <mxCell id="c28" value="«clinical»&#10;level_records" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="815" y="704" width="215" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="c29" value="PK id : uuid&#10;FK session_id : uuid&#10;   level : smallint&#10;   attempt : smallint&#10;   outcome : varchar(32)&#10;   criterion_met : boolean&#10;   started_at : timestamptz&#10;   ended_at : timestamptz&#10;   permanence_seconds : float&#10;   min_distance_m : float [N]&#10;   avoidance_count : integer&#10;   payload : jsonb&#10;   received_at : timestamptz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c28">
+          <mxGeometry x="0" y="34" width="215" height="216" as="geometry" />
+        </mxCell>
+        <mxCell id="c30" value="«clinical»&#10;analyses" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#d5e8d4;strokeColor=#82b366;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1127" y="704" width="407" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c31" value="PK,FK session_id : uuid&#10;PK method : varchar(32)&#10;   method_version : varchar(16)&#10;   tolerance_index : float {0..1}&#10;   recommendation : varchar(16) {advance|repeat|step_back}&#10;   basis : jsonb&#10;   clinical_status : varchar(32)&#10;   created_at : timestamptz" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c30">
+          <mxGeometry x="0" y="34" width="407" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="c32" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToOne;startFill=0;endFill=0;" edge="1" parent="1" source="c12" target="c1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c12" target="c3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToOne;startFill=0;endFill=0;" edge="1" parent="1" source="c12" target="c10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c35" value="professional" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c12" target="c14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c36" value="patient" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c12" target="c14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c12" target="c5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c38" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c16" target="c18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c16" target="c20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c40" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c16" target="c26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c41" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERzeroToOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c20" target="c26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c42" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c26" target="c28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c43" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c26" target="c30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c44" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c16" target="c22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c45" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERzeroToOne;endArrow=ERzeroToMany;startFill=0;endFill=0;" edge="1" parent="1" source="c26" target="c22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c46" value="«lógica» pseudonym_id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToOne;startFill=0;endFill=0;dashed=1;" edge="1" parent="1" source="c16" target="c10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c47" value="«lógica» author_user_id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;dashed=1;" edge="1" parent="1" source="c12" target="c22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c48" value="«lógica» session_id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=ERmandOne;endArrow=ERzeroToMany;startFill=0;endFill=0;dashed=1;" edge="1" parent="1" source="c26" target="c24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

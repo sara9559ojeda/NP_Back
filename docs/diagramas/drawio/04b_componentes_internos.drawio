@@ -1,0 +1,208 @@
+<mxfile host="neurophobia-generator" type="device">
+  <diagram id="d1" name="NEUROPHOBIA - Componentes internos de cada aplicación">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="«subsystem» API NEUROPHOBIA (NP_Back)" style="shape=folder;fontStyle=1;tabWidth=140;tabHeight=22;tabPosition=left;html=0;whiteSpace=wrap;verticalAlign=top;align=left;spacingLeft=10;spacingTop=2;fillColor=none;strokeColor=#666666;dashed=0;fontSize=13;container=1;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1138" height="422" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="«component»&#10;Routers HTTP&#10;api/routes: auth, me, patients,&#10;admin, device, public, health" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="30" y="45" width="229" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="«component»&#10;Autenticación y permisos&#10;api/deps: current_actor,&#10;require_roles, current_device" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="329" y="45" width="215" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="«component»&#10;Servicio de cuentas&#10;services: auth, accounts, admin" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="614" y="45" width="229" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="«component»&#10;Servicio de emparejamiento&#10;services: pairing" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="913" y="45" width="196" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="«component»&#10;Servicio de registros del visor&#10;services: records" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="30" y="191" width="229" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="«component»&#10;Servicio de seguimiento&#10;services: tracking, therapy" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="329" y="191" width="202" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="«component»&#10;Servicio de análisis&#10;services: analysis" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="601" y="191" width="156" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="«component»&#10;IA (SessionAnalyzer)&#10;app/ai: rules-baseline" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="827" y="191" width="169" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="«component»&#10;Repositorio identity&#10;repositories/identity" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="30" y="321" width="163" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="«component»&#10;Repositorio clinical&#10;repositories/clinical" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="263" y="321" width="163" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="«component»&#10;ORM y sesión de BD&#10;app/db: models, session" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="495" y="321" width="176" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="«component»&#10;Core&#10;config, errors, security,&#10;ratelimit, logging, pagination" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c1">
+          <mxGeometry x="741" y="321" width="222" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="«subsystem» Web NEUROPHOBIA (NP_Front)" style="shape=folder;fontStyle=1;tabWidth=140;tabHeight=22;tabPosition=left;html=0;whiteSpace=wrap;verticalAlign=top;align=left;spacingLeft=10;spacingTop=2;fillColor=none;strokeColor=#666666;dashed=0;fontSize=13;container=1;" vertex="1" parent="1">
+          <mxGeometry x="0" y="482" width="1105" height="276" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="«component»&#10;Enrutador&#10;App.tsx (React Router)" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c14">
+          <mxGeometry x="30" y="45" width="169" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="«component»&#10;Contexto de autenticación&#10;auth: AuthProvider, RequireRole" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c14">
+          <mxGeometry x="269" y="45" width="229" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="«component»&#10;Páginas&#10;public, patient, professional,&#10;admin, cuenta, errores" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c14">
+          <mxGeometry x="568" y="45" width="222" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="«component»&#10;Componentes de presentación&#10;Layout, Clinical, therapy, ui" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c14">
+          <mxGeometry x="860" y="45" width="215" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="«component»&#10;Hooks&#10;useApi, usePaged" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c14">
+          <mxGeometry x="30" y="191" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c20" value="«component»&#10;Cliente de API&#10;api: client, endpoints, adapters" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c14">
+          <mxGeometry x="240" y="191" width="235" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c21" value="«component»&#10;Textos i18n&#10;es.json" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c14">
+          <mxGeometry x="545" y="191" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" value="«component»&#10;Simulador MSW&#10;mocks (solo desarrollo)" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c14">
+          <mxGeometry x="755" y="191" width="176" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c23" value="«subsystem» App VR NEUROPHOBIA (NPdefdef)" style="shape=folder;fontStyle=1;tabWidth=140;tabHeight=22;tabPosition=left;html=0;whiteSpace=wrap;verticalAlign=top;align=left;spacingLeft=10;spacingTop=2;fillColor=none;strokeColor=#666666;dashed=0;fontSize=13;container=1;" vertex="1" parent="1">
+          <mxGeometry x="0" y="818" width="1188" height="406" as="geometry" />
+        </mxCell>
+        <mxCell id="c24" value="«component»&#10;Menú principal&#10;NeuroPhobiaMainMenuModern" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="30" y="45" width="189" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c25" value="«component»&#10;Gestión de sesión&#10;SessionManager, LevelManager,&#10;GameStateManager" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="289" y="45" width="215" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c26" value="«component»&#10;Niveles 1-5&#10;controladores por escena" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="574" y="45" width="182" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c27" value="«component»&#10;Métricas&#10;MetricsCollector, TaskManager,&#10;SessionReport, LevelMetrics" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="827" y="45" width="222" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c28" value="«component»&#10;Estímulo (arañas)&#10;AranaController, NPNaturalSpiderPatrol" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="30" y="191" width="275" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c29" value="«component»&#10;UI de sesión&#10;GlobalSessionUI, BreathingGuide, HUD" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="375" y="191" width="262" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c30" value="«component»&#10;Cliente API Unity&#10;FastAPIClient, DeviceRecordMapper" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="706" y="191" width="242" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c31" value="«component»&#10;Bandeja de salida&#10;RecordOutbox" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="1018" y="191" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c32" value="«component»&#10;Entrada XR / escritorio&#10;XRBootstrap, ControlModeSelector" style="shape=component;align=left;spacingLeft=36;verticalAlign=top;spacingTop=6;whiteSpace=wrap;html=0;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="c23">
+          <mxGeometry x="30" y="321" width="235" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c33" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c2" target="c3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c34" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c2" target="c4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c35" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c2" target="c5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c36" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c2" target="c6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c37" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c2" target="c7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c38" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c3" target="c10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c39" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c4" target="c10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c40" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c5" target="c11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c41" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c6" target="c8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c42" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c6" target="c11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c43" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c7" target="c11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c44" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c8" target="c9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c45" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c10" target="c12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c46" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c11" target="c12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c47" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c12" target="c13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c48" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c15" target="c17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c49" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c15" target="c16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c50" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c17" target="c18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c51" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c17" target="c19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c52" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c17" target="c21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c53" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c19" target="c20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c54" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c16" target="c20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c55" value="simula IWebAPI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c22" target="c20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c56" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c24" target="c25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c57" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c24" target="c30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c58" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c26" target="c25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c59" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c26" target="c27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c60" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c26" target="c28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c61" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c26" target="c29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c62" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c25" target="c30">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c63" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c30" target="c31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c64" value="«use»" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c26" target="c32">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c65" value="IWebAPI vía proxy" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c20" target="c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c66" value="IDeviceAPI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c30" target="c2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

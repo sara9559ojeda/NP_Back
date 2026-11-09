@@ -1,0 +1,267 @@
+@startuml 03_clases_unity
+title NPdefdef (Unity) - Clases principales (los MonoBehaviour heredan de UnityEngine.MonoBehaviour)
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+class "NeuroPhobiaMainMenuModern" as NeuroPhobiaMainMenuModern {
+  (consentimiento, grado de fobia, emparejamiento)
+}
+class "GameStateManager" as GameStateManager {
+  + CurrentState : GameState {static}
+  + OnStateChanged : Action<GameState> {static}
+  --
+  + SetState(state : GameState) {static}
+}
+enum "GameState" as GameState {
+  MENU
+  PLAYING
+  PAUSED
+  BREATHING
+  LEVEL_COMPLETE
+  SESSION_END
+}
+class "LevelManager" as LevelManager <<singleton>> {
+  + Instance : LevelManager {static}
+  --
+  + LoadLevel(level : int)
+  + UnlockNextLevel()
+  + OnLevelComplete(level : int, metrics : LevelMetrics)
+}
+class "MonoBehaviour" as MonoBehaviour <<library UnityEngine>> {
+}
+class "GlobalSessionUI" as GlobalSessionUI {
+  --
+  + CompleteLevel(level : int) {static}
+  + OfferRepeat(level : int, message : string) : bool {static}
+  + ShowSessionSummary() {static}
+}
+class "SessionManager" as SessionManager <<singleton>> {
+  + Instance : SessionManager {static}
+  + SessionId : string
+  + CurrentLevel : int
+  + PhobiaGrade : int
+  - report : SessionReport
+  - pendingPost : LevelMetrics
+  - apiClient : FastAPIClient
+  --
+  + StartSession(phobiaGrade : int, testSession : bool)
+  + AddLevelMetrics(metrics : LevelMetrics)
+  + RegisterLevelRetry(level : int)
+  + CurrentAttempt(level : int) : int
+  + RecordSudsBefore(level : int, value : int)
+  + RecordSudsAfter(level : int, value : int)
+  + PostPendingLevel()
+  + EndSession(endReason : string)
+  + GetReport() : SessionReport
+  + ResolveInitialLevel(phobiaGrade : int) : int
+}
+class "FastAPIClient" as FastAPIClient {
+  - baseUrl : string
+  - timeoutSeconds : int = 10
+  - outbox : RecordOutbox
+  - cachedContext : DeviceContextDto
+  --
+  + Pair(code : string, onDone) : IEnumerator
+  + Unpair(onDone) : IEnumerator
+  + RefreshContext(onDone) : IEnumerator
+  + PutPhobiaGrade(grade : int) : IEnumerator
+  + PostSessionStart(sessionId, phobiaGrade, testSession) : IEnumerator
+  + PostLevelMetrics(sessionId, level, metrics) : IEnumerator
+  + PostSessionEnd(sessionId, report, endReason) : IEnumerator
+  + AllowedStartLevel() : int
+  + SyncStatusText() : string
+}
+class "RecordOutbox" as RecordOutbox {
+  + OutboxDir : string
+  + QuarantineDir : string
+  --
+  + Enqueue(owner, type, recordId, json) : string
+  + Pending(owner) : List<string>
+  + Apply(path : string, action : OutboxAction)
+  + Classify(httpStatus : long) : OutboxAction {static}
+  + RetryDelaySeconds(failures, retryAfter) : double {static}
+}
+enum "OutboxAction" as OutboxAction {
+  Delete
+  Quarantine
+  NeedsPairing
+  Retry
+}
+class "SessionReport" as SessionReport <<Serializable>> {
+  + sessionId : string
+  + phobiaGrade : int
+  + totalDuration : float
+  + levelMetrics : List<LevelMetrics>
+  + timestamp : string
+  + testSession : bool
+}
+class "LevelMetrics" as LevelMetrics <<Serializable>> {
+  + level : int
+  + gazeTimeOnSpider : float
+  + avoidanceAttempts : int
+  + proximityMin : float
+  + levelPassed : bool
+  + levelAttempts : int
+  + handContactDuration : float
+  + outcome : string
+  + distanceSamples : List<float>
+  + events : List<LevelEvent>
+  + suds : List<SudsEntry>
+}
+class "DeviceRecordMapper" as DeviceRecordMapper <<utility>> {
+  --
+  + SessionStart(recordId, sessionId, startedUtc, phobiaGrade, ...) : string
+  + LevelRecord(recordId, sessionId, metrics, attempt, endedUtc) : string
+  + SessionEnd(recordId, sessionId, endedUtc, endReason, ...) : string
+  + ResolveOutcome(metrics : LevelMetrics) : string
+  + LevelReached(report : SessionReport) : int
+}
+class "NeuroPhobiaJson" as NeuroPhobiaJson {
+  - sb : StringBuilder
+  --
+  + BeginObject() : NeuroPhobiaJson
+  + Prop(name, value) : NeuroPhobiaJson
+  + ToString() : string
+}
+class "DeviceContextDto" as DeviceContextDto <<DTO>> {
+  + allowedStartLevel : int
+  + phobiaGrade : int
+  + recommendation : RecommendationDto
+  --
+  + RecommendationText() : string
+}
+class "LevelEvent" as LevelEvent <<Serializable>> {
+  + t : float
+  + type : string
+  + value : float
+}
+class "SudsEntry" as SudsEntry <<Serializable>> {
+  + phase : string
+  + value : int
+  + at : float
+}
+class "MetricsCollector" as MetricsCollector {
+  + level : int
+  + player : Transform
+  - gazeTimeOnSpider : float
+  - avoidanceAttempts : int
+  - proximityMin : float
+  - handContactDuration : float
+  --
+  + RegisterTaskCompletion(taskId : string)
+  + SetSpiders(spiders : AranaController[])
+  + RegisterBreathingActivation()
+  + RegisterHandWithdrawal()
+  + AddHandContactTime(seconds : float)
+  + BuildMetrics(passed : bool) : LevelMetrics
+}
+class "TaskManager" as TaskManager {
+  - completedTasks : HashSet<string>
+  --
+  + IsCompleted(id : string) : bool
+  + CompleteTask(taskId : string)
+}
+class "RecommendationDto" as RecommendationDto <<DTO>> {
+  + value : string
+  + method : string
+  + clinicalStatus : string
+}
+interface "IPhobiaStimulus" as IPhobiaStimulus {
+  --
+  + Pause()
+  + Resume()
+  + GetDistanceToPlayer() : float
+  + SetMovementPattern(p : MovementPattern)
+}
+class "AranaController" as AranaController {
+  + defaultPattern : MovementPattern
+  + player : Transform
+  + moveSpeed : float
+  - paused : bool
+  --
+  + Pause()
+  + Resume()
+  + GetDistanceToPlayer() : float
+  + SetMovementPattern(p : MovementPattern)
+}
+enum "MovementPattern" as MovementPattern {
+  IDLE
+  SLOW_PATROL
+  HAND_CRAWL
+  FREE_ROAM
+}
+class "NPNaturalSpiderPatrol" as NPNaturalSpiderPatrol {
+  (patrulla de arañas, niveles 4 y 5)
+}
+class "Level1SequentialGazeFlow" as Level1SequentialGazeFlow <<Nivel 1>> {
+  - cards : List<GameObject>
+  - nextSceneName : string
+}
+class "NeuroPhobiaLevel2StableGaze" as NeuroPhobiaLevel2StableGaze <<Nivel 2>> {
+  + metricsCollector : MetricsCollector
+}
+class "Level3ProgressControllerV2" as Level3ProgressControllerV2 <<Nivel 3>> {
+  + metricsCollector : MetricsCollector
+  --
+  + RegisterCheckpoint(order : int)
+}
+class "Level4ContactTimer" as Level4ContactTimer <<Nivel 4>> {
+  + metricsCollector : MetricsCollector
+  - contactSeconds : float
+}
+class "NPLevel4Controller" as NPLevel4Controller <<Nivel 4>> {
+  + spiderPatrol : NPNaturalSpiderPatrol
+}
+class "Level5DomesticTaskManager" as Level5DomesticTaskManager <<Nivel 5>> {
+  + metricsCollector : MetricsCollector
+  --
+  + RegisterTask(taskId : string)
+}
+class "NPLevel5Controller" as NPLevel5Controller <<Nivel 5>> {
+  + spiderPatrols : NPNaturalSpiderPatrol[]
+  --
+  + LoadMenu()
+  + RestartLevel()
+}
+
+AranaController ..|> IPhobiaStimulus
+AranaController -- MovementPattern
+SessionManager "1" *-- "1" SessionReport
+SessionReport "1" *-- "0..*" LevelMetrics
+LevelMetrics "1" *-- "0..*" LevelEvent
+LevelMetrics "1" *-- "0..*" SudsEntry
+SessionManager "1" -- "1" FastAPIClient : apiClient
+FastAPIClient "1" *-- "1" RecordOutbox
+FastAPIClient "1" -- "0..1" DeviceContextDto : caché
+DeviceContextDto "1" *-- "1" RecommendationDto
+RecordOutbox ..> OutboxAction : «use»
+FastAPIClient ..> DeviceRecordMapper : «use»
+DeviceRecordMapper ..> NeuroPhobiaJson : «create»
+MetricsCollector ..> LevelMetrics : «create»
+MetricsCollector "1" -- "0..*" AranaController
+GameStateManager -- GameState
+GameStateManager ..> AranaController : pausa / reanuda
+LevelManager ..> SessionManager : «use»
+TaskManager ..> MetricsCollector : «use»
+NeuroPhobiaMainMenuModern ..> SessionManager : «use»
+NeuroPhobiaMainMenuModern ..> FastAPIClient : «use»
+GlobalSessionUI ..> SessionManager : «use»
+GlobalSessionUI ..> MetricsCollector : «use»
+NeuroPhobiaLevel2StableGaze "1" -- "1" MetricsCollector
+Level3ProgressControllerV2 "1" -- "1" MetricsCollector
+Level4ContactTimer "1" -- "1" MetricsCollector
+Level5DomesticTaskManager "1" -- "1" MetricsCollector
+Level3ProgressControllerV2 ..> SessionManager : «use»
+Level4ContactTimer ..> SessionManager : «use»
+Level5DomesticTaskManager ..> SessionManager : «use»
+NeuroPhobiaLevel2StableGaze ..> SessionManager : «use»
+Level1SequentialGazeFlow ..> GlobalSessionUI : CompleteLevel
+NPLevel4Controller ..> GlobalSessionUI : CompleteLevel
+NPLevel4Controller "1" -- "1" NPNaturalSpiderPatrol
+NPLevel5Controller "1" o-- "1..*" NPNaturalSpiderPatrol
+SessionManager --|> MonoBehaviour
+FastAPIClient --|> MonoBehaviour
+LevelManager --|> MonoBehaviour
+GameStateManager --|> MonoBehaviour
+@enduml

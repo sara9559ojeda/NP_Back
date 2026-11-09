@@ -1,0 +1,327 @@
+<mxfile host="neurophobia-generator" type="device">
+  <diagram id="d1" name="NP_Back - Clases (entidades del ORM, todas heredan de Base)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="«entity»&#10;PersonalData" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="176" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="+ user_id : UUID&#10;+ full_name : str&#10;+ updated_at : datetime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c1">
+          <mxGeometry x="0" y="34" width="176" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="«entity»&#10;Consent" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="378" y="0" width="235" height="122" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="+ id : UUID&#10;+ user_id : UUID&#10;+ consent_version : str&#10;+ granted_at : datetime&#10;+ withdrawn_at : datetime [0..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c3">
+          <mxGeometry x="0" y="34" width="235" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="«entity»&#10;RefreshToken" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="729" y="0" width="222" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="+ id : UUID&#10;+ user_id : UUID&#10;+ family_id : UUID&#10;+ token_hash : str&#10;+ created_at : datetime&#10;+ expires_at : datetime&#10;+ revoked_at : datetime [0..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c5">
+          <mxGeometry x="0" y="34" width="222" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="«entity»&#10;RateLimitEvent" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1034" y="0" width="182" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="+ id : int&#10;+ key_hash : str&#10;+ occurred_at : datetime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c7">
+          <mxGeometry x="0" y="34" width="182" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="«DeclarativeBase»&#10;Base" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="0" width="163" height="58" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="+ metadata : MetaData" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c9">
+          <mxGeometry x="0" y="34" width="163" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="«entity»&#10;IdentityLink" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="0" y="224" width="163" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="+ user_id : UUID&#10;+ pseudonym_id : UUID" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c11">
+          <mxGeometry x="0" y="34" width="163" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="«entity»&#10;User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="378" y="224" width="235" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="+ id : UUID&#10;+ email : str&#10;+ password_hash : str [0..1]&#10;+ role : str&#10;+ active : bool&#10;+ created_at : datetime&#10;+ updated_at : datetime [0..1]&#10;+ withdrawn_at : datetime [0..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c13">
+          <mxGeometry x="0" y="34" width="235" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="«entity»&#10;Assignment" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="729" y="224" width="215" height="138" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="+ id : UUID&#10;+ professional_user_id : UUID&#10;+ patient_user_id : UUID&#10;+ active : bool&#10;+ created_at : datetime&#10;+ ended_at : datetime [0..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c15">
+          <mxGeometry x="0" y="34" width="215" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="«entity»&#10;Patient" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="0" y="464" width="308" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="+ pseudonym_id : UUID&#10;+ allowed_start_level : int&#10;+ plan_updated_at : datetime [0..1]&#10;+ phobia_grade : int [0..1]&#10;+ phobia_grade_updated_at : datetime [0..1]&#10;+ retain_until : datetime [0..1]&#10;+ created_at : datetime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c17">
+          <mxGeometry x="0" y="34" width="308" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="«entity»&#10;PairingCode" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="378" y="464" width="202" height="138" as="geometry" />
+        </mxCell>
+        <mxCell id="c20" value="+ id : UUID&#10;+ pseudonym_id : UUID&#10;+ code_hash : str&#10;+ created_at : datetime&#10;+ expires_at : datetime&#10;+ used_at : datetime [0..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c19">
+          <mxGeometry x="0" y="34" width="202" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="c21" value="«entity»&#10;Device" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="729" y="464" width="235" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c22" value="+ id : UUID&#10;+ pseudonym_id : UUID&#10;+ model : str&#10;+ app_version : str&#10;+ token_hash : str&#10;+ paired_at : datetime&#10;+ last_seen_at : datetime [0..1]&#10;+ revoked_at : datetime [0..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c21">
+          <mxGeometry x="0" y="34" width="235" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="c23" value="«entity»&#10;Note" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1034" y="464" width="215" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="c24" value="+ id : UUID&#10;+ pseudonym_id : UUID&#10;+ session_id : UUID [0..1]&#10;+ author_user_id : UUID&#10;+ text : str&#10;+ created_at : datetime&#10;+ edited_at : datetime [0..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c23">
+          <mxGeometry x="0" y="34" width="215" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="c25" value="«entity»&#10;InboundRecord" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="0" y="704" width="189" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c26" value="+ record_id : UUID&#10;+ pseudonym_id : UUID&#10;+ device_id : UUID [0..1]&#10;+ session_id : UUID&#10;+ type : str&#10;+ schema_version : int&#10;+ content_hash : str&#10;+ received_at : datetime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c25">
+          <mxGeometry x="0" y="34" width="189" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="c27" value="«entity»&#10;TherapySession" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="378" y="704" width="281" height="298" as="geometry" />
+        </mxCell>
+        <mxCell id="c28" value="+ id : UUID&#10;+ pseudonym_id : UUID&#10;+ device_id : UUID [0..1]&#10;+ has_start : bool&#10;+ has_end : bool&#10;+ started_at : datetime [0..1]&#10;+ ended_at : datetime [0..1]&#10;+ phobia_grade : int [0..1]&#10;+ test_session : bool [0..1]&#10;+ app_version : str [0..1]&#10;+ device_model : str [0..1]&#10;+ end_reason : str [0..1]&#10;+ level_reached : int [0..1]&#10;+ total_duration_seconds : float [0..1]&#10;+ raw : dict&#10;+ created_at : datetime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c27">
+          <mxGeometry x="0" y="34" width="281" height="264" as="geometry" />
+        </mxCell>
+        <mxCell id="c29" value="«entity»&#10;LevelRecord" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="729" y="704" width="229" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="c30" value="+ id : UUID&#10;+ session_id : UUID&#10;+ level : int&#10;+ attempt : int&#10;+ outcome : str&#10;+ criterion_met : bool&#10;+ started_at : datetime&#10;+ ended_at : datetime&#10;+ permanence_seconds : float&#10;+ min_distance_m : float [0..1]&#10;+ avoidance_count : int&#10;+ payload : dict&#10;+ received_at : datetime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c29">
+          <mxGeometry x="0" y="34" width="229" height="216" as="geometry" />
+        </mxCell>
+        <mxCell id="c31" value="«entity»&#10;Analysis" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=34;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=0;fillColor=#dae8fc;strokeColor=#6c8ebf;swimlaneFillColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1034" y="704" width="189" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c32" value="+ session_id : UUID&#10;+ method : str&#10;+ method_version : str&#10;+ tolerance_index : float&#10;+ recommendation : str&#10;+ basis : list&#10;+ clinical_status : str&#10;+ created_at : datetime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=0;fontSize=11;" vertex="1" parent="c31">
+          <mxGeometry x="0" y="34" width="189" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="c33" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c13" target="c1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c34" value="1" vertex="1" connectable="0" parent="c33" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c35" value="0..1" vertex="1" connectable="0" parent="c33" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c36" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c13" target="c3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c37" value="1" vertex="1" connectable="0" parent="c36" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c38" value="0..*" vertex="1" connectable="0" parent="c36" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c13" target="c11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c40" value="1" vertex="1" connectable="0" parent="c39" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c41" value="0..1" vertex="1" connectable="0" parent="c39" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c42" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c13" target="c5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c43" value="1" vertex="1" connectable="0" parent="c42" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c44" value="0..*" vertex="1" connectable="0" parent="c42" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c45" value="professional" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=none;" edge="1" parent="1" source="c13" target="c15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c46" value="1" vertex="1" connectable="0" parent="c45" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c47" value="0..*" vertex="1" connectable="0" parent="c45" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c48" value="patient" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=none;" edge="1" parent="1" source="c13" target="c15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c49" value="1" vertex="1" connectable="0" parent="c48" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c50" value="0..*" vertex="1" connectable="0" parent="c48" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c51" value="«logical» pseudonym_id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c11" target="c17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c52" value="0..1" vertex="1" connectable="0" parent="c51" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c53" value="1" vertex="1" connectable="0" parent="c51" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c54" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c17" target="c19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c55" value="1" vertex="1" connectable="0" parent="c54" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c56" value="0..*" vertex="1" connectable="0" parent="c54" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c57" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c17" target="c21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c58" value="1" vertex="1" connectable="0" parent="c57" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c59" value="0..*" vertex="1" connectable="0" parent="c57" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c60" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c17" target="c27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c61" value="1" vertex="1" connectable="0" parent="c60" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c62" value="0..*" vertex="1" connectable="0" parent="c60" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c63" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c17" target="c23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c64" value="1" vertex="1" connectable="0" parent="c63" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c65" value="0..*" vertex="1" connectable="0" parent="c63" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c66" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=none;" edge="1" parent="1" source="c21" target="c27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c67" value="0..1" vertex="1" connectable="0" parent="c66" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c68" value="0..*" vertex="1" connectable="0" parent="c66" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c69" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c27" target="c29">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c70" value="1" vertex="1" connectable="0" parent="c69" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c71" value="0..*" vertex="1" connectable="0" parent="c69" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c72" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;startArrow=diamondThin;startFill=1;startSize=14;endArrow=none;" edge="1" parent="1" source="c27" target="c31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c73" value="1" vertex="1" connectable="0" parent="c72" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c74" value="0..*" vertex="1" connectable="0" parent="c72" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c75" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=none;" edge="1" parent="1" source="c27" target="c23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c76" value="0..1" vertex="1" connectable="0" parent="c75" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c77" value="0..*" vertex="1" connectable="0" parent="c75" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c78" value="«logical» author" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c23" target="c13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c79" value="0..*" vertex="1" connectable="0" parent="c78" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c80" value="1" vertex="1" connectable="0" parent="c78" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c81" value="«logical» session_id" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=0;fontSize=10;jumpStyle=arc;endArrow=open;endFill=0;dashed=1;" edge="1" parent="1" source="c25" target="c27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c82" value="0..*" vertex="1" connectable="0" parent="c81" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="-0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c83" value="1" vertex="1" connectable="0" parent="c81" style="edgeLabel;resizable=0;html=0;fontSize=10;labelBackgroundColor=#ffffff;">
+          <mxGeometry x="0.85" relative="1" as="geometry">
+            <mxPoint as="offset" y="-10" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

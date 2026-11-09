@@ -1,0 +1,164 @@
+@startuml 01_entidad_relacion
+title NEUROPHOBIA - Diagrama entidad-relación
+skinparam classAttributeIconSize 0
+hide circle
+skinparam linetype ortho
+hide empty members
+
+entity "personal_data" as personal_data <<identity>> {
+  PK,FK user_id : uuid
+     full_name : varchar(200)
+     updated_at : timestamptz
+}
+entity "consents" as consents <<identity>> {
+  PK id : uuid
+  FK user_id : uuid
+     consent_version : varchar(64)
+     granted_at : timestamptz
+     withdrawn_at : timestamptz [N]
+}
+entity "refresh_tokens" as refresh_tokens <<identity>> {
+  PK id : uuid
+  FK user_id : uuid
+     family_id : uuid
+  U  token_hash : varchar(64)
+     created_at : timestamptz
+     expires_at : timestamptz
+     revoked_at : timestamptz [N]
+}
+entity "rate_limit_events" as rate_limit_events <<identity>> {
+  PK id : bigint
+     key_hash : varchar(64)
+     occurred_at : timestamptz
+}
+note "Nota\nLíneas punteadas = relaciones lógicas sin FK\n(cruzan los esquemas identity y clinical).\nRetirar el consentimiento borra personal_data\ne identity_links: los datos clínicos quedan anónimos." as Nota
+entity "identity_links" as identity_links <<identity>> {
+  PK,FK user_id : uuid
+  U  pseudonym_id : uuid  (sin FK)
+}
+entity "users" as users <<identity>> {
+  PK id : uuid
+  U  email : varchar(320)
+     password_hash : text [N]
+     role : varchar(16)  {patient|professional|admin}
+     active : boolean
+     created_at : timestamptz
+     updated_at : timestamptz [N]
+     withdrawn_at : timestamptz [N]
+}
+entity "assignments" as assignments <<identity>> {
+  PK id : uuid
+  FK professional_user_id : uuid
+  FK patient_user_id : uuid
+     active : boolean
+     created_at : timestamptz
+     ended_at : timestamptz [N]
+}
+entity "patients" as patients <<clinical>> {
+  PK pseudonym_id : uuid
+     allowed_start_level : smallint {1..5}
+     plan_updated_at : timestamptz [N]
+     phobia_grade : smallint {1..5} [N]
+     phobia_grade_updated_at : timestamptz [N]
+     retain_until : timestamptz [N]
+     created_at : timestamptz
+}
+entity "pairing_codes" as pairing_codes <<clinical>> {
+  PK id : uuid
+  FK pseudonym_id : uuid
+  U  code_hash : varchar(64)
+     created_at : timestamptz
+     expires_at : timestamptz
+     used_at : timestamptz [N]
+}
+entity "devices" as devices <<clinical>> {
+  PK id : uuid
+  FK pseudonym_id : uuid
+     model : varchar(32)
+     app_version : varchar(32)
+  U  token_hash : varchar(64)
+     paired_at : timestamptz
+     last_seen_at : timestamptz [N]
+     revoked_at : timestamptz [N]
+}
+entity "notes" as notes <<clinical>> {
+  PK id : uuid
+  FK pseudonym_id : uuid
+  FK session_id : uuid [N]
+     author_user_id : uuid  (sin FK)
+     text : text
+     created_at : timestamptz
+     edited_at : timestamptz [N]
+}
+entity "inbound_records" as inbound_records <<clinical>> {
+  PK record_id : uuid
+     pseudonym_id : uuid  (sin FK)
+     device_id : uuid [N]  (sin FK)
+     session_id : uuid  (sin FK)
+     type : varchar(16)
+     schema_version : smallint
+     content_hash : varchar(64)
+     received_at : timestamptz
+}
+entity "sessions" as sessions <<clinical>> {
+  PK id : uuid
+  FK pseudonym_id : uuid
+  FK device_id : uuid [N]
+     has_start : boolean
+     has_end : boolean
+     started_at : timestamptz [N]
+     ended_at : timestamptz [N]
+     phobia_grade : smallint [N]
+     test_session : boolean [N]
+     app_version : varchar(32) [N]
+     device_model : varchar(32) [N]
+     end_reason : varchar(32) [N]
+     level_reached : smallint [N]
+     total_duration_seconds : float [N]
+     raw : jsonb
+     created_at : timestamptz
+}
+entity "level_records" as level_records <<clinical>> {
+  PK id : uuid
+  FK session_id : uuid
+     level : smallint
+     attempt : smallint
+     outcome : varchar(32)
+     criterion_met : boolean
+     started_at : timestamptz
+     ended_at : timestamptz
+     permanence_seconds : float
+     min_distance_m : float [N]
+     avoidance_count : integer
+     payload : jsonb
+     received_at : timestamptz
+}
+entity "analyses" as analyses <<clinical>> {
+  PK,FK session_id : uuid
+  PK method : varchar(32)
+     method_version : varchar(16)
+     tolerance_index : float {0..1}
+     recommendation : varchar(16) {advance|repeat|step_back}
+     basis : jsonb
+     clinical_status : varchar(32)
+     created_at : timestamptz
+}
+
+users ||--o| personal_data
+users ||--o{ consents
+users ||--o| identity_links
+users ||--o{ assignments : professional
+users ||--o{ assignments : patient
+users ||--o{ refresh_tokens
+patients ||--o{ pairing_codes
+patients ||--o{ devices
+patients ||--o{ sessions
+devices |o--o{ sessions
+sessions ||--o{ level_records
+sessions ||--o{ analyses
+patients ||--o{ notes
+sessions |o--o{ notes
+patients ||..o| identity_links : «lógica» pseudonym_id
+users ||..o{ notes : «lógica» author_user_id
+sessions ||..o{ inbound_records : «lógica» session_id
+@enduml

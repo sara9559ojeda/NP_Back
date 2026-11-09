@@ -1,0 +1,44 @@
+@startuml 04a_componentes_sistema
+title NEUROPHOBIA - Diagrama de componentes (vista general)
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+component "App VR NEUROPHOBIA" as App_VR_NEUROPHOBIA <<application>>
+note bottom of App_VR_NEUROPHOBIA
+  Unity 6000.3 · OpenXR · XR Toolkit
+  APK Meta Quest 2/3/3S
+  (repo NPdefdef)
+end note
+component "Web NEUROPHOBIA" as Web_NEUROPHOBIA <<application>>
+note bottom of Web_NEUROPHOBIA
+  React + TypeScript (Vite) · SPA
+  (repo NP_Front)
+end note
+note "Almacenamiento local del visor\noutbox/ (RecordOutbox)\ndevice_context.json" as Almacenamiento_local_del_visor
+component "API NEUROPHOBIA" as API_NEUROPHOBIA <<service>>
+note bottom of API_NEUROPHOBIA
+  FastAPI · Python 3.12 · Docker
+  /api/v1 (contrato v1.1.0)
+  (repo NP_Back)
+end note
+component "Proxy web" as Proxy_web <<component>>
+note bottom of Proxy_web
+  Vercel: api/proxy.mjs
+  AWS: CloudFront /api/v1/*
+  añade x-np-proxy-secret, x-np-client-ip
+end note
+component "Módulo de IA" as Módulo_de_IA <<component>>
+note bottom of Módulo_de_IA
+  app/ai · rules-baseline
+  interfaz SessionAnalyzer
+end note
+database "PostgreSQL 17" as PostgreSQL_17 <<database>>
+
+App_VR_NEUROPHOBIA ..> API_NEUROPHOBIA : IDeviceAPI /api/v1/device (HTTPS, token de dispositivo)
+App_VR_NEUROPHOBIA ..> Almacenamiento_local_del_visor : «use» archivos
+Web_NEUROPHOBIA ..> Proxy_web : IProxy /api/v1/* (mismo origen)
+Proxy_web ..> API_NEUROPHOBIA : IWebAPI /api/v1 (JWT + cookie refresh)
+API_NEUROPHOBIA ..> Módulo_de_IA : SessionAnalyzer
+API_NEUROPHOBIA ..> PostgreSQL_17 : SQL (SQLAlchemy + Alembic)
+@enduml

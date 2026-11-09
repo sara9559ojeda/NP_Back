@@ -1,0 +1,123 @@
+@startuml 05_paquetes
+title NEUROPHOBIA - Diagrama de paquetes
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+package "NP_Back" <<repositorio>> {
+  package "main / cli" as main___cli {
+  }
+  package "api.routes" as api_routes {
+  }
+  package "api.deps" as api_deps {
+  }
+  package "services" as services {
+  }
+  package "repositories" as repositories {
+  }
+  package "schemas" as schemas {
+  }
+  package "ai" as ai {
+  }
+  package "db" as db {
+  }
+  package "core" as core {
+  }
+  package "alembic" as alembic {
+  }
+  package "infra/aws" as infra_aws {
+  }
+}
+package "NP_Front" <<repositorio>> {
+  package "App / main" as App___main {
+  }
+  package "pages" as pages {
+  }
+  package "components" as components {
+  }
+  package "auth" as auth {
+  }
+  package "hooks" as hooks {
+  }
+  package "api" as api {
+  }
+  package "i18n" as i18n {
+  }
+  package "mocks" as mocks {
+  }
+  package "proxy (api/proxy.mjs)" as proxy__api_proxy_mjs_ {
+  }
+}
+package "NPdefdef" <<repositorio Assets>> {
+  package "Control" as Control {
+  }
+  package "Comunicacion" as Comunicacion {
+  }
+  package "Metricas" as Metricas {
+  }
+  package "Entidades" as Entidades {
+  }
+  package "UI" as UI {
+  }
+  package "Menu" as Menu {
+  }
+  package "Nivel2..Nivel5" as Nivel2__Nivel5 {
+  }
+  package "Ajustes por nivel" as Ajustes_por_nivel {
+  }
+  package "Scenes" as Scenes {
+  }
+  package "Editor" as Editor {
+  }
+  package "UnityEngine / XR Toolkit / OpenXR" as UnityEngine___XR_Toolkit___OpenXR <<library>> {
+  }
+}
+
+main___cli ..> api_routes : «import»
+main___cli ..> services : «import»
+api_routes ..> services : «import»
+api_routes ..> api_deps : «import»
+api_routes ..> schemas : «import»
+api_deps ..> services : «import»
+api_deps ..> repositories : «import»
+services ..> repositories : «import»
+services ..> schemas : «import»
+services ..> ai : «import»
+services ..> core : «import»
+repositories ..> db : «import»
+db ..> core : «import»
+core ..> db : «import» (diferido)
+alembic ..> db : «import»
+App___main ..> pages : «import»
+App___main ..> auth : «import»
+pages ..> components : «import»
+pages ..> hooks : «import»
+pages ..> api : «import»
+pages ..> i18n : «import»
+components ..> api : «import»
+components ..> hooks : «import»
+auth ..> api : «import»
+hooks ..> api : «import»
+mocks ..> api : «import»
+Control ..> Comunicacion : «import»
+Control ..> Metricas : «import»
+Control ..> Entidades : «import»
+Comunicacion ..> Metricas : «import»
+Metricas ..> Control : «import»
+Metricas ..> Entidades : «import»
+UI ..> Control : «import»
+UI ..> Comunicacion : «import»
+Menu ..> Control : «import»
+Nivel2__Nivel5 ..> Control : «import»
+Nivel2__Nivel5 ..> Metricas : «import»
+Nivel2__Nivel5 ..> Entidades : «import»
+Ajustes_por_nivel ..> Control : «import»
+Ajustes_por_nivel ..> Metricas : «import»
+Ajustes_por_nivel ..> UI : «import»
+Scenes ..> Ajustes_por_nivel : «use»
+Editor ..> Comunicacion : «import»
+Control ..> UnityEngine___XR_Toolkit___OpenXR : «import»
+api ..> api_routes : «use» HTTP /api/v1
+Comunicacion ..> api_routes : «use» HTTP /api/v1/device
+proxy__api_proxy_mjs_ ..> api_routes : «use» reenvía
+@enduml
