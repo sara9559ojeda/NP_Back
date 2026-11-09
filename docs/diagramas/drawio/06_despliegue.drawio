@@ -1,0 +1,67 @@
+<mxfile host="neurophobia-generator" type="device">
+  <diagram id="d1" name="NEUROPHOBIA - Diagrama de despliegue">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="Paciente" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=0;outlineConnect=0;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="20" y="90" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="«device»&#10;Dispositivo VR (Meta Quest)" style="shape=cube;whiteSpace=wrap;html=0;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=12;verticalAlign=top;fontStyle=1;container=1;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="240" y="40" width="420" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="«component»&#10;GafasVR" style="shape=component;align=center;spacingLeft=20;whiteSpace=wrap;html=0;fontStyle=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;" vertex="1" parent="c2">
+          <mxGeometry x="20" y="50" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="«component»&#10;App Unity" style="shape=component;align=center;spacingLeft=20;whiteSpace=wrap;html=0;fontStyle=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;" vertex="1" parent="c2">
+          <mxGeometry x="220" y="115" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="«executionEnvironment»&#10;Frontend (navegador)" style="shape=cube;whiteSpace=wrap;html=0;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=12;verticalAlign=top;fontStyle=1;container=1;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="0" y="300" width="220" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="«component»&#10;Interfaz web (React)" style="shape=component;align=center;spacingLeft=20;whiteSpace=wrap;html=0;fontStyle=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;" vertex="1" parent="c5">
+          <mxGeometry x="20" y="70" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c7" value="«device»&#10;Servidor Backend" style="shape=cube;whiteSpace=wrap;html=0;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=12;verticalAlign=top;fontStyle=1;container=1;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="240" y="330" width="520" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="«component»&#10;Servidor HTTPS (FastAPI)" style="shape=component;align=center;spacingLeft=20;whiteSpace=wrap;html=0;fontStyle=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;" vertex="1" parent="c7">
+          <mxGeometry x="25" y="55" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c9" value="«component»&#10;Interfaz BD (SQLAlchemy)" style="shape=component;align=center;spacingLeft=20;whiteSpace=wrap;html=0;fontStyle=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;" vertex="1" parent="c7">
+          <mxGeometry x="25" y="140" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="«component»&#10;IA" style="shape=component;align=center;spacingLeft=20;whiteSpace=wrap;html=0;fontStyle=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;" vertex="1" parent="c7">
+          <mxGeometry x="300" y="140" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c11" value="«device»&#10;Servidor BD" style="shape=cube;whiteSpace=wrap;html=0;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;size=12;verticalAlign=top;fontStyle=1;container=1;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="790" y="190" width="220" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="«component»&#10;PostgreSQL" style="shape=component;align=center;spacingLeft=20;whiteSpace=wrap;html=0;fontStyle=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=12;" vertex="1" parent="c11">
+          <mxGeometry x="20" y="60" width="170" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c13" value="Ingresa a la aplicación" style="html=0;fontSize=11;dashed=1;dashPattern=1 3;endArrow=open;" edge="1" parent="1" source="c1" target="c3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="HTTPS /api/v1/device" style="html=0;fontSize=11;dashed=1;endArrow=open;endSize=10;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="c4" target="c8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c15" value="respuesta JSON" style="html=0;fontSize=11;dashed=1;endArrow=open;endSize=10;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="c8" target="c4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="HTTPS /api/v1" style="html=0;fontSize=11;dashed=1;endArrow=open;endSize=10;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="c6" target="c8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c17" value="«use»" style="html=0;fontSize=11;dashed=1;endArrow=open;endSize=10;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="c8" target="c10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c18" value="«use»" style="html=0;fontSize=11;dashed=1;endArrow=open;endSize=10;edgeStyle=orthogonalEdgeStyle;rounded=0;" edge="1" parent="1" source="c8" target="c9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c19" value="TCP / SQL" style="html=0;fontSize=11;dashed=1;startArrow=open;endArrow=open;endSize=10;startSize=10;" edge="1" parent="1" source="c9" target="c12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

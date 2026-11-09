@@ -34,6 +34,14 @@ La carpeta [`drawio/`](drawio) tiene cada diagrama ya hecho en formato **draw.io
 | `04a_componentes_sistema.drawio` | Componentes: vista general |
 | `04b_componentes_internos.drawio` | Componentes internos de API, web y app VR |
 | `05_paquetes.drawio` | Paquetes de los tres repositorios |
+| `06_despliegue.drawio` | Despliegue (dispositivo VR, frontend, servidor backend, servidor BD) |
+| `07_casos_de_uso.drawio` | Casos de uso |
+| `08_secuencia_iniciar_terapia.drawio` | Secuencia: iniciar terapia (paciente) |
+| `09_secuencia_revisar_avance.drawio` | Secuencia: revisar avance y anotar comentarios (profesional) |
+| `10_secuencia_iniciar_sesion.drawio` | Secuencia: iniciar sesión (paciente) |
+| `11_secuencia_editar_perfiles.drawio` | Secuencia: editar perfiles (administrador) |
+
+Los diagramas 06–11 salen de `generar_comportamiento.py`.
 
 Pasos:
 

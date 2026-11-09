@@ -1,0 +1,80 @@
+<mxfile host="neurophobia-generator" type="device">
+  <diagram id="d1" name="Secuencia - Iniciar terapia (paciente)">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1" value="Paciente" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=0;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=44;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;participant=umlActor;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;" vertex="1" parent="1">
+          <mxGeometry x="40" y="0" width="40" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="c2" value="Software VR (Unity)" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=0;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=44;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="190" y="0" width="120" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="c3" value="Backend" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=0;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=44;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="380" y="0" width="120" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="c4" value="Base de datos" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=0;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=44;fillColor=#7FD0F5;strokeColor=#000000;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="570" y="0" width="120" height="420" as="geometry" />
+        </mxCell>
+        <mxCell id="c5" value="" style="html=0;points=[];perimeter=orthogonalPerimeter;fillColor=#7FD0F5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="245" y="86" width="10" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c6" value="Iniciar terapia" edge="1" parent="1" style="html=0;fontSize=11;verticalAlign=bottom;endArrow=block;endFill=1;endSize=10;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="65" y="90" as="sourcePoint" />
+            <mxPoint x="245" y="90" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c7" value="" style="html=0;points=[];perimeter=orthogonalPerimeter;fillColor=#7FD0F5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="435" y="130" width="10" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c8" value="Envía métricas" edge="1" parent="1" style="html=0;fontSize=11;verticalAlign=bottom;endArrow=block;endFill=1;endSize=10;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="255" y="134" as="sourcePoint" />
+            <mxPoint x="435" y="134" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c9" value="" style="html=0;points=[];perimeter=orthogonalPerimeter;fillColor=#7FD0F5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="625" y="174" width="10" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c10" value="Guarda métricas" edge="1" parent="1" style="html=0;fontSize=11;verticalAlign=bottom;endArrow=block;endFill=1;endSize=10;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="445" y="178" as="sourcePoint" />
+            <mxPoint x="625" y="178" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c11" value="" style="html=0;points=[];perimeter=orthogonalPerimeter;fillColor=#7FD0F5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="435" y="218" width="10" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c12" value="Analiza datos" edge="1" parent="1" style="html=0;fontSize=11;verticalAlign=bottom;endArrow=block;endFill=1;endSize=10;align=left;spacingLeft=4;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="445" y="222" as="sourcePoint" />
+            <mxPoint x="445" y="240" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="480" y="222" />
+              <mxPoint x="480" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c13" value="" style="html=0;points=[];perimeter=orthogonalPerimeter;fillColor=#7FD0F5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="625" y="262" width="10" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c14" value="Guarda retroalimentación" edge="1" parent="1" style="html=0;fontSize=11;verticalAlign=bottom;endArrow=block;endFill=1;endSize=10;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="445" y="266" as="sourcePoint" />
+            <mxPoint x="625" y="266" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c15" value="" style="html=0;points=[];perimeter=orthogonalPerimeter;fillColor=#7FD0F5;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="435" y="306" width="10" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c16" value="Retroalimentación guardada" edge="1" parent="1" style="html=0;fontSize=11;verticalAlign=bottom;endArrow=open;endSize=10;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="625" y="310" as="sourcePoint" />
+            <mxPoint x="445" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
