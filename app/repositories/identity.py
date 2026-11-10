@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import and_, delete, func, or_, select, update
+from sqlalchemy import and_, delete, func, or_, select, text, update
 from sqlalchemy.orm import Session
 
 from app.core.pagination import Page
@@ -115,6 +115,18 @@ def list_users(
         stmt = stmt.where(or_(User.created_at < at, and_(User.created_at == at, User.id < last_id)))
     stmt = stmt.order_by(User.created_at.desc(), User.id.desc()).limit(page.limit + 1)
     return [(row[0], row[1]) for row in db.execute(stmt)]
+
+
+# Clave fija del bloqueo consultivo que serializa los cambios sobre administradores (64 bits con signo).
+_ADMIN_CHANGES_LOCK = 0x4E50_4144_4D49_4E53  # "NPADMINS"
+
+
+def lock_admin_changes(db: Session) -> None:
+    """Bloqueo de transacción: dos cambios simultáneos no pueden ver ambos «quedan 2 administradores».
+
+    Se toma antes de bloquear filas de usuario, siempre en el mismo orden, para no crear interbloqueos.
+    """
+    db.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": _ADMIN_CHANGES_LOCK})
 
 
 def count_active_admins(db: Session) -> int:

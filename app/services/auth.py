@@ -35,7 +35,14 @@ def create_account(db: Session, *, email: str, password: str, role: str, full_na
     """Crea la identidad y, si es paciente, su seudónimo clínico. No hace commit."""
     if identity.email_exists(db, email):
         raise ApiError(409, "EMAIL_TAKEN", "Ese correo ya tiene una cuenta.")
-    user = identity.add_user(db, email=email, password_hash=hash_password(password), role=role, full_name=full_name)
+    password_hash = hash_password(password)
+    try:
+        # Punto de guardado: si otro registro simultáneo ganó la carrera, el INSERT falla aquí (flush)
+        # y se responde 409 sin anular el resto de la transacción.
+        with db.begin_nested():
+            user = identity.add_user(db, email=email, password_hash=password_hash, role=role, full_name=full_name)
+    except IntegrityError as exc:
+        raise ApiError(409, "EMAIL_TAKEN", "Ese correo ya tiene una cuenta.") from exc
     if role == "patient":
         ensure_patient_link(db, user.id)
     return user.id

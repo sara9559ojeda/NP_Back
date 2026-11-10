@@ -76,6 +76,7 @@ def withdraw_consent(db: Session, actor: Actor) -> None:
 
     Los datos clínicos se conservan sin vínculo (anónimos); su plazo depende de D23.
     """
+    identity.lock_admin_changes(db)  # antes del bloqueo de fila: ver LAST_ADMIN
     user = identity.get_user(db, actor.user_id, for_update=True)
     if user is None:
         raise ApiError(401, "UNAUTHENTICATED")

@@ -15,6 +15,8 @@ def get_engine() -> Engine:
     return create_engine(
         get_settings().database_url.get_secret_value(),
         pool_pre_ping=True,
+        # Sin valores de parámetros en los errores de SQLAlchemy (correos, hashes) que acaban en los logs.
+        hide_parameters=True,
         poolclass=NullPool,
         connect_args={"prepare_threshold": None},
     )
