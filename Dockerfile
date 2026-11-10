@@ -7,8 +7,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /srv
 
+# Security updates of the Debian base (Trivy, finding H-12).
+RUN apt-get update \
+    && apt-get -y upgrade \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+# pip (and the libraries it vendors) is not needed at runtime: remove it after installing.
+RUN pip install -r requirements.txt \
+    && python -m pip uninstall -y pip
 
 COPY alembic.ini .
 COPY alembic ./alembic
