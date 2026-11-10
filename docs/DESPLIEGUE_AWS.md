@@ -1,5 +1,7 @@
 # Desplegar NEUROPHOBIA en AWS (alternativa a Vercel + Supabase)
 
+> Para el proyecto con plan FREE, 100 USD de créditos y región us-east-2, usa [EC2 con PostgreSQL juntos](DESPLIEGUE_AWS_EC2.md). El diseño Fargate/ALB descrito debajo no es el elegido para ese proyecto.
+
 Esta guía despliega **todo el sistema** (NP_Back y NP_Front) en una cuenta de AWS con un solo comando, y lo borra con otro. La infraestructura está escrita como código con AWS CDK (TypeScript) en [`infra/aws`](../infra/aws). El despliegue en Vercel sigue funcionando igual; esto es una alternativa, no un reemplazo.
 
 > Preparar no es desplegar: nada de este repositorio crea recursos en AWS hasta que tú ejecutes `deploy-aws`. Usa datos ficticios en la primera prueba.

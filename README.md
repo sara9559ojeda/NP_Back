@@ -1,5 +1,7 @@
 # NEUROPHOBIA — Backend
 
+Despliegue AWS en Ohio con EC2 y PostgreSQL juntos: [arquitectura, costo y operación](docs/DESPLIEGUE_AWS_EC2.md).
+
 API REST del sistema NEUROPHOBIA, prototipo académico de realidad virtual para apoyar el tratamiento de la aracnofobia mediante exposición gradual. Trabajo de grado de **Sara María Ojeda López**, Ingeniería de Software, Universidad Cooperativa de Colombia (Pasto, 2026).
 
 > NEUROPHOBIA no es un dispositivo médico ni sustituye a un terapeuta. Se usa con el acompañamiento de un profesional de la salud.
