@@ -16,6 +16,7 @@ from fastapi.openapi.utils import get_openapi
 from app.api.routes import admin, auth, device, health, me, patients, public
 from app.core.config import APP_VERSION, get_settings
 from app.core.errors import install_error_handlers
+from app.core.headers import SecurityHeadersMiddleware
 from app.core.logging import AccessLogMiddleware, configure_logging
 from app.schemas.common import Problem
 from app.schemas.device import RecordEnvelope, PAYLOAD_MODELS
@@ -79,6 +80,7 @@ def create_app() -> FastAPI:
         allow_headers=["Authorization", "Content-Type", "Accept"],
         expose_headers=["X-Request-Id", "Retry-After"],
     )
+    app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(AccessLogMiddleware)
     app.openapi = lambda: custom_openapi(app)  # type: ignore[method-assign]
     return app

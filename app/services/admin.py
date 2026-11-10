@@ -65,6 +65,7 @@ def create_user(db: Session, data: AdminUserCreate) -> AdminUserOut:
 
 
 def patch_user(db: Session, user_id: uuid.UUID, data: AdminUserPatch) -> AdminUserOut:
+    identity.lock_admin_changes(db)  # antes del bloqueo de fila: ver LAST_ADMIN
     user = identity.get_user(db, user_id, for_update=True)
     if user is None:
         raise ApiError(404, "NOT_FOUND")
