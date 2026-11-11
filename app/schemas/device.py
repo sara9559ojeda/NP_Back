@@ -6,6 +6,7 @@ from typing import Annotated, Any, Literal
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 from app.schemas.common import CamelModel, Paginated, UtcDateTime
+from app.schemas.tracking import SessionFeedbackItem
 
 # ───────────── emparejamiento ─────────────
 
@@ -62,6 +63,7 @@ class DeviceContext(CamelModel):
     # v1.1.0: latest self-reported phobia grade, to prefill the "Ajustar grado de fobia" step.
     phobia_grade: int | None = None
     phobia_grade_updated_at: UtcDateTime | None = None
+    last_feedback: SessionFeedbackItem | None = None
 
 
 # ───────────── phobia grade and therapy state (v1.1.0) ─────────────

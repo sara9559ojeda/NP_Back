@@ -73,3 +73,4 @@ CLAUDE.md
 infra/aws-lite/.build/
 infra/aws-lite/outputs.json
 infra/aws-lite/template.generated.json
+/.test-tmp/

@@ -24,6 +24,22 @@ class AnalysisOut(CamelModel):
     basis: list[BasisItem]
     clinical_status: str
     created_at: UtcDateTime
+    explanation: str | None = None
+    evaluated_level: int | None = None
+    evaluated_attempt: int | None = None
+    narrative: str | None = None
+    narrative_status: Literal["disabled", "pending", "generating", "generated", "fallback", "quota_exceeded"] = "disabled"
+    narrative_model: str | None = None
+    narrative_created_at: UtcDateTime | None = None
+
+
+class SessionComparison(CamelModel):
+    previous_session_id: uuid.UUID
+    previous_ended_at: UtcDateTime
+    level_delta: int | None
+    duration_delta_seconds: float | None
+    tolerance_delta: float | None
+    tolerance_comparable: bool
 
 
 class LastSessionItem(CamelModel):
@@ -151,6 +167,8 @@ class SessionFeedbackItem(CamelModel):
     level_reached: int | None
     end_reason: str | None
     analysis: AnalysisOut
+    total_duration_seconds: float | None = None
+    comparison: SessionComparison | None = None
 
 
 class ProfessionalFeedbackItem(SessionFeedbackItem):

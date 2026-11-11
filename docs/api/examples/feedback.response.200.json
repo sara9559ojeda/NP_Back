@@ -25,9 +25,18 @@
           }
         ],
         "clinicalStatus": "pendiente_de_validar",
-        "createdAt": "2026-10-30T21:12:01Z"
+        "createdAt": "2026-10-30T21:12:01Z",
+        "explanation": "Explicación técnica pendiente de revisión profesional.",
+        "narrative": null,
+        "narrativeStatus": "disabled",
+        "narrativeModel": null,
+        "narrativeCreatedAt": null,
+        "evaluatedLevel": 2,
+        "evaluatedAttempt": 1
       },
-      "notesCount": 1
+      "notesCount": 1,
+      "totalDurationSeconds": 720.0,
+      "comparison": null
     }
   ],
   "nextCursor": null

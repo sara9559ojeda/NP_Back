@@ -36,6 +36,7 @@ _TITLES: dict[str, str] = {
     "RATE_LIMITED": "Demasiados intentos",
     "SERVER_ERROR": "Error interno",
     "STORAGE_UNAVAILABLE": "Almacenamiento no disponible",
+    "RELEASE_UNAVAILABLE": "Instalador no disponible",
 }
 
 # Seconds the client is asked to wait before retrying when the database does not answer.

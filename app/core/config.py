@@ -5,6 +5,7 @@ son obligatorios y los escribe Sara en ``backend/.env`` (fuera de Git).
 """
 
 from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 from pydantic import Field, SecretStr, model_validator
@@ -53,6 +54,13 @@ class Settings(BaseSettings):
 
     # Módulo de IA.
     ai_method: str = "rules-baseline"
+
+    apk_release_directory: Path | None = None
+    groq_api_key: SecretStr | None = None
+    groq_model: str = "openai/gpt-oss-20b"
+    external_ai_enabled: bool = False
+    groq_daily_request_limit: int = Field(default=25, ge=0, le=1000)
+    groq_timeout_seconds: float = Field(default=8, ge=1, le=20)
 
     log_level: str = "INFO"
 

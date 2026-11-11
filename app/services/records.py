@@ -28,7 +28,7 @@ from app.schemas.device import (
     SessionStartPayload,
 )
 from app.services.actor import DeviceActor
-from app.services.therapy import session_ref, sync_phobia_grade_from_session
+from app.services.therapy import session_feedback, session_ref, sync_phobia_grade_from_session
 from app.services.analysis import feedback_for, refresh_analysis
 
 
@@ -186,4 +186,5 @@ def device_context(db: Session, device: DeviceActor) -> DeviceContext:
         recommendation=recommendation,
         phobia_grade=patient.phobia_grade if patient else None,
         phobia_grade_updated_at=patient.phobia_grade_updated_at if patient else None,
+        last_feedback=session_feedback(db, from_session, analyses[from_session.id]) if from_session else None,
     )

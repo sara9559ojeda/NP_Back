@@ -210,12 +210,91 @@
             "title": "Createdat",
             "type": "string"
           },
+          "evaluatedAttempt": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evaluatedattempt"
+          },
+          "evaluatedLevel": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Evaluatedlevel"
+          },
+          "explanation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Explanation"
+          },
           "method": {
             "title": "Method",
             "type": "string"
           },
           "methodVersion": {
             "title": "Methodversion",
+            "type": "string"
+          },
+          "narrative": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Narrative"
+          },
+          "narrativeCreatedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Narrativecreatedat"
+          },
+          "narrativeModel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Narrativemodel"
+          },
+          "narrativeStatus": {
+            "default": "disabled",
+            "enum": [
+              "disabled",
+              "pending",
+              "generating",
+              "generated",
+              "fallback",
+              "quota_exceeded"
+            ],
+            "title": "Narrativestatus",
             "type": "string"
           },
           "recommendation": {
@@ -242,6 +321,92 @@
           "createdAt"
         ],
         "title": "AnalysisOut",
+        "type": "object"
+      },
+      "AppRelease": {
+        "additionalProperties": false,
+        "properties": {
+          "bytes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Bytes"
+          },
+          "createdAt": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Createdat"
+          },
+          "downloadRole": {
+            "const": "admin",
+            "default": "admin",
+            "title": "Downloadrole",
+            "type": "string"
+          },
+          "headsetTested": {
+            "default": false,
+            "title": "Headsettested",
+            "type": "boolean"
+          },
+          "sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sha256"
+          },
+          "status": {
+            "enum": [
+              "unavailable",
+              "pending_validation",
+              "available"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "versionCode": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Versioncode"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "AppRelease",
         "type": "object"
       },
       "AssignmentCreate": {
@@ -540,6 +705,16 @@
           "allowedStartLevel": {
             "title": "Allowedstartlevel",
             "type": "integer"
+          },
+          "lastFeedback": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionFeedbackItem"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "lastSession": {
             "anyOf": [
@@ -2097,6 +2272,16 @@
           "analysis": {
             "$ref": "#/components/schemas/AnalysisOut"
           },
+          "comparison": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionComparison"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "endReason": {
             "anyOf": [
               {
@@ -2160,6 +2345,17 @@
               }
             ],
             "title": "Startedat"
+          },
+          "totalDurationSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totaldurationseconds"
           }
         },
         "required": [
@@ -2633,6 +2829,67 @@
         "title": "Samples",
         "type": "object"
       },
+      "SessionComparison": {
+        "additionalProperties": false,
+        "properties": {
+          "durationDeltaSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Durationdeltaseconds"
+          },
+          "levelDelta": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Leveldelta"
+          },
+          "previousEndedAt": {
+            "title": "Previousendedat",
+            "type": "string"
+          },
+          "previousSessionId": {
+            "format": "uuid",
+            "title": "Previoussessionid",
+            "type": "string"
+          },
+          "toleranceComparable": {
+            "title": "Tolerancecomparable",
+            "type": "boolean"
+          },
+          "toleranceDelta": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tolerancedelta"
+          }
+        },
+        "required": [
+          "previousSessionId",
+          "previousEndedAt",
+          "levelDelta",
+          "durationDeltaSeconds",
+          "toleranceDelta",
+          "toleranceComparable"
+        ],
+        "title": "SessionComparison",
+        "type": "object"
+      },
       "SessionDetail": {
         "additionalProperties": false,
         "properties": {
@@ -2859,6 +3116,16 @@
           "analysis": {
             "$ref": "#/components/schemas/AnalysisOut"
           },
+          "comparison": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SessionComparison"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "endReason": {
             "anyOf": [
               {
@@ -2918,6 +3185,17 @@
               }
             ],
             "title": "Startedat"
+          },
+          "totalDurationSeconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Totaldurationseconds"
           }
         },
         "required": [
@@ -3336,6 +3614,68 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/admin/app-release/download": {
+      "get": {
+        "operationId": "download_app_api_v1_admin_app_release_download_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/vnd.android.package-archive": {}
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "UNAUTHENTICATED, TOKEN_EXPIRED, INVALID_CREDENTIALS o DEVICE_REVOKED"
+          },
+          "403": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "FORBIDDEN"
+          },
+          "409": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "EMAIL_TAKEN, RECORD_CONFLICT o LAST_ADMIN"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "STORAGE_UNAVAILABLE (database unreachable; retry after Retry-After)"
+          }
+        },
+        "security": [
+          {
+            "webAccessToken": []
+          }
+        ],
+        "summary": "Download App",
+        "tags": [
+          "releases"
+        ]
+      }
+    },
     "/api/v1/admin/assignments": {
       "get": {
         "operationId": "list_assignments_api_v1_admin_assignments_get",
@@ -6736,6 +7076,37 @@
         "summary": "Detalle de una sesión: registros por nivel, SUDS, análisis y notas",
         "tags": [
           "patients"
+        ]
+      }
+    },
+    "/api/v1/public/app-release": {
+      "get": {
+        "operationId": "app_release_api_v1_public_app_release_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppRelease"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "503": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Problem"
+                }
+              }
+            },
+            "description": "STORAGE_UNAVAILABLE (database unreachable; retry after Retry-After)"
+          }
+        },
+        "summary": "App Release",
+        "tags": [
+          "releases"
         ]
       }
     },

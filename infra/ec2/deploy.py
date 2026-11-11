@@ -78,10 +78,13 @@ def prepare():
     subprocess.run(['docker', 'save', '-o', str(BUILD/'image.tar'), IMAGE], check=True)
     with tarfile.open(BUILD/'release.tar.gz', 'w:gz') as archive:
         archive.add(BUILD/'image.tar', arcname='image.tar')
-        for file in (ROOT.parent/'NP_AWS_Front/dist').rglob('*'):
+        frontend = ROOT.parent / 'NP_Front/dist'
+        if not (frontend / 'index.html').is_file():
+            raise RuntimeError('Build NP_Front before preparing the deployment')
+        for file in frontend.rglob('*'):
             if file.is_file() and file.name != 'mockServiceWorker.js':
-                archive.add(file, arcname='frontend/'+file.relative_to(ROOT.parent/'NP_AWS_Front/dist').as_posix())
-        for name in ['setup.py', 'nginx.conf', 'backup.sh', 'health.sh', 'create_admin.py', 'restore_check.sh']:
+                archive.add(file, arcname='frontend/'+file.relative_to(frontend).as_posix())
+        for name in ['setup.py', 'nginx.conf', 'security-headers.conf', 'backup.sh', 'health.sh', 'create_admin.py', 'restore_check.sh']:
             archive.add(HERE/name, arcname='infra/'+name)
     print(json.dumps({'artifactBytes': (BUILD/'release.tar.gz').stat().st_size}))
 

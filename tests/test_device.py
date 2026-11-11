@@ -119,6 +119,7 @@ def test_context_without_sessions(client, api):
     assert r.json() == {
         "allowedStartLevel": 1,
         "lastSession": None,
+        "lastFeedback": None,
         "recommendation": None,
         "phobiaGrade": None,
         "phobiaGradeUpdatedAt": None,

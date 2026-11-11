@@ -47,6 +47,7 @@ def app(database_url):
     os.environ["NP_SECRET_KEY"] = secrets.token_urlsafe(48)
     os.environ["NP_CORS_ORIGIN"] = "https://web.test"
     os.environ["NP_COOKIE_SECURE"] = "true"
+    os.environ["NP_EXTERNAL_AI_ENABLED"] = "false"
 
     from app.core.config import get_settings
     from app.db import session as db_session

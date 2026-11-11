@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import and_, delete, func, or_, select, update
+from sqlalchemy import and_, case, delete, func, or_, select, update
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 
@@ -163,11 +163,28 @@ def analyses_for(db: Session, session_ids: list[uuid.UUID], method: str) -> dict
 
 def upsert_analysis(db: Session, values: dict[str, Any]) -> None:
     stmt = insert(Analysis).values(**values)
+    changed = Analysis.input_fingerprint.is_distinct_from(stmt.excluded.input_fingerprint)
+    updates = {k: stmt.excluded[k] for k in ("method_version", "tolerance_index", "recommendation", "basis", "clinical_status", "created_at", "input_fingerprint", "evaluated_level", "evaluated_attempt")}
+    for name in ("narrative_status", "narrative_text", "narrative_model", "narrative_started_at", "narrative_created_at"):
+        updates[name] = case((changed, stmt.excluded[name]), else_=getattr(Analysis, name))
     stmt = stmt.on_conflict_do_update(
         index_elements=["session_id", "method"],
-        set_={k: stmt.excluded[k] for k in ("method_version", "tolerance_index", "recommendation", "basis", "clinical_status", "created_at")},
+        set_=updates,
     )
     db.execute(stmt)
+
+
+def previous_closed_session(db: Session, current: TherapySession) -> TherapySession | None:
+    return db.scalars(
+        select(TherapySession).where(
+            TherapySession.pseudonym_id == current.pseudonym_id,
+            TherapySession.id != current.id,
+            TherapySession.has_start.is_(True),
+            TherapySession.has_end.is_(True),
+            TherapySession.test_session.is_(False),
+            TherapySession.ended_at <= current.started_at,
+        ).order_by(TherapySession.ended_at.desc(), TherapySession.id.desc()).limit(1)
+    ).first()
 
 
 def delete_analysis(db: Session, session_id: uuid.UUID, method: str) -> None:

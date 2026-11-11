@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session
 
 from app.ai.features import session_features
 from app.ai.registry import get_analyzer
+from app.ai.groq_summary import enabled, fingerprint, make_facts
 from app.core.config import get_settings
 from app.core.security import utcnow
 from app.db.models import TherapySession
@@ -33,6 +34,14 @@ def refresh_analysis(db: Session, session: TherapySession) -> None:
     if result is None:
         clinical.delete_analysis(db, session.id, analyzer.method)
         return
+    basis = [asdict(item) for item in result.basis]
+    settings = get_settings()
+    target = max(features.levels, key=lambda level: (level.level, level.ended_at_epoch, level.attempt))
+    facts = make_facts(
+        session, result.recommendation, result.tolerance_index, basis,
+        evaluated_level=target.level, evaluated_attempt=target.attempt,
+        method=result.method, method_version=result.method_version,
+    )
     clinical.upsert_analysis(
         db,
         {
@@ -41,9 +50,17 @@ def refresh_analysis(db: Session, session: TherapySession) -> None:
             "method_version": result.method_version,
             "tolerance_index": result.tolerance_index,
             "recommendation": result.recommendation,
-            "basis": [asdict(item) for item in result.basis],
+            "basis": basis,
             "clinical_status": result.clinical_status,
             "created_at": utcnow(),
+            "input_fingerprint": fingerprint(facts, settings.groq_model, enabled(settings)),
+            "evaluated_level": target.level,
+            "evaluated_attempt": target.attempt,
+            "narrative_status": "pending" if enabled(settings) else "disabled",
+            "narrative_text": None,
+            "narrative_model": settings.groq_model if enabled(settings) else None,
+            "narrative_started_at": None,
+            "narrative_created_at": None,
         },
     )
 

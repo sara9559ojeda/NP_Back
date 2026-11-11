@@ -29,6 +29,7 @@ from app.schemas.tracking import (
 )
 from app.services.actor import DeviceActor
 from app.services.analysis import feedback_for
+from app.services.feedback import compare_session
 from app.services.tracking import analysis_out, session_status
 
 
@@ -63,7 +64,7 @@ def sync_phobia_grade_from_session(db: Session, pseudonym: uuid.UUID, grade: int
 # ───────────── therapy state ─────────────
 
 
-def _feedback_item(s: TherapySession, analysis: Analysis) -> SessionFeedbackItem:
+def session_feedback(db: Session, s: TherapySession, analysis: Analysis) -> SessionFeedbackItem:
     return SessionFeedbackItem(
         session_id=s.id,
         started_at=s.started_at,
@@ -72,6 +73,8 @@ def _feedback_item(s: TherapySession, analysis: Analysis) -> SessionFeedbackItem
         level_reached=s.level_reached,
         end_reason=s.end_reason,
         analysis=analysis_out(analysis),
+        total_duration_seconds=s.total_duration_seconds,
+        comparison=compare_session(db, s, analysis),
     )
 
 
@@ -98,7 +101,7 @@ def therapy_state(db: Session, pseudonym: uuid.UUID) -> TherapyStateOut:
         )
         if last
         else None,
-        last_feedback=_feedback_item(analyzed, analyses[analyzed.id]) if analyzed else None,
+        last_feedback=session_feedback(db, analyzed, analyses[analyzed.id]) if analyzed else None,
     )
 
 
@@ -132,7 +135,7 @@ def feedback_page(db: Session, pseudonym: uuid.UUID, page: Page) -> FeedbackPage
     visible = rows[: page.limit]
     counts = clinical.notes_count_by_session(db, pseudonym, [s.id for s, _ in visible])
     items = [
-        ProfessionalFeedbackItem(**_feedback_item(s, a).model_dump(), notes_count=counts.get(s.id, 0)) for s, a in visible
+        ProfessionalFeedbackItem(**session_feedback(db, s, a).model_dump(), notes_count=counts.get(s.id, 0)) for s, a in visible
     ]
     return FeedbackPage(items=items, next_cursor=next_cursor(rows, page, lambda r: (r[0].started_at, r[0].id)))
 

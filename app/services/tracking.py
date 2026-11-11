@@ -34,6 +34,7 @@ from app.schemas.tracking import (
     SessionSummary,
 )
 from app.services.actor import Actor
+from app.services.feedback import explain_analysis
 
 
 def _not_found() -> ApiError:
@@ -92,6 +93,13 @@ def analysis_out(a: Analysis) -> AnalysisOut:
         basis=[BasisItem(**item) for item in a.basis],
         clinical_status=a.clinical_status,
         created_at=a.created_at,
+        explanation=explain_analysis(a.basis),
+        evaluated_level=a.evaluated_level,
+        evaluated_attempt=a.evaluated_attempt,
+        narrative=a.narrative_text,
+        narrative_status=a.narrative_status,
+        narrative_model=a.narrative_model,
+        narrative_created_at=a.narrative_created_at,
     )
 
 

@@ -32,6 +32,11 @@ services:
       NP_CORS_ORIGIN: ${NP_CORS_ORIGIN:-http://localhost:5173}
       NP_COOKIE_SECURE: ${NP_COOKIE_SECURE:-true}
       NP_LOG_LEVEL: ${NP_LOG_LEVEL:-INFO}
+      NP_EXTERNAL_AI_ENABLED: ${NP_EXTERNAL_AI_ENABLED:-false}
+      NP_GROQ_API_KEY: ${NP_GROQ_API_KEY:-}
+      NP_GROQ_MODEL: ${NP_GROQ_MODEL:-openai/gpt-oss-20b}
+      NP_GROQ_DAILY_REQUEST_LIMIT: ${NP_GROQ_DAILY_REQUEST_LIMIT:-25}
+      NP_GROQ_TIMEOUT_SECONDS: ${NP_GROQ_TIMEOUT_SECONDS:-8}
     ports:
       # En todas las interfaces, para que el visor llegue por la Wi-Fi local en las builds de desarrollo.
       - "8000:8000"

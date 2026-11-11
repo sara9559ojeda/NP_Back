@@ -10,7 +10,7 @@ No hay claves foráneas entre esquemas: solo la capa de servicio une los dos lad
 """
 
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any
 
 from sqlalchemy import (
@@ -19,6 +19,7 @@ from sqlalchemy import (
     Identity,
     CheckConstraint,
     DateTime,
+    Date,
     Float,
     ForeignKey,
     Index,
@@ -287,7 +288,23 @@ class Analysis(Base):
     recommendation: Mapped[str] = mapped_column(String(16), nullable=False)
     basis: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, nullable=False)
     clinical_status: Mapped[str] = mapped_column(String(32), nullable=False)
+    input_fingerprint: Mapped[str | None] = mapped_column(String(64))
+    evaluated_level: Mapped[int | None] = mapped_column(SmallInteger)
+    evaluated_attempt: Mapped[int | None] = mapped_column(Integer)
+    narrative_status: Mapped[str] = mapped_column(String(24), nullable=False, server_default="disabled")
+    narrative_text: Mapped[str | None] = mapped_column(Text)
+    narrative_model: Mapped[str | None] = mapped_column(String(100))
+    narrative_started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    narrative_created_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = _created_at()
+
+
+class NarrativeUsage(Base):
+    __tablename__ = "narrative_usage"
+    __table_args__ = {"schema": "clinical"}
+
+    day: Mapped[date] = mapped_column(Date, primary_key=True)
+    requests: Mapped[int] = mapped_column(Integer, nullable=False)
 
 
 class Note(Base):

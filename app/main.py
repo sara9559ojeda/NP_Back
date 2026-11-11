@@ -8,20 +8,36 @@ Capas:
 """
 
 from typing import Any
+import asyncio
+from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 
-from app.api.routes import admin, auth, device, health, me, patients, public
+from app.api.routes import admin, auth, device, health, me, patients, public, releases
 from app.core.config import APP_VERSION, get_settings
 from app.core.errors import install_error_handlers
 from app.core.headers import SecurityHeadersMiddleware
 from app.core.logging import AccessLogMiddleware, configure_logging
 from app.schemas.common import Problem
 from app.schemas.device import RecordEnvelope, PAYLOAD_MODELS
+from app.ai.groq_summary import enabled
+from app.services.narratives import summary_worker
 
 API_PREFIX = "/api/v1"
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(summary_worker()) if enabled(get_settings()) else None
+    try:
+        yield
+    finally:
+        if task is not None:
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task
 
 
 def custom_openapi(app: FastAPI) -> dict[str, Any]:
@@ -68,9 +84,10 @@ def create_app() -> FastAPI:
         openapi_url=f"{API_PREFIX}/openapi.json",
         docs_url=f"{API_PREFIX}/docs",
         redoc_url=None,
+        lifespan=lifespan,
     )
     install_error_handlers(app)
-    for module in (health, public, auth, me, admin, patients, device):
+    for module in (health, public, auth, me, admin, patients, device, releases):
         app.include_router(module.router, prefix=API_PREFIX)
     app.add_middleware(
         CORSMiddleware,
