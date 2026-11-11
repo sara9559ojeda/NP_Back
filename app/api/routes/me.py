@@ -21,12 +21,14 @@ Pagination = Annotated[Page, Depends(page_params)]
 
 
 @router.get("/me", response_model=MeOut, responses=problems(401, 423), summary="Datos propios")
-def get_me(actor: AnyUser, db: Db) -> MeOut:
+def get_me(actor: AnyUser, db: Db, response: Response) -> MeOut:
+    response.headers["Cache-Control"] = "no-store"
     return accounts.get_me(db, actor)
 
 
 @router.patch("/me", response_model=MeOut, responses=problems(401, 409, 422, 423), summary="Editar nombre o correo")
-def patch_me(data: MePatch, actor: AnyUser, db: Db) -> MeOut:
+def patch_me(data: MePatch, actor: AnyUser, db: Db, response: Response) -> MeOut:
+    response.headers["Cache-Control"] = "no-store"
     return accounts.patch_me(db, actor, data)
 
 

@@ -1,0 +1,14 @@
+let servers = Resources.*[ Type == 'AWS::EC2::Instance' ]
+rule ec2_hardened when %servers !empty {
+    %servers.Properties.MetadataOptions.HttpTokens == 'required'
+    %servers.Properties.MetadataOptions.HttpPutResponseHopLimit == 1
+    %servers.Properties.BlockDeviceMappings.*.Ebs.Encrypted == true
+    %servers.Properties.BlockDeviceMappings.*.Ebs.DeleteOnTermination == false
+    %servers.Properties.DisableApiTermination == true
+    %servers.Properties.CreditSpecification.CPUCredits == 'standard'
+    %servers.Properties.IamInstanceProfile exists
+}
+let forbidden = Resources.*[ Type in ['AWS::Lambda::Function', 'AWS::RDS::DBInstance', 'AWS::EC2::NatGateway', 'AWS::ElasticLoadBalancingV2::LoadBalancer'] ]
+rule no_unapproved_cost_drivers {
+    %forbidden empty
+}
