@@ -38,6 +38,8 @@ Copiar la configuración revisada de nginx y `security-headers.conf` a `/opt/neu
 
 Ejecutar `nginx -t` antes de recargar. Verificar en la URL pública la guía `/instalar`, CSP, cabeceras y que una ruta `.apk` inexistente devuelve 404. El APK se entrega exclusivamente por el endpoint autenticado, nunca mediante el fallback HTML de la SPA. Revisar navegador tras desplegar: CSP puede descubrir fuentes o conexiones adicionales de una configuración distinta.
 
+La web usa Google Fonts: `style-src` permite únicamente `https://fonts.googleapis.com` además de sus fuentes previas, y `font-src` permite `https://fonts.gstatic.com` además de `'self'`. Verificar la hoja de estilos y las familias Atkinson Hyperlegible Next, Bricolage Grotesque e IBM Plex Mono en el navegador con la CSP activa. Conservar las restricciones de scripts, conexiones y marcos. Las plantillas sin secretos pueden tener modo 644; el archivo nginx generado que contiene el secreto del proxy debe conservar acceso privado, modo 600.
+
 ## APK y prueba física
 
 El build nuevo usa HTTPS de CloudFront y produce `release.json` con SHA-256 y revisión. Instalar primero mediante USB por la persona responsable. En Quest verificar: arranque, controles reales, nivel 5, pausa/salida, vinculación, envío y consulta del resultado en Refugio y web. Verificar firma y ausencia de `debuggable` con las herramientas Android.
