@@ -34,11 +34,12 @@ def release_files() -> tuple[ReleaseManifest, Path] | None:
 
 
 def ready(manifest: ReleaseManifest) -> bool:
+    # distributionReady is the explicit authorization to distribute; headsetTested only reports
+    # whether the physical Quest check has been completed and is published as-is.
     return (
         manifest.distribution_ready
         and manifest.signed_for_distribution
         and not manifest.debuggable
-        and manifest.headset_tested
         and not manifest.source_dirty
         and manifest.backend_url.scheme == "https"
     )

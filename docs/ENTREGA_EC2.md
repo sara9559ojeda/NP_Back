@@ -44,7 +44,7 @@ La web usa Google Fonts: `style-src` permite únicamente `https://fonts.googleap
 
 El build nuevo usa HTTPS de CloudFront y produce `release.json` con SHA-256 y revisión. Instalar primero mediante USB por la persona responsable. En Quest verificar: arranque, controles reales, nivel 5, pausa/salida, vinculación, envío y consulta del resultado en Refugio y web. Verificar firma y ausencia de `debuggable` con las herramientas Android.
 
-Solo después de esa prueba se pueden marcar `headsetTested=true` y `distributionReady=true` en una copia del manifiesto y colocar ambos archivos en `/opt/neurophobia/releases`, legibles por UID 10001. No modificar el APK tras calcular el hash. Las claves de firma permanecen fuera de Git y del paquete web.
+La descarga administrativa depende de `distributionReady=true`, que registra la autorización expresa de distribución, además de firma, ausencia de `debuggable`, árbol limpio y HTTPS. `headsetTested` informa con veracidad si la prueba física en Quest se ha completado y no debe marcarse `true` sin haberla hecho. Colocar ambos archivos en `/opt/neurophobia/releases`, legibles por UID 10001. No modificar el APK tras calcular el hash. Las claves de firma permanecen fuera de Git y del paquete web.
 
 ## Regreso a la versión anterior
 

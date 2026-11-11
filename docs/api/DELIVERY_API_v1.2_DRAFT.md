@@ -17,7 +17,7 @@ Los elementos de retroalimentación añaden `totalDurationSeconds` y `comparison
 - `GET /public/app-release`: metadatos sin autenticación. `status`: `unavailable`, `pending_validation` o `available`. Sin URL S3 ni rutas internas.
 - `GET /admin/app-release/download`: solo administración; APK binario, `private, no-store` y `X-Content-SHA256`. Sin sesión devuelve 401, otros roles 403, versión no apta 409, fallo de almacenamiento/integridad 503.
 - Directorio opcional `NP_APK_RELEASE_DIRECTORY`: contiene `release.json` y su APK. Ausente significa que no hay instalador publicado.
-- El manifiesto exige nombre simple, tamaño, SHA-256, versión, revisión Git completa y URL HTTPS. Solo se habilita con `signedForDistribution=true`, `debuggable=false`, `sourceDirty=false`, `headsetTested=true` y `distributionReady=true`. Estos indicadores requieren revisión del artefacto real: no son una certificación automática.
+- El manifiesto exige nombre simple, tamaño, SHA-256, versión, revisión Git completa y URL HTTPS. Solo se habilita con `signedForDistribution=true`, `debuggable=false`, `sourceDirty=false` y `distributionReady=true` (autorización expresa de distribución). `headsetTested` se publica tal cual e indica si la prueba física en Quest se completó; no condiciona la descarga. Estos indicadores requieren revisión del artefacto real: no son una certificación automática.
 
 ## Persistencia
 

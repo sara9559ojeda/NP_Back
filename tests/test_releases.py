@@ -26,7 +26,7 @@ def write_release(directory, **changes):
 
 
 @pytest.mark.parametrize("change", [
-    {"headsetTested": False}, {"signedForDistribution": False}, {"debuggable": True},
+    {"signedForDistribution": False}, {"debuggable": True},
     {"sourceDirty": True}, {"distributionReady": False}, {"backendUrl": "http://localhost:8000"},
 ])
 def test_unvalidated_release_cannot_be_downloaded(tmp_path, monkeypatch, change):
@@ -36,6 +36,16 @@ def test_unvalidated_release_cannot_be_downloaded(tmp_path, monkeypatch, change)
     with pytest.raises(ApiError) as error:
         releases.download_release()
     assert error.value.code == "RELEASE_UNAVAILABLE"
+
+
+def test_authorized_release_is_downloadable_before_headset_check(tmp_path, monkeypatch):
+    artifact, manifest = write_release(tmp_path, headsetTested=False, distributionReady=True)
+    monkeypatch.setattr(releases, "get_settings", lambda: SimpleNamespace(apk_release_directory=tmp_path))
+    public = releases.current_release()
+    assert public.status == "available"
+    assert public.headset_tested is False
+    path, digest = releases.download_release()
+    assert path == artifact.resolve() and digest == manifest["sha256"]
 
 
 def test_release_integrity_failure_is_not_served(tmp_path, monkeypatch):
