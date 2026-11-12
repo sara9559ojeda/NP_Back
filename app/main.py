@@ -95,7 +95,7 @@ def create_app() -> FastAPI:
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
         allow_headers=["Authorization", "Content-Type", "Accept"],
-        expose_headers=["X-Request-Id", "Retry-After"],
+        expose_headers=["X-Request-Id", "Retry-After", "Server-Timing"],
     )
     app.add_middleware(SecurityHeadersMiddleware)
     app.add_middleware(AccessLogMiddleware)

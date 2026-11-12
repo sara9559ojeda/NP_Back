@@ -85,6 +85,7 @@ Para que el visor se conecte por la Wi-Fi local (solo builds de desarrollo), usa
 | `NP_CORS_ORIGIN` | No | Origen de la web (por defecto `http://localhost:5173`). |
 | `NP_COOKIE_SECURE` | No | `true` por defecto (cookie de refresco `Secure`). |
 | `NP_LOG_LEVEL` | No | `INFO` por defecto. |
+| `NP_DB_POOL_SIZE` | No | Conexiones a PostgreSQL que la API reutiliza. Por defecto 5; 0 (sin pool propio) en Vercel o con el Transaction pooler de Supabase (puerto 6543). |
 
 Otras opciones técnicas (vida de los tokens, límites de frecuencia, tamaño máximo del sobre) están en `app/core/config.py` y se cambian con variables `NP_*` del mismo nombre.
 

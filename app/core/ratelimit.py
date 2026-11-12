@@ -84,22 +84,45 @@ class PostgresWindowLimiter:
         ).hexdigest()
 
     def _operate(self, key: str, window: float, *, hit: bool = False, limit: int | None = None) -> int:
+        """Bloquea la clave, poda la ventana, cuenta y, si procede, anota el intento.
+
+        Tres viajes a PostgreSQL como máximo (bloqueo, poda + conteo, inserción), dentro de una
+        transacción propia que el pool reutiliza.
+        """
+        from datetime import timedelta
+
         from sqlalchemy import text
         from app.db.session import get_engine
         lock_id = int.from_bytes(bytes.fromhex(key[:16]), "big", signed=True)
         with get_engine().begin() as conn:
-            conn.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock_id})
-            now = conn.execute(text("SELECT clock_timestamp()")).scalar_one()
-            from datetime import timedelta
+            # La subconsulta toma el bloqueo antes de leer el reloj: la hora es posterior a la espera.
+            now = conn.execute(
+                text("SELECT clock_timestamp() FROM (SELECT pg_advisory_xact_lock(:lock)) AS locked"), {"lock": lock_id}
+            ).scalar_one()
             cutoff = now - timedelta(seconds=window)
-            conn.execute(text("DELETE FROM identity.rate_limit_events WHERE key_hash=:key AND occurred_at<=:cutoff"), {"key": key, "cutoff": cutoff})
-            # Limpieza acotada de claves abandonadas; solo hashes y fechas.
-            conn.execute(text("DELETE FROM identity.rate_limit_events WHERE id IN (SELECT id FROM identity.rate_limit_events WHERE occurred_at < :cutoff LIMIT 1000)"), {"cutoff": now - timedelta(days=1)})
-            count, oldest = conn.execute(text("SELECT count(*), min(occurred_at) FROM identity.rate_limit_events WHERE key_hash=:key"), {"key": key}).one()
+            count, oldest = conn.execute(
+                text(
+                    "WITH expired AS ("
+                    "  DELETE FROM identity.rate_limit_events WHERE key_hash = :key AND occurred_at <= :cutoff"
+                    "), abandoned AS ("
+                    # Limpieza acotada de claves abandonadas (más de un día); solo hashes y fechas.
+                    "  DELETE FROM identity.rate_limit_events WHERE id IN ("
+                    "    SELECT id FROM identity.rate_limit_events"
+                    "    WHERE occurred_at < :stale AND key_hash <> :key LIMIT 1000)"
+                    ") "
+                    # Los DELETE de las CTE no son visibles aquí: el conteo filtra la ventana por sí mismo.
+                    "SELECT count(*), min(occurred_at) FROM identity.rate_limit_events "
+                    "WHERE key_hash = :key AND occurred_at > :cutoff"
+                ),
+                {"key": key, "cutoff": cutoff, "stale": now - timedelta(days=1)},
+            ).one()
             if limit is not None and count >= limit:
                 raise rate_limited(window - (now - oldest).total_seconds())
             if hit:
-                conn.execute(text("INSERT INTO identity.rate_limit_events(key_hash, occurred_at) VALUES (:key, :now)"), {"key": key, "now": now})
+                conn.execute(
+                    text("INSERT INTO identity.rate_limit_events(key_hash, occurred_at) VALUES (:key, :now)"),
+                    {"key": key, "now": now},
+                )
             return count
 
     def count(self, key: str, window: float) -> int:

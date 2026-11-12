@@ -14,6 +14,8 @@ import uuid
 
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
+from app.core import timing
+
 _EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+(\.[\w-]+)+")
 _BEARER_RE = re.compile(r"(?i)bearer\s+[\w.\-~+/=]+")
 _OPAQUE_RE = re.compile(r"\b(npr|npd)_[\w-]{10,}")
@@ -80,25 +82,32 @@ class AccessLogMiddleware:
         scope.setdefault("state", {})["request_id"] = request_id
         start = time.perf_counter()
         status_holder = {"status": 500}
+        measured, token = timing.begin()
 
         async def send_wrapper(message: Message) -> None:
             if message["type"] == "http.response.start":
                 status_holder["status"] = message["status"]
                 headers = list(message.get("headers", []))
                 headers.append((b"x-request-id", request_id.encode("ascii")))
+                # Solo duraciones (W3C Server-Timing): separa el tiempo de la API del de la red.
+                elapsed = (time.perf_counter() - start) * 1000
+                headers.append((b"server-timing", measured.header(elapsed).encode("ascii")))
                 message["headers"] = headers
             await send(message)
 
         try:
             await self.app(scope, receive, send_wrapper)
         finally:
+            timing.end(token)
             route = scope.get("route")
             template = getattr(route, "path", None) or "[sin ruta]"
             access_logger.info(
-                "request_id=%s method=%s route=%s status=%s ms=%.1f",
+                "request_id=%s method=%s route=%s status=%s ms=%.1f db_ms=%.1f queries=%d",
                 request_id,
                 scope.get("method"),
                 template,
                 status_holder["status"],
                 (time.perf_counter() - start) * 1000,
+                measured.db_ms,
+                measured.db_queries,
             )

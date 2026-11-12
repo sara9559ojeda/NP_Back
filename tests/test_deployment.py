@@ -18,15 +18,24 @@ def test_dependency_manifests_agree():
     assert project["tool"]["vercel"]["entrypoint"] == "main:app"
 
 
-def test_vercel_entrypoint_and_supabase_engine(app):
+def test_vercel_entrypoint_and_supabase_engine(app, monkeypatch):
+    from app.db import session as db_session
     from app.db.session import get_engine
     deployed = importlib.import_module("main").app
     from fastapi.testclient import TestClient
     with TestClient(deployed) as client:
         assert client.get('/api/v1/health').status_code == 200
-    assert isinstance(get_engine().pool, NullPool)
-    with get_engine().connect() as conn:
-        assert conn.connection.driver_connection.prepare_threshold is None
+    # Fuera de Vercel la API reutiliza conexiones; dentro, sin pool propio.
+    assert not isinstance(get_engine().pool, NullPool)
+    monkeypatch.setenv("VERCEL", "1")
+    db_session.get_engine.cache_clear()
+    try:
+        assert isinstance(get_engine().pool, NullPool)
+        with get_engine().connect() as conn:
+            assert conn.connection.driver_connection.prepare_threshold is None
+    finally:
+        get_engine().dispose()
+        db_session.get_engine.cache_clear()
 
 
 def test_proxy_ip_requires_secret(app, monkeypatch):

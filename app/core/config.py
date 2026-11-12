@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     secret_key: SecretStr = Field(min_length=32)
     # AWS only: RDS secret JSON injected by ECS; used when NP_DATABASE_URL is absent.
     database_secret: SecretStr | None = None
+    # Conexiones abiertas que la API reutiliza. Sin valor: 5, salvo en Vercel o con el Transaction
+    # pooler de Supabase (puerto 6543), donde el pooler externo ya agrupa y se usa 0 (sin pool propio).
+    db_pool_size: int | None = Field(default=None, ge=0, le=20)
 
     # Web.
     cors_origin: str = "http://localhost:5173"
