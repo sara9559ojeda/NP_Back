@@ -7,13 +7,16 @@ import uuid
 from datetime import datetime, timedelta, timezone
 
 import jwt
-from argon2 import PasswordHasher
+from argon2 import PasswordHasher, profiles
 from argon2.exceptions import InvalidHashError, VerificationError, VerifyMismatchError
 
 from app.core.config import get_settings
 
-# argon2-cffi usa Argon2id por defecto (RFC 9106, perfil recomendado de baja memoria).
-_hasher = PasswordHasher()
+# Argon2id con el perfil de baja memoria de RFC 9106 (t=3, m=64 MiB, p=4), fijado de forma explícita
+# para que una actualización de argon2-cffi no cambie el coste sin una decisión revisada.
+# Medido en la t3.small de producción: ≈140 ms por hash o verificación, dentro del contenedor de 512 MB.
+PASSWORD_PROFILE = profiles.RFC_9106_LOW_MEMORY
+_hasher = PasswordHasher.from_parameters(PASSWORD_PROFILE)
 # Hash ficticio para igualar el tiempo de respuesta cuando el correo no existe.
 _DUMMY_HASH = _hasher.hash(secrets.token_urlsafe(16))
 
@@ -35,6 +38,14 @@ def verify_password(password_hash: str | None, password: str) -> bool:
     try:
         return _hasher.verify(password_hash or _DUMMY_HASH, password) and password_hash is not None
     except (VerifyMismatchError, VerificationError, InvalidHashError):
+        return False
+
+
+def password_needs_rehash(password_hash: str) -> bool:
+    """True si el hash se creó con otros parámetros: se renueva en el siguiente inicio de sesión."""
+    try:
+        return _hasher.check_needs_rehash(password_hash)
+    except InvalidHashError:
         return False
 
 

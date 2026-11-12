@@ -14,6 +14,7 @@ from app.core.security import (
     create_access_token,
     hash_password,
     new_opaque_token,
+    password_needs_rehash,
     sha256_hex,
     utcnow,
     verify_password,
@@ -95,6 +96,8 @@ def login(db: Session, email: str, password: str, client_ip: str) -> IssuedToken
         raise ApiError(401, "INVALID_CREDENTIALS", "Correo o contraseña incorrectos.")
     if not user.active:
         raise ApiError(423, "ACCOUNT_DISABLED", "La cuenta está desactivada.")
+    if password_needs_rehash(user.password_hash):
+        user.password_hash = hash_password(password)
     tokens = _issue(db, user.id, user.role)
     db.commit()
     return tokens
