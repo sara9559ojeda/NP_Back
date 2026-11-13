@@ -90,6 +90,27 @@ def test_daily_limit_is_shared_and_atomic(app):
         assert db.scalars(select(NarrativeUsage.requests)).one() == 2
 
 
+def test_provider_receives_no_digits_and_rejections_are_logged_by_reason(client, api, care_team, monkeypatch, caplog):
+    from tests.test_groq_summary import PRODUCTION_OUTPUT_V1
+    calls = []
+    def handler(request):
+        calls.append(request)
+        facts = json.loads(json.loads(request.content)["messages"][1]["content"])
+        text = {"summary": PRODUCTION_OUTPUT_V1, "recommendation": facts["recommendation"]}
+        return httpx.Response(200, json={"choices": [{"finish_reason": "stop", "message": {"content": json.dumps(text)}}]})
+    configure_provider(monkeypatch, handler)
+    full_session(api, care_team["device"])
+    with caplog.at_level("WARNING", logger="neurophobia.narratives"):
+        assert narratives.process_next_summary()
+    sent = json.loads(calls[0].content)["messages"][1]["content"]
+    assert not any(ch.isdigit() for ch in sent)
+    assert "Optional session summary unavailable (unsupported_content)" in caplog.text
+    assert "500" not in caplog.text and "SUDS" not in caplog.text
+    data = client.get(f"{API}/me/therapy", headers=care_team["patient_headers"]).json()["lastFeedback"]["analysis"]
+    assert data["narrativeStatus"] == "fallback"
+    assert data["narrative"] is None and data["explanation"]
+
+
 def test_request_limit_uses_deterministic_fallback(client, api, care_team, monkeypatch):
     def handler(request):
         raise AssertionError("Provider must not be called")

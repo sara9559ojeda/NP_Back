@@ -8,7 +8,7 @@ from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
 
-from app.ai.groq_summary import enabled, make_facts, request_summary
+from app.ai.groq_summary import SummaryRejected, enabled, make_facts, request_summary
 from app.core.config import get_settings
 from app.core.security import utcnow
 from app.db.models import Analysis, NarrativeUsage, TherapySession
@@ -19,6 +19,19 @@ logger = logging.getLogger("neurophobia.narratives")
 
 def provider_client(settings):
     return httpx.Client(timeout=settings.groq_timeout_seconds, follow_redirects=False, trust_env=False)
+
+
+def failure_reason(exc: Exception) -> str:
+    """Fixed category for the log; never the provider text or the request."""
+    if isinstance(exc, SummaryRejected):
+        return exc.reason
+    if isinstance(exc, httpx.HTTPStatusError):
+        return f"http_{exc.response.status_code}"
+    if isinstance(exc, httpx.TimeoutException):
+        return "timeout"
+    if isinstance(exc, httpx.HTTPError):
+        return "network"
+    return type(exc).__name__
 
 
 def reserve_daily_request(db: Session, limit: int) -> bool:
@@ -71,8 +84,8 @@ def process_next_summary() -> bool:
         with provider_client(settings) as client:
             narrative = request_summary(facts, settings, client)
         status = "generated"
-    except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError):
-        logger.warning("Optional session summary unavailable; deterministic explanation retained")
+    except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
+        logger.warning("Optional session summary unavailable (%s); deterministic explanation retained", failure_reason(exc))
 
     with Session(get_engine()) as db:
         db.execute(
